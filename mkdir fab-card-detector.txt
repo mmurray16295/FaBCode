@@ -1,0 +1,3 @@
+mkdir fab-card-detector
+cd fab-card-detector
+git init
