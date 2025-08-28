@@ -1,6 +1,6 @@
-train: data/YouTube_Labeled/FaB Card Detection.v2i.yolov11/train/images
-val: data/YouTube_Labeled/FaB Card Detection.v2i.yolov11/valid/images
-test: data/YouTube_Labeled/FaB Card Detection.v2i.yolov11/test/images
+train: data/YouTube_Labeled/FaB Card Detection.v3i.yolov11/train/images
+val: data/YouTube_Labeled/FaB Card Detection.v3i.yolov11/valid/images
+test: data/YouTube_Labeled/FaB Card Detection.v3i.yolov11/test/images
 
 names:
   0: card_id_1

@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 119
+names: ['AIO026', 'AJV001', 'AJV006', 'ARC009', 'ARC023', 'ARC116', 'ARC154', 'CRU100', 'CRU158', 'CRU161', 'CRU178', 'DTD001', 'DTD004', 'DTD005', 'DTD006', 'DTD011', 'DTD221', 'DYN117', 'DYN132', 'ELE116', 'ELE146', 'ELE202', 'ELE203', 'ELE233', 'EVO001', 'EVO003', 'EVO012', 'EVO013', 'EVO081', 'EVO142', 'EVR072', 'EVR075', 'EVR195', 'HER131', 'HER144', 'HNT001', 'HNT009', 'HNT011', 'HNT012', 'HNT015', 'HNT032', 'HNT053', 'HNT054', 'HNT056', 'HNT098', 'HNT100', 'HNT103', 'HNT123', 'HNT143', 'HNT167', 'HNT168', 'HNT196', 'HNT202', 'HNT208', 'HNT209', 'HNT215', 'HNT244', 'HNT261', 'HVY047', 'HVY053', 'HVY059', 'HVY079', 'HVY097', 'HVY195', 'HVY242', 'HVY243', 'HVY254', 'MON004', 'MON010', 'MON061', 'MON089', 'MON107', 'MST103', 'MST105', 'MST106', 'MST111', 'OUT011', 'OUT012', 'OUT139', 'ROS007', 'ROS013', 'ROS018', 'ROS019', 'ROS021', 'ROS022', 'ROS071', 'ROS072', 'ROS074', 'ROS163', 'ROS168', 'ROS204', 'SEA001', 'SEA003', 'SEA008', 'SEA010', 'SEA021', 'SEA042', 'SEA043', 'SEA045', 'SEA048', 'SEA080', 'SEA125', 'SEA161', 'SEA182', 'SEA188', 'SEA245', 'UPR060', 'UPR075', 'UPR136', 'UPR165', 'UPR166', 'WTR041', 'WTR075', 'WTR079', 'WTR082', 'WTR116', 'WTR153', 'WTR159', 'WTR206']
+
+roboflow:
+  workspace: michael-bocph
+  project: fab-card-detection-21c8i
+  version: 3
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/michael-bocph/fab-card-detection-21c8i/dataset/3

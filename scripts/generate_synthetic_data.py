@@ -3,12 +3,12 @@ import glob
 import random
 import uuid
 from PIL import Image
+import yaml
 
 # Paths
 TEMPLATE_BASE = 'data/images/YouTube_Labeled/FaB Card Detection.v3i.yolov11'
 WTR_DIR = 'data/images/WTR'  # Folder with WTR card images
-OUTPUT_IMG_DIR = 'data/synthetic/images'
-OUTPUT_LABEL_DIR = 'data/synthetic/labels'
+OUTPUT_BASE_DIR = 'data/synthetic'
 
 # Gather all template images and labels from train, test, valid
 template_pairs = []
@@ -149,7 +149,8 @@ def refined_rotation(ratio, high_avg_aspect):
             return int(270 * (1 - interp) + 180 * interp)
 
 # Number of synthetic images to generate
-NUM_SYNTHETIC_IMAGES = 3
+NUM_SYNTHETIC_IMAGES = 100
+
 
 for idx in range(NUM_SYNTHETIC_IMAGES):
     # Randomly select a template image and its label
@@ -203,9 +204,65 @@ for idx in range(NUM_SYNTHETIC_IMAGES):
                     img_copy = paste_card(img_copy, card_img, parts[1:], (avg_aspect, high_avg_aspect))
                 # Update class id to WTR card index
                 label_copy.append(f"{card_idx} {' '.join(parts[1:])}\n")
+    # Final random rotation (0, 90, 180, 270 degrees) and label update
+    final_angle = random.choice([0, 90, 180, 270])
+    if final_angle != 0:
+        img_copy = img_copy.rotate(final_angle, expand=True)
+        w, h = img_copy.size
+        updated_labels = []
+        for lbl in label_copy:
+            parts = lbl.strip().split()
+            if len(parts) == 5:
+                class_id, cx, cy, bw, bh = parts
+                cx = float(cx)
+                cy = float(cy)
+                bw = float(bw)
+                bh = float(bh)
+                # Apply rotation transformation
+                if final_angle == 90:
+                    new_cx, new_cy = cy, 1 - cx
+                    new_bw, new_bh = bh, bw
+                elif final_angle == 180:
+                    new_cx, new_cy = 1 - cx, 1 - cy
+                    new_bw, new_bh = bw, bh
+                elif final_angle == 270:
+                    new_cx, new_cy = 1 - cy, cx
+                    new_bw, new_bh = bh, bw
+                else:
+                    new_cx, new_cy = cx, cy
+                    new_bw, new_bh = bw, bh
+                updated_labels.append(f"{class_id} {new_cx:.6f} {new_cy:.6f} {new_bw:.6f} {new_bh:.6f}\n")
+            else:
+                updated_labels.append(lbl)
+        label_copy = updated_labels
     unique_id = uuid.uuid4().hex[:8]
     out_img_name = f"synthetic_{idx}_{unique_id}_{os.path.splitext(os.path.basename(template_path))[0]}.png"
     out_label_name = f"synthetic_{idx}_{unique_id}_{os.path.splitext(os.path.basename(template_path))[0]}.txt"
-    img_copy.save(os.path.join(OUTPUT_IMG_DIR, out_img_name))
-    with open(os.path.join(OUTPUT_LABEL_DIR, out_label_name), 'w') as outf:
+    # Assign to train/valid/test split
+    split_rand = random.random()
+    if split_rand < 0.7:
+        split_folder = 'train'
+    elif split_rand < 0.9:
+        split_folder = 'valid'
+    else:
+        split_folder = 'test'
+    img_out_dir = os.path.join(OUTPUT_BASE_DIR, split_folder, 'images')
+    label_out_dir = os.path.join(OUTPUT_BASE_DIR, split_folder, 'labels')
+    os.makedirs(img_out_dir, exist_ok=True)
+    os.makedirs(label_out_dir, exist_ok=True)
+    img_copy.save(os.path.join(img_out_dir, out_img_name))
+    with open(os.path.join(label_out_dir, out_label_name), 'w') as outf:
         outf.writelines(label_copy)
+
+# After all synthetic images/labels are generated, write data.yaml
+wtr_card_names = [os.path.splitext(f)[0] for f in wtr_cards]
+data_yaml = {
+    'train': 'data/synthetic/train/images',
+    'val': 'data/synthetic/valid/images',
+    'test': 'data/synthetic/test/images',
+    'nc': len(wtr_card_names),
+    'names': wtr_card_names
+}
+data_yaml_path = os.path.join(OUTPUT_BASE_DIR, 'data.yaml')
+with open(data_yaml_path, 'w') as f:
+    yaml.dump(data_yaml, f, default_flow_style=False)
