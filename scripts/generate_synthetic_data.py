@@ -2,6 +2,7 @@
 import os
 import glob
 import random
+import os
 import uuid
 from PIL import Image
 import yaml
@@ -10,7 +11,7 @@ import argparse
 # Paths
 TEMPLATE_BASE = 'data/images/YouTube_Labeled/FaB Card Detection.v4i.yolov11'
 WTR_DIR = 'data/images/WTR'  # Folder with WTR card images
-OUTPUT_BASE_DIR = 'data/synthetic'
+OUTPUT_BASE_DIR = os.path.join('data', 'synthetic')
 
 # Gather all template images and labels from train, test, valid
 template_pairs = []
@@ -265,9 +266,9 @@ for idx in range(NUM_SYNTHETIC_IMAGES):
 # After all synthetic images/labels are generated, write data.yaml
 wtr_card_names = [os.path.splitext(f)[0] for f in wtr_cards]
 data_yaml = {
-    'train': os.path.abspath(os.path.join(OUTPUT_BASE_DIR, 'train', 'images')).replace('\\', '/'),
-    'val': os.path.abspath(os.path.join(OUTPUT_BASE_DIR, 'valid', 'images')).replace('\\', '/'),
-    'test': os.path.abspath(os.path.join(OUTPUT_BASE_DIR, 'test', 'images')).replace('\\', '/'),
+    'train': os.path.join(OUTPUT_BASE_DIR, 'train', 'images').replace('\\', '/'),
+    'val': os.path.join(OUTPUT_BASE_DIR, 'valid', 'images').replace('\\', '/'),
+    'test': os.path.join(OUTPUT_BASE_DIR, 'test', 'images').replace('\\', '/'),
     'nc': len(wtr_card_names),
     'names': wtr_card_names
 }

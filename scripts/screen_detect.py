@@ -4,11 +4,12 @@ import cv2
 import numpy as np
 import mss
 import json
+import os
 import requests
 from PIL import Image
 from io import BytesIO
 
-model = YOLO('runs/detect/train12/weights/best.pt')
+model = YOLO(os.path.join('runs', 'detect', 'train12', 'weights', 'best.pt'))
 
 # Mouse position tracking
 mouse_pos = (0, 0)
@@ -18,7 +19,7 @@ def mouse_callback(event, x, y, flags, param):
         mouse_pos = (x, y)
 
 # Load card data
-with open('data/card.json', 'r', encoding='utf-8') as f:
+with open(os.path.join('data', 'card.json'), 'r', encoding='utf-8') as f:
     card_data = json.load(f)
 
  # Helper to get image_url for a card id (from class name)
