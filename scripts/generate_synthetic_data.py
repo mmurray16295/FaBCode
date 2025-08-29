@@ -1,12 +1,14 @@
+
 import os
 import glob
 import random
 import uuid
 from PIL import Image
 import yaml
+import argparse
 
 # Paths
-TEMPLATE_BASE = 'data/images/YouTube_Labeled/FaB Card Detection.v3i.yolov11'
+TEMPLATE_BASE = 'data/images/YouTube_Labeled/FaB Card Detection.v4i.yolov11'
 WTR_DIR = 'data/images/WTR'  # Folder with WTR card images
 OUTPUT_BASE_DIR = 'data/synthetic'
 
@@ -148,8 +150,14 @@ def refined_rotation(ratio, high_avg_aspect):
         else:
             return int(270 * (1 - interp) + 180 * interp)
 
+
+# Parse command-line arguments
+parser = argparse.ArgumentParser(description='Generate synthetic FaB card images.')
+parser.add_argument('--num-images', type=int, default=100, help='Number of synthetic images to generate')
+args = parser.parse_args()
+
 # Number of synthetic images to generate
-NUM_SYNTHETIC_IMAGES = 100
+NUM_SYNTHETIC_IMAGES = args.num_images
 
 
 for idx in range(NUM_SYNTHETIC_IMAGES):
@@ -257,9 +265,9 @@ for idx in range(NUM_SYNTHETIC_IMAGES):
 # After all synthetic images/labels are generated, write data.yaml
 wtr_card_names = [os.path.splitext(f)[0] for f in wtr_cards]
 data_yaml = {
-    'train': 'data/synthetic/train/images',
-    'val': 'data/synthetic/valid/images',
-    'test': 'data/synthetic/test/images',
+    'train': os.path.abspath(os.path.join(OUTPUT_BASE_DIR, 'train', 'images')).replace('\\', '/'),
+    'val': os.path.abspath(os.path.join(OUTPUT_BASE_DIR, 'valid', 'images')).replace('\\', '/'),
+    'test': os.path.abspath(os.path.join(OUTPUT_BASE_DIR, 'test', 'images')).replace('\\', '/'),
     'nc': len(wtr_card_names),
     'names': wtr_card_names
 }

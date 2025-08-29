@@ -1,6 +1,7 @@
 import os
 import json
 import requests
+import re
 
 CARD_JSON_PATH = os.path.join(os.path.dirname(__file__), '..', 'data', 'card.json')
 IMAGE_DIR = os.path.join(os.path.dirname(__file__), '..', 'data', 'images', 'WTR')
@@ -21,7 +22,8 @@ def main():
             if printing.get('set_id') == SET_ID and not printed:
                 image_url = printing.get('image_url')
                 if image_url:
-                    card_name = card.get('name', 'unknown').replace('/', '_').replace(' ', '_')
+                    raw_name = card.get('name', 'unknown').replace(' ', '_')
+                    card_name = re.sub(r'[^A-Za-z0-9_-]', '', raw_name)
                     file_name = f"{card_name}_{printing.get('id', 'unknown')}.png"
                     file_path = os.path.join(IMAGE_DIR, file_name)
                     try:

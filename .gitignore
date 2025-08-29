@@ -1,0 +1,24 @@
+# Ignore synthetic data
+/data/synthetic/
+
+# Ignore all training runs except train12
+runs/detect/train*/
+!runs/detect/train12/
+
+# Ignore all weights except best.pt and last.pt in train12
+runs/detect/train12/weights/*
+!runs/detect/train12/weights/best.pt
+!runs/detect/train12/weights/last.pt
+
+# Ignore card set folders
+data/images/AAC/
+data/images/APR/
+data/images/WTR/
+
+# Ignore YouTube folder but not its subfolders
+data/images/YouTube/
+
+.venv/
+
+# Ignore explore_card_json.py utility script
+scripts/explore_card_json.py
