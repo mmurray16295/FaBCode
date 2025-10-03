@@ -1,5 +1,6 @@
-# Ignore synthetic data
-/data/synthetic/
+# Ignore synthetic data (all variations)
+data/synthetic/
+data/synthetic*/
 
 # Ignore all training runs except train12
 runs/detect/train*/
@@ -14,6 +15,7 @@ runs/detect/train12/weights/*
 data/images/AAC/
 data/images/APR/
 data/images/WTR/
+data/images/SEA/
 
 # Ignore YouTube folder but not its subfolders
 data/images/YouTube/

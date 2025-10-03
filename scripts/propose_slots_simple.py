@@ -32,9 +32,9 @@ def xyxy_to_yolo(x1,y1,x2,y2,W,H):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--model", required=True, help="Path to your trained YOLO weights (best.pt)")
-    ap.add_argument("--input_dir", required=True, help="Folder with unlabeled backgrounds")
-    ap.add_argument("--template_base", default=r"data/images/YouTube_Labeled/FaB Card Detection.v4i.yolov11",
+    ap.add_argument("--model", required=True, help="C:\VS Code\FaB Code\runs\detect\train12\weights\best.pt")
+    ap.add_argument("--input_dir", required=True, help="data\images\YouTube\Not_Yet_Added")
+    ap.add_argument("--template_base", default=r"data/images/YouTube_Labeled/FaB Card Detection.v4i.yolov11_2",
                     help="Existing template base (train/valid/test/images|labels)")
     ap.add_argument("--split", default="train", choices=["train","valid","test"], help="Which split to add to")
     ap.add_argument("--conf", type=float, default=0.20, help="Low-ish conf for recall")

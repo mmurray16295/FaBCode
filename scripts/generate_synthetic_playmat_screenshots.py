@@ -1,3 +1,19 @@
+# ===================== PATH & RUN SETTINGS =====================
+# Change these paths to select which sets and backgrounds to use
+
+# Folder containing background images (playmat screenshots)
+TEMPLATE_BASE = r'C:\VS Code\FaB Code\data\images\YouTube_Labeled'
+
+# Folder containing card images for the set you want to use (e.g., SEA)
+SEA_DIR = r'C:\VS Code\FaB Code\data\images\SEA'
+
+# Folder to save synthetic output (will create train, test, valid subfolders)
+OUTPUT_BASE_DIR = r'C:\VS Code\FaB Code\data\synthetic 2'
+
+# Number of synthetic images to generate (set this for each run)
+NUM_SYNTHETIC_IMAGES = 20  # <--- Change this value for your trial runs
+
+# ==============================================================
 
 import os
 import glob
@@ -8,14 +24,25 @@ from PIL import Image
 import yaml
 import argparse
 
-# Paths
-TEMPLATE_BASE = 'data/images/YouTube_Labeled/FaB Card Detection.v4i.yolov11'
-WTR_DIR = 'data/images/WTR'  # Folder with WTR card images
-OUTPUT_BASE_DIR = os.path.join('data', 'synthetic')
+import pathlib
 
-# Gather all template images and labels from train, test, valid
-template_pairs = []
-for split in ['train', 'test', 'valid']:
+# ===================== PATH SETTINGS =====================
+# Change these paths to select which sets and backgrounds to use
+
+# Folder containing background images (playmat screenshots)
+TEMPLATE_BASE = r'C:\VS Code\FaB Code\data\images\YouTube_Labeled'
+
+# Folder containing card images for the set you want to use (e.g., SEA)
+SEA_DIR = r'C:\VS Code\FaB Code\data\images\SEA'
+
+# Folder to save synthetic output (will create train, test, valid subfolders)
+OUTPUT_BASE_DIR = r'C:\VS Code\FaB Code\data\synthetic 2'
+
+# ========================================================
+
+# Build separate template pairs for each split
+template_pairs_by_split = {'train': [], 'valid': [], 'test': []}
+for split in ['train', 'valid', 'test']:
     img_dir = os.path.join(TEMPLATE_BASE, split, 'images')
     label_dir = os.path.join(TEMPLATE_BASE, split, 'labels')
     images = glob.glob(os.path.join(img_dir, '*.png')) + glob.glob(os.path.join(img_dir, '*.jpg'))
@@ -23,8 +50,10 @@ for split in ['train', 'test', 'valid']:
         base = os.path.splitext(os.path.basename(img_path))[0]
         label_path = os.path.join(label_dir, base + '.txt')
         if os.path.exists(label_path):
-            template_pairs.append((img_path, label_path))
-wtr_cards = [f for f in os.listdir(WTR_DIR) if f.endswith('.png')]
+            template_pairs_by_split[split].append((img_path, label_path))
+
+# List of card images for the selected set
+sea_cards = [f for f in os.listdir(SEA_DIR) if f.endswith('.png')]
 
 def best_fit_to_bbox(card_img, box_w, box_h, avg_area=None):
     # Crop for aspect ratio < 0.75, or for horizontal cards with high aspect ratio and small area
@@ -142,16 +171,28 @@ def refined_rotation(ratio, high_avg_aspect):
 
 # Parse command-line arguments
 parser = argparse.ArgumentParser(description='Generate synthetic FaB card images.')
-parser.add_argument('--num-images', type=int, default=100, help='Number of synthetic images to generate')
+parser.add_argument('--num-images', type=int, default=None, help='Number of synthetic images to generate')
 args = parser.parse_args()
 
 # Number of synthetic images to generate
-NUM_SYNTHETIC_IMAGES = args.num_images
+NUM_SYNTHETIC_IMAGES = args.num_images if args.num_images is not None else NUM_SYNTHETIC_IMAGES
 
+# Calculate split distribution (70% train, 20% valid, 10% test)
+train_count = int(NUM_SYNTHETIC_IMAGES * 0.7)
+valid_count = int(NUM_SYNTHETIC_IMAGES * 0.2)
+test_count = NUM_SYNTHETIC_IMAGES - train_count - valid_count
 
-for idx in range(NUM_SYNTHETIC_IMAGES):
-    # Randomly select a template image and its label
-    template_path, label_path = random.choice(template_pairs)
+# Generate images for each split
+idx = 0
+for split_folder, count in [('train', train_count), ('valid', valid_count), ('test', test_count)]:
+    template_pairs = template_pairs_by_split[split_folder]
+    if not template_pairs:
+        print(f"Warning: No template pairs found for {split_folder} split. Skipping.")
+        continue
+    
+    for _ in range(count):
+        # Randomly select a template image and its label from the current split
+        template_path, label_path = random.choice(template_pairs)
     with Image.open(template_path).convert('RGB') as template_img:
         with open(label_path, 'r') as lf:
             lines = lf.readlines()
@@ -194,9 +235,9 @@ for idx in range(NUM_SYNTHETIC_IMAGES):
             parts = line.strip().split()
             if len(parts) == 5:
                 # Randomly select a WTR card for this bounding box
-                card_idx = random.randint(0, len(wtr_cards)-1)
-                card_name = wtr_cards[card_idx]
-                card_path = os.path.join(WTR_DIR, card_name)
+                card_idx = random.randint(0, len(sea_cards)-1)
+                card_name = sea_cards[card_idx]
+                card_path = os.path.join(SEA_DIR, card_name)
                 with Image.open(card_path).convert('RGBA') as card_img:
                     img_copy = paste_card(img_copy, card_img, parts[1:], avg_aspect, high_avg_aspect, avg_area)
                 # Update class id to WTR card index
@@ -232,33 +273,27 @@ for idx in range(NUM_SYNTHETIC_IMAGES):
             else:
                 updated_labels.append(lbl)
         label_copy = updated_labels
-    unique_id = uuid.uuid4().hex[:8]
-    out_img_name = f"synthetic_{idx}_{unique_id}_{os.path.splitext(os.path.basename(template_path))[0]}.png"
-    out_label_name = f"synthetic_{idx}_{unique_id}_{os.path.splitext(os.path.basename(template_path))[0]}.txt"
-    # Assign to train/valid/test split
-    split_rand = random.random()
-    if split_rand < 0.7:
-        split_folder = 'train'
-    elif split_rand < 0.9:
-        split_folder = 'valid'
-    else:
-        split_folder = 'test'
-    img_out_dir = os.path.join(OUTPUT_BASE_DIR, split_folder, 'images')
-    label_out_dir = os.path.join(OUTPUT_BASE_DIR, split_folder, 'labels')
-    os.makedirs(img_out_dir, exist_ok=True)
-    os.makedirs(label_out_dir, exist_ok=True)
-    img_copy.save(os.path.join(img_out_dir, out_img_name))
-    with open(os.path.join(label_out_dir, out_label_name), 'w') as outf:
-        outf.writelines(label_copy)
+        unique_id = uuid.uuid4().hex[:8]
+        out_img_name = f"synthetic_{idx}_{unique_id}_{os.path.splitext(os.path.basename(template_path))[0]}.png"
+        out_label_name = f"synthetic_{idx}_{unique_id}_{os.path.splitext(os.path.basename(template_path))[0]}.txt"
+        # Use the current split folder (already determined)
+        img_out_dir = os.path.join(OUTPUT_BASE_DIR, split_folder, 'images')
+        label_out_dir = os.path.join(OUTPUT_BASE_DIR, split_folder, 'labels')
+        os.makedirs(img_out_dir, exist_ok=True)
+        os.makedirs(label_out_dir, exist_ok=True)
+        img_copy.save(os.path.join(img_out_dir, out_img_name))
+        with open(os.path.join(label_out_dir, out_label_name), 'w') as outf:
+            outf.writelines(label_copy)
+        idx += 1
 
 # After all synthetic images/labels are generated, write data.yaml
-wtr_card_names = [os.path.splitext(f)[0] for f in wtr_cards]
+card_names = [os.path.splitext(f)[0] for f in sea_cards]
 data_yaml = {
     'train': os.path.join(OUTPUT_BASE_DIR, 'train', 'images').replace('\\', '/'),
     'val': os.path.join(OUTPUT_BASE_DIR, 'valid', 'images').replace('\\', '/'),
     'test': os.path.join(OUTPUT_BASE_DIR, 'test', 'images').replace('\\', '/'),
-    'nc': len(wtr_card_names),
-    'names': wtr_card_names
+    'nc': len(card_names),
+    'names': card_names
 }
 data_yaml_path = os.path.join(OUTPUT_BASE_DIR, 'data.yaml')
 with open(data_yaml_path, 'w') as f:

@@ -4,8 +4,8 @@ import requests
 import re
 
 CARD_JSON_PATH = os.path.join(os.path.dirname(__file__), '..', 'data', 'card.json')
-IMAGE_DIR = os.path.join(os.path.dirname(__file__), '..', 'data', 'images', 'WTR')
-SET_ID = 'WTR'
+IMAGE_DIR = os.path.join(os.path.dirname(__file__), '..', 'data', 'images', 'SEA')
+SET_ID = 'SEA'
 
 def ensure_dir(path):
     if not os.path.exists(path):
