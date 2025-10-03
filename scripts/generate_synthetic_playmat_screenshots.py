@@ -43,17 +43,6 @@ def best_fit_to_bbox(card_img, box_w, box_h, avg_area=None):
         return card_cropped
     else:
         return card_img.resize((box_w, box_h), Image.LANCZOS)
-    theta = math.radians(angle % 180)  # Normalize angle to [0, 180]
-    # Avoid division by zero for sin/cos
-    sin_theta = abs(math.sin(theta)) if abs(math.sin(theta)) > 1e-3 else 1.0
-    cos_theta = abs(math.cos(theta)) if abs(math.cos(theta)) > 1e-3 else 1.0
-    if sin_theta == 1.0 and cos_theta == 1.0:
-        # Unrotated, just fit to box
-        new_w, new_h = box_w, box_h
-    else:
-        new_h = int(box_h / sin_theta)
-        new_w = int(box_w / cos_theta)
-    return card_img.resize((new_w, new_h), Image.LANCZOS)
 def guess_rotation_direction(template_img, box_x, box_y, box_w, box_h):
     # Crop bounding box region from template
     bbox_crop = template_img.crop((box_x, box_y, box_x + box_w, box_y + box_h)).convert('L')
@@ -65,7 +54,7 @@ def guess_rotation_direction(template_img, box_x, box_y, box_w, box_h):
     # If left is brighter, rotate one way; else, the other
     return 1 if left_brightness > right_brightness else -1
 
-def paste_card(template_img, card_img, bbox, min_height):
+def paste_card(template_img, card_img, bbox, avg_aspect, high_avg_aspect, avg_area):
     w, h = template_img.size
     cx, cy, bw, bh = [float(x) for x in bbox]
     box_w, box_h = int(bw * w), int(bh * h)
@@ -87,7 +76,7 @@ def paste_card(template_img, card_img, bbox, min_height):
     card_resized = card_resized.resize((card_resized.size[0], adj_h3), Image.LANCZOS)
     # Rotation logic based on bounding box aspect ratio (height/width)
     ratio = box_h / box_w if box_w > 0 else 1.0
-        # Use refined logic for high aspect ratios
+    # Use refined logic for high aspect ratios
     if ratio >= 1.5:
         angle = refined_rotation(ratio, high_avg_aspect)
     else:
@@ -114,7 +103,6 @@ def paste_card(template_img, card_img, bbox, min_height):
     rw, rh = card_fitted.size
     # Center the card in the bounding box
     offset_x = box_x + (box_w - rw) // 2
-    offset_y = box_y + (box_h - rh) // 2
     offset_y = box_y + (box_h - rh) // 2
     # Post-processing: sample background properties and apply to card
     from PIL import ImageFilter, ImageEnhance
@@ -210,7 +198,7 @@ for idx in range(NUM_SYNTHETIC_IMAGES):
                 card_name = wtr_cards[card_idx]
                 card_path = os.path.join(WTR_DIR, card_name)
                 with Image.open(card_path).convert('RGBA') as card_img:
-                    img_copy = paste_card(img_copy, card_img, parts[1:], (avg_aspect, high_avg_aspect))
+                    img_copy = paste_card(img_copy, card_img, parts[1:], avg_aspect, high_avg_aspect, avg_area)
                 # Update class id to WTR card index
                 label_copy.append(f"{card_idx} {' '.join(parts[1:])}\n")
     # Final random rotation (0, 90, 180, 270 degrees) and label update
