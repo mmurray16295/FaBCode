@@ -44,11 +44,33 @@ python train.py --data data/synthetic/data.yaml --weights runs/detect/train12/we
 
 Adjust the command as needed for your environment and training script. Training outputs will be saved in a new folder under `runs/detect/`.
 
-## Data Structure
-- `data/images/` - Card images by set
-- `data/synthetic/` - Synthetic images and labels
-- `runs/detect/train12/` - Latest training run and model weights
-- `scripts/` - Utility scripts for data and model management
+## Persistent classes and multi-set generation
+The synthetic generator maintains a persistent global class index at:
+
+- `data/synthetic 2/classes.yaml` (same folder as your OUTPUT_BASE_DIR)
+
+Each run:
+- Loads the existing class list (`names` array)
+- Scans `--card-dirs` for PNGs and appends any new card names
+- Reuses existing IDs for previously seen names (handles reprints)
+- Writes labels using stable IDs and updates `data.yaml` with the union of all names
+
+### Examples
+- Generate 20 images from SEA only:
+
+```sh
+python scripts/generate_synthetic_playmat_screenshots.py --num-images 20 --card-dirs "data/images/SEA"
+```
+
+- Add WTR later and generate 200 more, preserving IDs:
+
+```sh
+python scripts/generate_synthetic_playmat_screenshots.py --num-images 200 --card-dirs "data/images/SEA" "data/images/WTR"
+```
+
+- Backgrounds are sampled only from their respective split folders under `data/images/YouTube_Labeled/{train,valid,test}`.
+
+If you want reprints to be treated as different classes, we can switch to prefixing class names with the set directory (e.g., `SEA/CardName` vs `WTR/CardName`).
 
 ## Contributing
 Pull requests and suggestions are welcome. Please follow standard Python style and document your code.

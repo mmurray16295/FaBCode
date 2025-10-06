@@ -1,0 +1,42 @@
+{
+  // VS Code Run/Debug configurations
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Generate Synthetic: SEA (20 images)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/generate_synthetic_playmat_screenshots.py",
+      "console": "integratedTerminal",
+      "args": [
+        "--num-images", "20",
+        "--card-dirs", "${workspaceFolder}/data/images/SEA"
+      ]
+    },
+    {
+      "name": "Generate Synthetic: SEA + WTR (200 images)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/generate_synthetic_playmat_screenshots.py",
+      "console": "integratedTerminal",
+      "args": [
+        "--num-images", "200",
+        "--card-dirs", "${workspaceFolder}/data/images/SEA",
+        "${workspaceFolder}/data/images/WTR"
+      ]
+    },
+    {
+      "name": "Generate Synthetic: SEA + WTR + HVY (200 images)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/generate_synthetic_playmat_screenshots.py",
+      "console": "integratedTerminal",
+      "args": [
+        "--num-images", "200",
+        "--card-dirs", "${workspaceFolder}/data/images/SEA",
+        "${workspaceFolder}/data/images/WTR",
+        "${workspaceFolder}/data/images/HVY"
+      ]
+    }
+  ]
+}
