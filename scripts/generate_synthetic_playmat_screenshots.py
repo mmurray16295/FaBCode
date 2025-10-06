@@ -23,13 +23,121 @@ import glob
 import random
 import os
 import uuid
-from PIL import Image
+from PIL import Image, ImageFilter, ImageDraw
 import yaml
 import argparse
 import re
 import json
+import io
+import numpy as np
 
 import pathlib
+
+# ========================================================
+
+def jpeg_round_trip(pil_img, q1=(30,70), q2=None):
+    """One or two JPEG compressions."""
+    buf = io.BytesIO()
+    pil_img.save(buf, format="JPEG", quality=random.randint(*q1))
+    buf.seek(0)
+    img = Image.open(buf).convert(pil_img.mode)
+    if q2:
+        buf2 = io.BytesIO()
+        img.save(buf2, format="JPEG", quality=random.randint(*q2))
+        buf2.seek(0)
+        img = Image.open(buf2).convert(pil_img.mode)
+    return img
+
+def down_up_sample(pil_img, min_s=0.5, max_s=0.95):
+    """Downscale by a random non-integer factor then upscale back."""
+    w,h = pil_img.size
+    s = random.uniform(min_s, max_s)
+    new = pil_img.resize((max(1,int(w*s)), max(1,int(h*s))), random.choice([
+        Image.BILINEAR, Image.BICUBIC, Image.LANCZOS
+    ]))
+    return new.resize((w,h), random.choice([Image.BILINEAR, Image.BICUBIC]))
+
+def gamma_jitter(pil_img, lo=0.85, hi=1.15):
+    g = random.uniform(lo, hi)
+    arr = np.asarray(pil_img).astype(np.float32) / 255.0
+    arr = np.clip(arr ** g, 0, 1)
+    return Image.fromarray((arr*255).astype(np.uint8), mode=pil_img.mode)
+
+def chroma_subsample(pil_img, sigma=(0.8, 2.0)):
+    """Blur color channels to mimic 4:2:0."""
+    ycbcr = pil_img.convert("YCbCr")
+    Y, Cb, Cr = ycbcr.split()
+    rad = random.uniform(*sigma)
+    Cb = Cb.filter(ImageFilter.GaussianBlur(radius=rad))
+    Cr = Cr.filter(ImageFilter.GaussianBlur(radius=rad))
+    return Image.merge("YCbCr", (Y,Cb,Cr)).convert(pil_img.mode)
+
+def tiny_blur_or_unsharp(pil_img):
+    if random.random() < 0.5:
+        return pil_img.filter(ImageFilter.GaussianBlur(radius=random.uniform(0.3, 1.2)))
+    # unsharp: blur then blend
+    blur = pil_img.filter(ImageFilter.GaussianBlur(radius=random.uniform(0.6, 1.6)))
+    return Image.blend(pil_img, blur, alpha=random.uniform(0.15, 0.35))
+
+def add_letterbox_and_ui(pil_img, p_bars=0.5, p_ui=0.5):
+    img = pil_img.copy()
+    draw = ImageDraw.Draw(img)
+    w,h = img.size
+    # bars
+    if random.random() < p_bars:
+        t = random.randint(2, max(2, h//20))   # top
+        b = random.randint(2, max(2, h//20))   # bottom
+        l = random.randint(0, max(0, w//50))   # left (pillarbox sometimes 0)
+        r = random.randint(0, max(0, w//50))
+        col = random.choice([(0,0,0), (8,8,8), (16,16,16), (24,24,24)])
+        if t: draw.rectangle([0,0,w,t], fill=col)
+        if b: draw.rectangle([0,h-b,w,h], fill=col)
+        if l: draw.rectangle([0,0,l,h], fill=col)
+        if r: draw.rectangle([w-r,0,w,h], fill=col)
+    # UI hairlines
+    if random.random() < p_ui:
+        y = random.randint(0, h-1)
+        draw.line([(0,y),(w-1,y)], fill=(random.randint(160,220),)*3, width=1)
+        if random.random() < 0.3:
+            x = random.randint(0, w-1)
+            draw.line([(x,0),(x,h-1)], fill=(random.randint(160,220),)*3, width=1)
+    return img
+
+def add_cursor_or_mask(pil_img, p=0.15):
+    if random.random() >= p: return pil_img
+    img = pil_img.copy()
+    draw = ImageDraw.Draw(img)
+    w,h = img.size
+    # rectangle mask (like your overlay)
+    if random.random() < 0.5:
+        mw, mh = random.randint(w//12, w//6), random.randint(h//12, h//6)
+        x = random.randint(0, max(0, w-mw)); y = random.randint(0, max(0, h-mh))
+        draw.rectangle([x,y,x+mw,y+mh], fill=(0,0,0))
+    else:
+        # simple cursor triangle
+        cx = random.randint(0, w-20); cy = random.randint(0, h-20)
+        pts = [(cx,cy),(cx+14,cy+6),(cx+6,cy+14)]
+        draw.polygon(pts, fill=(255,255,255))
+    return img
+
+def simulate_screen_capture(pil_img):
+    """Compose several capture-like artifacts without changing geometry."""
+    img = pil_img
+    if random.random() < 0.85:
+        img = down_up_sample(img, 0.55, 0.95)
+    if random.random() < 0.8:
+        img = tiny_blur_or_unsharp(img)
+    if random.random() < 0.8:
+        img = jpeg_round_trip(img, q1=(28,60), q2=(35,75) if random.random()<0.5 else None)
+    if random.random() < 0.8:
+        img = gamma_jitter(img, 0.85, 1.20)
+    if random.random() < 0.6:
+        img = chroma_subsample(img, sigma=(0.8, 1.8))
+    if random.random() < 0.6:
+        img = add_letterbox_and_ui(img, p_bars=0.7, p_ui=0.6)
+    if random.random() < 0.2:
+        img = add_cursor_or_mask(img, p=1.0)
+    return img
 
 # ========================================================
 
@@ -512,6 +620,9 @@ for _ in range(NUM_SYNTHETIC_IMAGES):
     label_out_dir = os.path.join(OUTPUT_BASE_DIR, split_folder, 'labels')
     os.makedirs(img_out_dir, exist_ok=True)
     os.makedirs(label_out_dir, exist_ok=True)
+    # Apply screen capture emulation to ~75% of images
+    if random.random() < 0.75:
+        img_copy = simulate_screen_capture(img_copy)
     img_copy.save(os.path.join(img_out_dir, out_img_name))
     with open(os.path.join(label_out_dir, out_label_name), 'w') as outf:
         outf.writelines(label_copy)
