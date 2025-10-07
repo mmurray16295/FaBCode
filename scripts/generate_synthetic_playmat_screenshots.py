@@ -663,14 +663,34 @@ card_files = load_card_files(CARD_SET_DIRS)
 
 # Load and update persistent class index with any new card names from this run
 class_index_path = os.path.join(OUTPUT_BASE_DIR, 'classes.yaml')
+data_yaml_path = os.path.join(OUTPUT_BASE_DIR, 'data.yaml')
 class_names = load_or_create_class_index(class_index_path)
 existing = set(class_names)
+new_classes_found = False
 for set_dir, card_filename in card_files:
     raw_name = os.path.splitext(card_filename)[0]
     name = canonicalize_name(raw_name)
     if name not in existing:
         class_names.append(name)
         existing.add(name)
+        new_classes_found = True
+
+# If we found new classes, immediately save to prevent loss on crash
+if new_classes_found:
+    print(f"[init] Found new classes, total now: {len(class_names)}. Saving immediately...")
+    save_class_index(class_index_path, class_names)
+    # Also write data.yaml immediately
+    data_yaml_content = {
+        'train': os.path.join(OUTPUT_BASE_DIR, 'train', 'images').replace('\\', '/'),
+        'val': os.path.join(OUTPUT_BASE_DIR, 'valid', 'images').replace('\\', '/'),
+        'test': os.path.join(OUTPUT_BASE_DIR, 'test', 'images').replace('\\', '/'),
+        'nc': len(class_names),
+        'names': class_names,
+    }
+    with open(data_yaml_path, 'w') as f:
+        yaml.dump(data_yaml_content, f, default_flow_style=False)
+    print(f"[init] Saved classes.yaml and data.yaml with {len(class_names)} classes")
+
 # Build mapping name -> id
 name_to_id = {name: idx for idx, name in enumerate(class_names)}
 
@@ -1047,10 +1067,22 @@ for _ in range(NUM_SYNTHETIC_IMAGES):
         except Exception:
             # Avoid any logging-related crashes
             pass
-    # Periodically persist coverage file
-    if args.coverage_guided and idx % 50 == 0:
+    # Periodically persist all config files to survive crashes
+    if idx % 50 == 0:
         try:
-            save_coverage(coverage_path, coverage)
+            if args.coverage_guided:
+                save_coverage(coverage_path, coverage)
+            # Also checkpoint classes.yaml and data.yaml
+            save_class_index(class_index_path, class_names)
+            data_yaml_checkpoint = {
+                'train': os.path.join(OUTPUT_BASE_DIR, 'train', 'images').replace('\\', '/'),
+                'val': os.path.join(OUTPUT_BASE_DIR, 'valid', 'images').replace('\\', '/'),
+                'test': os.path.join(OUTPUT_BASE_DIR, 'test', 'images').replace('\\', '/'),
+                'nc': len(class_names),
+                'names': class_names,
+            }
+            with open(data_yaml_path, 'w') as f:
+                yaml.dump(data_yaml_checkpoint, f, default_flow_style=False)
         except Exception:
             pass
 
