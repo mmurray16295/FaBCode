@@ -17,6 +17,8 @@ data/images/APR/
 data/images/WTR/
 data/images/SEA/
 data/images/HVY/
+data/images/CRU/
+data/images/ARC/
 
 # Ignore YouTube folder but not its subfolders
 data/images/YouTube/

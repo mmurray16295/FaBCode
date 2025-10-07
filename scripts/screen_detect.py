@@ -155,6 +155,32 @@ def get_image_url_by_id(card_id):
                 return printing.get('image_url')
     return None
 
+# Helper to get image_url by canonicalized card name
+def get_image_url_by_name(card_name):
+    """Match card by canonicalized name (e.g., 'Anka_Drag_Under')"""
+    # Convert underscores to spaces for matching
+    search_name = card_name.replace('_', ' ').lower().strip()
+    
+    for card in card_data:
+        card_display_name = card.get('name', '').lower().strip()
+        
+        # Try exact match first
+        if card_display_name == search_name:
+            printings = card.get('printings', [])
+            if printings:
+                return printings[0].get('image_url')
+        
+        # Try removing punctuation for fuzzy match
+        import re
+        card_no_punct = re.sub(r'[^\w\s]', '', card_display_name)
+        search_no_punct = re.sub(r'[^\w\s]', '', search_name)
+        if card_no_punct == search_no_punct:
+            printings = card.get('printings', [])
+            if printings:
+                return printings[0].get('image_url')
+    
+    return None
+
 # Helper to load card images from URL and cache them
 card_image_cache = {}
 def get_card_image(url):
@@ -254,7 +280,6 @@ def main():
     names_base = model.names if hasattr(model, 'names') else {}
 
     while True:
-        print("Loop iteration started")
         # 1) Capture the next frame
         if args.video:
             ok, frame = cap.read()
@@ -265,7 +290,8 @@ def main():
             frame = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
 
         # 2) If enabled, mask the last overlay from the frame BEFORE inference
-        if args.mask_overlay and last_overlay_rect is not None:
+        # NOTE: Only mask when NOT using transparent overlay - transparent windows don't block screen capture
+        if args.mask_overlay and not args.transparent and last_overlay_rect is not None:
             ox, oy, ow, oh = last_overlay_rect
             # Clamp to frame bounds just in case
             x1, y1 = max(0, ox), max(0, oy)
@@ -316,9 +342,11 @@ def main():
 
         # 4) Determine if mouse hovers a box
         mouse_over_box = None
-        if args.video:
+        if args.video or not args.transparent:
+            # Use window-relative mouse position from callback
             mx, my = mouse_pos
         else:
+            # In transparent overlay mode, use global mouse position
             gx, gy = get_global_mouse_pos()
             mx = gx - monitor['left']
             my = gy - monitor['top']
@@ -371,8 +399,8 @@ def main():
         next_overlay_rect = None
         if mouse_over_box:
             bx1, by1, bx2, by2, class_name = mouse_over_box
-            card_id = class_name[-6:] if len(class_name) >= 6 else class_name
-            image_url = get_image_url_by_id(card_id)
+            # Try to get image URL by canonicalized name (e.g., "Amethyst_Amulet")
+            image_url = get_image_url_by_name(class_name)
             if image_url:
                 card_img = get_card_image(image_url)
                 if card_img:
