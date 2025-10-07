@@ -2,13 +2,13 @@
 # Change these paths to select which sets and backgrounds to use
 
 # Folder containing background images (playmat screenshots)
-TEMPLATE_BASE = r'C:\VS Code\FaB Code\data\images\YouTube_Labeled'
+TEMPLATE_BASE = '/workspace/fab/src/data/images/YouTube_Labeled'
 
 # Folder containing card images for the set you want to use (e.g., SEA)
-SEA_DIR = r'C:\VS Code\FaB Code\data\images\SEA'
+SEA_DIR = '/workspace/fab/src/data/images/SEA'
 
 # Folder to save synthetic output (will create train, test, valid subfolders)
-OUTPUT_BASE_DIR = r'C:\VS Code\FaB Code\data\synthetic 2'
+OUTPUT_BASE_DIR = '/workspace/fab/src/data/synthetic_2'
 
 # Number of synthetic images to generate (set this for each run)
 NUM_SYNTHETIC_IMAGES = 20  # <--- Change this value for your trial runs
