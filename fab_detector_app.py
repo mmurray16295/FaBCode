@@ -50,8 +50,9 @@ class DetectorGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("FaB Card Detector")
-        self.root.geometry("600x700")
-        self.root.resizable(False, False)
+        self.root.geometry("650x800")
+        self.root.resizable(True, True)  # Allow window resizing
+        self.root.minsize(600, 700)  # Minimum size to prevent too small
         
         # Detection thread
         self.detector_thread = None
@@ -62,23 +63,48 @@ class DetectorGUI:
         
     def _create_widgets(self):
         """Create GUI widgets."""
+        
+        # Create a canvas with scrollbar for scrolling
+        canvas = tk.Canvas(self.root, highlightthickness=0)
+        scrollbar = ttk.Scrollbar(self.root, orient="vertical", command=canvas.yview)
+        scrollable_frame = ttk.Frame(canvas)
+        
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+        
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+        
+        # Pack scrollbar and canvas
+        scrollbar.pack(side="right", fill="y")
+        canvas.pack(side="left", fill="both", expand=True)
+        
+        # Bind mousewheel for scrolling
+        def _on_mousewheel(event):
+            canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+        canvas.bind_all("<MouseWheel>", _on_mousewheel)
+        
         # Title
-        title = tk.Label(self.root, text="FaB Card Live Detector", 
+        title = tk.Label(scrollable_frame, text="FaB Card Live Detector", 
                         font=("Arial", 20, "bold"))
         title.pack(pady=20)
         
         # Model selection
-        model_frame = ttk.LabelFrame(self.root, text="Model Configuration", padding=10)
+        model_frame = ttk.LabelFrame(scrollable_frame, text="Model Configuration", padding=10)
         model_frame.pack(fill="x", padx=20, pady=10)
         
         ttk.Label(model_frame, text="Model Weights:").grid(row=0, column=0, sticky="w", pady=5)
-        self.model_path = tk.StringVar(value="runs/train/phase1_100classes/weights/best.pt")
+        # Default to models/best.pt for packaged version, fallback to training path
+        default_model = "models/best.pt" if os.path.exists("models/best.pt") else "runs/train/phase1_100classes/weights/best.pt"
+        self.model_path = tk.StringVar(value=default_model)
         model_entry = ttk.Entry(model_frame, textvariable=self.model_path, width=40)
         model_entry.grid(row=0, column=1, padx=5, pady=5)
         ttk.Button(model_frame, text="Browse", command=self._browse_model).grid(row=0, column=2, padx=5)
         
         # Detection mode
-        mode_frame = ttk.LabelFrame(self.root, text="Detection Mode", padding=10)
+        mode_frame = ttk.LabelFrame(scrollable_frame, text="Detection Mode", padding=10)
         mode_frame.pack(fill="x", padx=20, pady=10)
         
         self.mode = tk.StringVar(value="windowed")
@@ -88,7 +114,7 @@ class DetectorGUI:
                        variable=self.mode, value="overlay").pack(anchor="w", pady=5)
         
         # Monitor selection
-        monitor_frame = ttk.LabelFrame(self.root, text="Monitor Configuration", padding=10)
+        monitor_frame = ttk.LabelFrame(scrollable_frame, text="Monitor Configuration", padding=10)
         monitor_frame.pack(fill="x", padx=20, pady=10)
         
         ttk.Label(monitor_frame, text="Capture Monitor:").grid(row=0, column=0, sticky="w", pady=5)
@@ -105,7 +131,7 @@ class DetectorGUI:
                  font=("Arial", 8, "italic")).grid(row=2, column=0, columnspan=2, sticky="w", pady=2)
         
         # Detection settings
-        settings_frame = ttk.LabelFrame(self.root, text="Detection Settings", padding=10)
+        settings_frame = ttk.LabelFrame(scrollable_frame, text="Detection Settings", padding=10)
         settings_frame.pack(fill="x", padx=20, pady=10)
         
         ttk.Label(settings_frame, text="Confidence Threshold:").grid(row=0, column=0, sticky="w", pady=5)
@@ -127,7 +153,7 @@ class DetectorGUI:
         iou_scale.configure(command=lambda v: self.iou_label.config(text=f"{float(v):.2f}"))
         
         # Overlay settings
-        overlay_frame = ttk.LabelFrame(self.root, text="Overlay Settings", padding=10)
+        overlay_frame = ttk.LabelFrame(scrollable_frame, text="Overlay Settings", padding=10)
         overlay_frame.pack(fill="x", padx=20, pady=10)
         
         self.topmost = tk.BooleanVar(value=True)
@@ -155,7 +181,7 @@ class DetectorGUI:
                    width=10).grid(row=0, column=3, padx=5)
         
         # Control buttons
-        button_frame = ttk.Frame(self.root)
+        button_frame = ttk.Frame(scrollable_frame)
         button_frame.pack(pady=20)
         
         self.start_button = ttk.Button(button_frame, text="Start Detection", 
@@ -167,8 +193,8 @@ class DetectorGUI:
         self.stop_button.grid(row=0, column=1, padx=10)
         
         # Status
-        self.status_label = ttk.Label(self.root, text="Ready", 
-                                     font=("Arial", 10), foreground="green")
+        self.status_label = ttk.Label(scrollable_frame, text="Ready", 
+                                     font=("Arial", 10, "bold"), foreground="green")
         self.status_label.pack(pady=10)
         
     def _load_defaults(self):
