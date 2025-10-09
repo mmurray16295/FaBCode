@@ -33,6 +33,9 @@ __pycache__/
 *.pyc
 *.pyo
 
+# Ignore uncompressed package directories (keep .tar.gz only)
+packages/fab_card_detector_*/
+
 .venv/
 
 # Ignore explore_card_json.py utility script
