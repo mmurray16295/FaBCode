@@ -11,17 +11,8 @@ runs/detect/train12/weights/*
 !runs/detect/train12/weights/best.pt
 !runs/detect/train12/weights/last.pt
 
-# Ignore card set folders
-data/images/AAC/
-data/images/APR/
-data/images/WTR/
-data/images/SEA/
-data/images/HVY/
-data/images/CRU/
-data/images/ARC/
-
-# Ignore YouTube folder but not its subfolders
-data/images/YouTube/
+# Ignore all card images and backgrounds
+data/images/
 
 .venv/
 

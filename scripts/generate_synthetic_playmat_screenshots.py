@@ -1,27 +1,33 @@
 # ===================== PATH & RUN SETTINGS =====================
 # Change these paths to select which sets and backgrounds to use
 
-# Folder containing background images (playmat screenshots)
-TEMPLATE_BASE = '/workspace/fab/src/data/images/YouTube_Labeled'
+# Folder containing background images (playmat screenshots) with Card/Ref labels
+TEMPLATE_BASE = r'C:\VS Code\FaB Code\data\images\YouTube_Labeled'
 
-# Folder containing card images for the set you want to use (e.g., SEA)
-SEA_DIR = '/workspace/fab/src/data/images/SEA'
+# Base folder containing all card image sets
+CARD_IMAGES_BASE = r'c:\VS Code\FaB Code\data\images'
 
 # Folder to save synthetic output (will create train, test, valid subfolders)
-OUTPUT_BASE_DIR = '/workspace/fab/src/data/synthetic_2'
+OUTPUT_BASE_DIR = r'c:\VS Code\FaB Code\data\synthetic_2'
+
+# Folder to save positioning cache files (saves card placement calculations)
+POSITIONING_CACHE_DIR = r'c:\VS Code\FaB Code\data\positioning_cache'
 
 # Number of synthetic images to generate (set this for each run)
 NUM_SYNTHETIC_IMAGES = 20  # <--- Change this value for your trial runs
 
-# Allow specifying multiple card set directories; defaults to [SEA_DIR]
-CARD_SET_DIRS = [SEA_DIR]
+# Path to card popularity weights JSON file
+POPULARITY_WEIGHTS_PATH = r'c:\VS Code\FaB Code\data\card_popularity_weights.json'
+
+# Class IDs for Card and Ref (from YOLO labels)
+CLASS_ID_CARD = 0
+CLASS_ID_REF = 1
 
 # ==============================================================
 
 import os
 import glob
 import random
-import os
 import uuid
 from PIL import Image, ImageFilter, ImageDraw
 import yaml
@@ -31,8 +37,26 @@ import json
 import io
 import numpy as np
 import math
+from collections import defaultdict
 
 import pathlib
+
+# ========================================================
+
+# Automatically discover all card set directories (subdirectories in CARD_IMAGES_BASE)
+# Excludes YouTube and YouTube_Labeled folders
+CARD_SET_DIRS = []
+if os.path.isdir(CARD_IMAGES_BASE):
+    for item in os.listdir(CARD_IMAGES_BASE):
+        item_path = os.path.join(CARD_IMAGES_BASE, item)
+        # Include only directories, exclude YouTube folders
+        if os.path.isdir(item_path) and 'YouTube' not in item:
+            CARD_SET_DIRS.append(item_path)
+    CARD_SET_DIRS.sort()  # Sort alphabetically for consistent ordering
+
+print(f"[init] Discovered {len(CARD_SET_DIRS)} card set directories")
+
+# ========================================================
 
 # ========================================================
 
@@ -166,6 +190,8 @@ def _rand_skin_or_sleeve():
     dice = [(200,30,30),(30,200,30),(30,30,200),(255,255,255),(20,20,20)]
     return random.choice(skin + cloth + dice)
 
+# Chaos mode removed - now implemented in separate script: generate_chaos_mode.py
+
 def apply_occluders(pil_img, yolo_labels, coverage_drop=0.85,
                     p_apply=0.40, occl_per_img=(1,4),
                     per_box_cov=(0.20,0.60), blur=(0.8,2.0), shadow=True):
@@ -258,6 +284,10 @@ def apply_occluders(pil_img, yolo_labels, coverage_drop=0.85,
         
         ox1 = max(0, cx - rw//2); oy1 = max(0, cy - rh//2)
         ox2 = min(W-1, ox1 + rw); oy2 = min(H-1, oy1 + rh)
+        
+        # Ensure valid coordinates after clamping
+        if ox2 <= ox1: ox2 = ox1 + 1
+        if oy2 <= oy1: oy2 = oy1 + 1
 
         col = _rand_skin_or_sleeve()
         # Vary opacity: some translucent, most opaque
@@ -358,14 +388,149 @@ def load_card_files(card_dirs):
 
 def canonicalize_name(name: str) -> str:
     """
-    Collapse reprints by stripping a trailing _<SET><digits> suffix if present.
-    Examples:
-      'Enlightened_Strike_WTR159' -> 'Enlightened_Strike'
-      'Snatch_SEA169' -> 'Snatch'
-    If no suffix matches, returns the name unchanged.
+    Return card name unchanged to preserve set codes.
+    Set codes (e.g., WTR173, WTR174, WTR175) distinguish different rarity variants
+    of the same card, which have different popularity weights.
+    
+    Previously this function stripped set codes to collapse reprints, but this
+    caused red/yellow/blue variants to be treated as identical.
+    
+    Examples (now preserved):
+      'Enlightened_Strike_WTR159' -> 'Enlightened_Strike_WTR159'
+      'Sigil_of_Solace_WTR173' -> 'Sigil_of_Solace_WTR173'
     """
-    m = re.match(r"^(.*)_([A-Z]{2,5}\d{1,5})$", name)
-    return m.group(1) if m else name
+    return name
+
+
+def load_popularity_weights(weights_path):
+    """
+    Load popularity weights from JSON file.
+    Returns:
+        - weights_dict: dict mapping canonicalized card names to their total weights
+        - rank_dict: dict mapping canonicalized card names to their popularity rank (1-based)
+    """
+    if not os.path.exists(weights_path):
+        print(f"[warning] Popularity weights file not found: {weights_path}")
+        return {}, {}
+    
+    try:
+        with open(weights_path, 'r') as f:
+            data = json.load(f)
+        
+        raw_weights = data.get('weights', {})
+        
+        # Build dict of canonicalized names -> total weights
+        weights_dict = {}
+        for card_key, weight_data in raw_weights.items():
+            canon_name = canonicalize_name(card_key)
+            total_weight = weight_data.get('total_weight', 0.0)
+            
+            # Accumulate weights for cards with multiple printings
+            if canon_name in weights_dict:
+                weights_dict[canon_name] += total_weight
+            else:
+                weights_dict[canon_name] = total_weight
+        
+        # Sort by weight descending to create rank mapping
+        sorted_cards = sorted(weights_dict.items(), key=lambda x: x[1], reverse=True)
+        rank_dict = {card: rank + 1 for rank, (card, _) in enumerate(sorted_cards)}
+        
+        print(f"[init] Loaded popularity weights for {len(weights_dict)} cards (ranked 1-{len(rank_dict)})")
+        return weights_dict, rank_dict
+    
+    except Exception as e:
+        print(f"[error] Failed to load popularity weights: {e}")
+        return {}, {}
+
+
+def filter_cards_by_popularity_rank(card_files, rank_dict, min_rank=None, max_rank=None):
+    """
+    Filter card files to only include those within the specified popularity rank range.
+    
+    Args:
+        card_files: list of (dir, filename) tuples
+        rank_dict: dict mapping canonicalized card names to ranks
+        min_rank: minimum rank (inclusive), e.g., 1 for top cards
+        max_rank: maximum rank (inclusive), e.g., 300 for top 300
+    
+    Returns:
+        filtered list of (dir, filename) tuples
+    """
+    if not rank_dict or (min_rank is None and max_rank is None):
+        return card_files  # No filtering
+    
+    filtered = []
+    for set_dir, card_filename in card_files:
+        raw_name = os.path.splitext(card_filename)[0]
+        canon_name = canonicalize_name(raw_name)
+        
+        rank = rank_dict.get(canon_name)
+        if rank is None:
+            # Card not in popularity data - skip by default when filtering
+            continue
+        
+        # Check if rank is within range
+        if min_rank is not None and rank < min_rank:
+            continue
+        if max_rank is not None and rank > max_rank:
+            continue
+        
+        filtered.append((set_dir, card_filename))
+    
+    print(f"[init] Filtered {len(card_files)} cards to {len(filtered)} within rank range [{min_rank or 1}, {max_rank or 'end'}]")
+    return filtered
+
+
+def weighted_card_choice(card_files, weights_dict, class_to_files=None, target_class=None):
+    """
+    Choose a card file using popularity weights with independent sampling.
+    Cards can be selected multiple times (realistic for gameplay scenarios).
+    
+    Args:
+        card_files: list of (dir, filename) tuples to choose from
+        weights_dict: dict mapping canonicalized card names to weights
+        class_to_files: optional dict for coverage-guided selection
+        target_class: optional specific class to select from (for coverage-guided)
+    
+    Returns:
+        (set_dir, card_filename) tuple
+    """
+    if target_class and class_to_files:
+        # Coverage-guided: choose from specific class
+        candidates = class_to_files.get(target_class, [])
+        if not candidates:
+            candidates = card_files
+    else:
+        candidates = card_files
+    
+    if not candidates:
+        raise RuntimeError("No card files available for selection")
+    
+    # If no weights available, fall back to uniform random
+    if not weights_dict:
+        return random.choice(candidates)
+    
+    # Build weights list for candidates
+    candidate_weights = []
+    for set_dir, card_filename in candidates:
+        raw_name = os.path.splitext(card_filename)[0]
+        canon_name = canonicalize_name(raw_name)
+        weight = weights_dict.get(canon_name, 0.0)
+        
+        # Use a minimum weight to ensure all cards have some chance
+        weight = max(weight, 0.001)
+        candidate_weights.append(weight)
+    
+    # Normalize weights to probabilities
+    total_weight = sum(candidate_weights)
+    if total_weight <= 0:
+        return random.choice(candidates)
+    
+    probabilities = [w / total_weight for w in candidate_weights]
+    
+    # Sample using weights (independent for each call)
+    chosen_idx = random.choices(range(len(candidates)), weights=probabilities, k=1)[0]
+    return candidates[chosen_idx]
 
 
 def load_or_create_class_index(index_path):
@@ -392,6 +557,257 @@ def save_class_index(index_path, names):
     os.makedirs(os.path.dirname(index_path), exist_ok=True)
     with open(index_path, 'w') as f:
         yaml.dump({'names': names}, f, default_flow_style=False)
+
+
+# ===================== POSITIONING CACHE SYSTEM =====================
+
+def get_positioning_cache_path(template_path, cache_dir):
+    """
+    Generate a cache file path for a template image.
+    Cache files are stored with the same name as the template but in the cache directory.
+    """
+    template_name = os.path.basename(template_path)
+    cache_name = os.path.splitext(template_name)[0] + '_positioning.json'
+    return os.path.join(cache_dir, cache_name)
+
+
+def load_positioning_cache(cache_path):
+    """
+    Load cached positioning data if it exists.
+    Returns None if cache doesn't exist or is invalid.
+    """
+    if not os.path.exists(cache_path):
+        return None
+    
+    try:
+        with open(cache_path, 'r') as f:
+            cache_data = json.load(f)
+        return cache_data
+    except Exception as e:
+        print(f"[warning] Failed to load positioning cache {cache_path}: {e}")
+        return None
+
+
+def save_positioning_cache(cache_path, positioning_data):
+    """
+    Save positioning data to cache file.
+    positioning_data format:
+    {
+        'template_size': [width, height],
+        'ref_bbox_stats': {
+            'avg_bbox_width': float,
+            'avg_bbox_height': float,
+            'avg_area': float,
+            'highlighted_card_threshold': float
+        },
+        'boxes': [
+            {
+                'class_id': int,
+                'bbox': [cx, cy, bw, bh],  # normalized coordinates
+                'best_angle': int,  # 0-359 degrees
+                'crop_corner': str,  # 'tl', 'tr', 'bl', 'br', 'center'
+                'visible_area': int  # pixels
+            },
+            ...
+        ]
+    }
+    """
+    os.makedirs(os.path.dirname(cache_path), exist_ok=True)
+    try:
+        with open(cache_path, 'w') as f:
+            json.dump(positioning_data, f, indent=2)
+    except Exception as e:
+        print(f"[warning] Failed to save positioning cache {cache_path}: {e}")
+
+
+def build_positioning_cache(template_img, label_lines, avg_bbox_width, avg_bbox_height, avg_area, highlighted_threshold):
+    """
+    Build complete positioning cache for a template by calculating optimal rotations.
+    Uses a dummy card image to determine rotations (geometry-dependent, not card-dependent).
+    
+    Returns cache data structure with all box-specific positioning info.
+    """
+    W, H = template_img.size
+    
+    # Create a dummy card image with proper FaB card aspect ratio (~63mm x ~88mm ≈ 0.714 aspect)
+    # Use a standard card size that will be scaled appropriately
+    CARD_ASPECT = 0.714  # width / height for FaB cards
+    dummy_h = 400  # Standard height in pixels
+    dummy_w = int(dummy_h * CARD_ASPECT)
+    dummy_card = Image.new('RGBA', (dummy_w, dummy_h), (255, 255, 255, 255))
+    
+    # Calculate aspect ratio stats for this template
+    aspect_ratios = []
+    for line in label_lines:
+        parts = line.strip().split()
+        if len(parts) == 5:
+            _, cx, cy, bw, bh = parts
+            bw, bh = float(bw), float(bh)
+            box_w_px = bw * W
+            box_h_px = bh * H
+            if box_w_px > 0:
+                aspect_ratios.append(box_h_px / box_w_px)
+    
+    aspect_ratios_sorted = sorted(aspect_ratios)
+    n = len(aspect_ratios_sorted)
+    lower = int(n * 0.25)
+    upper = int(n * 0.75)
+    trimmed = aspect_ratios_sorted[lower:upper] if upper > lower else aspect_ratios_sorted
+    ASPECT_SCALE = (1920.0 / 1080.0) / (640.0 / 640.0)  # = 1.778
+    avg_aspect = (sum(trimmed) / len(trimmed) if trimmed else 1.0) * ASPECT_SCALE
+    high_threshold = 1.5 * ASPECT_SCALE
+    high_aspects = [ar * ASPECT_SCALE for ar in aspect_ratios if ar >= 1.5]
+    high_avg_aspect = sum(high_aspects) / len(high_aspects) if high_aspects else avg_aspect * 2.4
+    
+    cache_data = {
+        'template_name': os.path.basename(template_img.filename) if hasattr(template_img, 'filename') else 'unknown',
+        'template_size': [W, H],
+        'ref_stats': {
+            'avg_bbox_width': float(avg_bbox_width),
+            'avg_bbox_height': float(avg_bbox_height),
+            'avg_area': float(avg_area),
+            'highlighted_card_threshold': float(highlighted_threshold)
+        },
+        'aspect_stats': {
+            'avg_aspect': float(avg_aspect),
+            'high_avg_aspect': float(high_avg_aspect)
+        },
+        'boxes': []
+    }
+    
+    # Calculate optimal rotation for each box
+    print(f"[cache] Building positioning cache for {len(label_lines)} boxes...")
+    for idx, line in enumerate(label_lines):
+        parts = line.strip().split()
+        if len(parts) != 5:
+            continue
+        
+        class_id_str, cx, cy, bw, bh = parts
+        class_id = int(class_id_str)
+        cx, cy, bw, bh = float(cx), float(cy), float(bw), float(bh)
+        
+        box_w = int(bw * W)
+        box_h = int(bh * H)
+        box_x = int((cx - bw/2) * W)
+        box_y = int((cy - bh/2) * H)
+        
+        # Determine if this is a highlighted card
+        bbox_area = bw * bh
+        is_highlighted = highlighted_threshold and bbox_area > highlighted_threshold
+        
+        # Calculate optimal rotation using paste_card's rotation search
+        # We use the dummy card and extract the best_angle by running the rotation logic
+        # For efficiency, we'll call paste_card but only care about the rotation
+        temp_img = template_img.copy()
+        
+        # Use paste_card to calculate best rotation (it will return the rotated result)
+        # but we just need to extract the angle it chose
+        # Actually, let's inline the rotation search here for clarity
+        
+        bbox_data = [cx, cy, bw, bh]
+        
+        # Calculate rotation using the same logic as paste_card
+        # (This duplicates some code but keeps the cache building self-contained)
+        import numpy as np
+        
+        # Scale dummy card based on whether it's highlighted
+        orig_w, orig_h = dummy_card.size
+        if is_highlighted:
+            scale_w = box_w / orig_w
+            scale_h = box_h / orig_h
+            card_scale = min(scale_w, scale_h)
+        else:
+            scale_w = avg_bbox_width / orig_w
+            scale_h = avg_bbox_height / orig_h
+            card_scale = (scale_w + scale_h) / 2.0
+        
+        # Apply 3.5% reduction
+        card_scale = card_scale * 0.965
+        
+        scaled_w = int(orig_w * card_scale)
+        scaled_h = int(orig_h * card_scale)
+        card_scaled = dummy_card.resize((scaled_w, scaled_h), Image.LANCZOS)
+        
+        # NEW SIMPLIFIED ROTATION ALGORITHM (same as paste_card)
+        card_arr = np.array(card_scaled)
+        if len(card_arr.shape) == 3 and card_arr.shape[2] == 4:
+            total_card_pixels = np.sum(card_arr[:, :, 3] > 10)
+        else:
+            total_card_pixels = scaled_w * scaled_h
+        
+        # STEP 1: Find angle with maximum visible surface area
+        best_angle_area = 0
+        best_visible_area = 0
+        
+        for angle in range(0, 360, 1):  # Test every 1 degree
+            test_card = card_scaled.rotate(-angle, expand=True, resample=Image.BICUBIC, fillcolor=(0, 0, 0, 0))
+            rot_w, rot_h = test_card.size
+            
+            overlap_w = min(rot_w, box_w)
+            overlap_h = min(rot_h, box_h)
+            overlap_region = test_card.crop((0, 0, overlap_w, overlap_h))
+            test_arr = np.array(overlap_region)
+            
+            if len(test_arr.shape) == 3 and test_arr.shape[2] == 4:
+                visible_pixels = np.sum(test_arr[:, :, 3] > 10)
+            else:
+                visible_pixels = overlap_w * overlap_h
+            
+            if visible_pixels > best_visible_area:
+                best_visible_area = visible_pixels
+                best_angle_area = angle
+        
+        # STEP 2: Test vertically mirrored angle
+        mirrored_angle = (180 - best_angle_area) % 360
+        
+        def count_bright_pixels_cache(angle):
+            test_card = card_scaled.rotate(-angle, expand=True, resample=Image.BICUBIC, fillcolor=(0, 0, 0, 0))
+            rot_w, rot_h = test_card.size
+            overlap_w = min(rot_w, box_w)
+            overlap_h = min(rot_h, box_h)
+            overlap_region = test_card.crop((0, 0, overlap_w, overlap_h))
+            
+            if overlap_region.mode == 'RGBA':
+                arr = np.array(overlap_region)
+                rgb = arr[:, :, :3]
+                alpha = arr[:, :, 3]
+                brightness = np.mean(rgb, axis=2)
+                bright_pixels = np.sum((brightness > 128) & (alpha > 10))
+            else:
+                gray = overlap_region.convert('L')
+                arr = np.array(gray)
+                bright_pixels = np.sum(arr > 128)
+            
+            return bright_pixels
+        
+        bright_original = count_bright_pixels_cache(best_angle_area)
+        bright_mirrored = count_bright_pixels_cache(mirrored_angle)
+        
+        if bright_mirrored > bright_original:
+            best_angle = mirrored_angle
+        else:
+            best_angle = best_angle_area
+        
+        # STEP 3: If right half of screen, rotate 180° more
+        img_center_x = W / 2
+        if box_x + box_w/2 >= img_center_x:
+            best_angle = (best_angle + 180) % 360
+        
+        cache_data['boxes'].append({
+            'index': idx,
+            'class_id': class_id,
+            'bbox': [cx, cy, bw, bh],
+            'is_highlighted': bool(is_highlighted),
+            'best_rotation': int(best_angle),
+            'pixel_coords': [box_x, box_y, box_w, box_h]
+        })
+    
+    print(f"[cache] Positioning cache built successfully")
+    return cache_data
+
+
+# =====================================================================
+
 
 def best_fit_to_bbox(card_img, box_w, box_h, avg_area=None):
     # Crop for aspect ratio < 0.75, or for horizontal cards with high aspect ratio and small area
@@ -453,15 +869,19 @@ def guess_rotation_direction(template_img, box_x, box_y, box_w, box_h):
     # If left is brighter, rotate one way; else, the other
     return 1 if left_brightness > right_brightness else -1
 
-def paste_card(template_img, card_img, bbox, avg_aspect, high_avg_aspect, avg_area, target_bbox_width, target_bbox_height, highlighted_threshold):
+def paste_card(template_img, card_img, bbox, avg_aspect, high_avg_aspect, avg_area, target_bbox_width, target_bbox_height, highlighted_threshold, cached_rotation=None, skip_bg_tint=False):
     """
     Place card in bbox with uniform scale across all cards:
     1. Detect if this is a "highlighted" card (much larger bbox)
     2. For normal cards: use uniform scale across scene
     3. For highlighted cards: scale independently to fit bbox
-    4. Test all 360 rotation angles to maximize visible card area
+    4. Test all 360 rotation angles to maximize visible card area (or use cached_rotation if provided)
     5. Crop to bbox if card extends beyond
     6. Apply background color tint and other post-processing
+    
+    Args:
+        cached_rotation: Optional pre-calculated optimal rotation angle (0-359). If provided, skips rotation search.
+        skip_bg_tint: If True, skips background color sampling/tinting (useful for chaos mode with synthetic backgrounds)
     """
     from PIL import ImageFilter, ImageEnhance
     import numpy as np
@@ -490,74 +910,94 @@ def paste_card(template_img, card_img, bbox, avg_aspect, high_avg_aspect, avg_ar
         scale_h = target_bbox_height / orig_h
         card_scale = (scale_w + scale_h) / 2.0  # Average scale - balances both dimensions
     
+    # Apply 3.5% reduction to prevent cards from being slightly too large
+    card_scale = card_scale * 0.965
+    
     # Apply uniform scale to card (same for all cards in scene)
     scaled_w = int(orig_w * card_scale)
     scaled_h = int(orig_h * card_scale)
     card_scaled = card_img.resize((scaled_w, scaled_h), Image.LANCZOS)
     
-    # Test rotation angles to maximize card visibility AND maximize corner contact with bbox
-    best_angle = 0
-    best_visible_area = 0
-    best_corners_touching = 0
-    
-    # Calculate total card pixels for early exit condition
-    card_arr = np.array(card_scaled)
-    if len(card_arr.shape) == 3 and card_arr.shape[2] == 4:
-        total_card_pixels = np.sum(card_arr[:, :, 3] > 10)
+    # Use cached rotation if available, otherwise calculate optimal rotation
+    if cached_rotation is not None:
+        best_angle = cached_rotation
     else:
-        total_card_pixels = scaled_w * scaled_h
-    
-    # Tolerance for "corner touching": 5% of bbox dimensions
-    tolerance_w = box_w * 0.05
-    tolerance_h = box_h * 0.05
-    
-    # Sample every 8 degrees for speed (45 iterations instead of 360)
-    for angle in range(0, 360, 8):
-        # Rotate scaled card WITH expansion to see full rotated bounds
-        test_card = card_scaled.rotate(-angle, expand=True, resample=Image.BICUBIC, fillcolor=(0, 0, 0, 0))
+        # NEW SIMPLIFIED ROTATION ALGORITHM
+        # Step 1: Find angle that maximizes visible surface area (test every degree, 0-359)
+        # Step 2: Test mirrored angle and choose based on bright pixel coverage
+        # Step 3: If right half of screen, rotate 180° more
         
-        # Calculate overlap between rotated card bounds and bbox
-        rot_w, rot_h = test_card.size
-        
-        # Count how many corners of the rotated card touch the bbox edges (with tolerance)
-        corners_touching = 0
-        if rot_w >= box_w - tolerance_w:  # Left and right edges touch (within tolerance)
-            corners_touching += 2
-        if rot_h >= box_h - tolerance_h:  # Top and bottom edges touch (within tolerance)
-            corners_touching += 2
-        
-        # Visible area is the intersection
-        overlap_w = min(rot_w, box_w)
-        overlap_h = min(rot_h, box_h)
-        
-        # Count actual card pixels in this overlap region (not transparent)
-        overlap_region = test_card.crop((0, 0, overlap_w, overlap_h))
-        test_arr = np.array(overlap_region)
-        
-        if len(test_arr.shape) == 3 and test_arr.shape[2] == 4:  # Has alpha channel
-            visible_pixels = np.sum(test_arr[:, :, 3] > 10)  # Count non-transparent pixels
+        card_arr = np.array(card_scaled)
+        if len(card_arr.shape) == 3 and card_arr.shape[2] == 4:
+            total_card_pixels = np.sum(card_arr[:, :, 3] > 10)
         else:
-            visible_pixels = overlap_w * overlap_h  # No alpha, all visible
+            total_card_pixels = scaled_w * scaled_h
         
-        # Prioritize: 100% visible + 4 corners > fewer corners > more visible area
-        is_better = False
-        if visible_pixels >= total_card_pixels * 0.98:  # Card is fully visible
-            if corners_touching > best_corners_touching:
-                is_better = True
-            elif corners_touching == best_corners_touching and visible_pixels > best_visible_area:
-                is_better = True
-        elif visible_pixels > best_visible_area:
-            # Not fully visible yet, just maximize visible area
-            is_better = True
+        # STEP 1: Find angle with maximum visible surface area
+        best_angle_area = 0
+        best_visible_area = 0
         
-        if is_better:
-            best_visible_area = visible_pixels
-            best_corners_touching = corners_touching
-            best_angle = angle
+        for angle in range(0, 360, 1):  # Test every 1 degree
+            test_card = card_scaled.rotate(-angle, expand=True, resample=Image.BICUBIC, fillcolor=(0, 0, 0, 0))
+            rot_w, rot_h = test_card.size
             
-            # Early exit: 100% visible AND 4 corners touching = perfect fit
-            if best_visible_area >= total_card_pixels * 0.98 and best_corners_touching >= 4:
-                break
+            # Calculate visible area (intersection with bbox)
+            overlap_w = min(rot_w, box_w)
+            overlap_h = min(rot_h, box_h)
+            overlap_region = test_card.crop((0, 0, overlap_w, overlap_h))
+            test_arr = np.array(overlap_region)
+            
+            if len(test_arr.shape) == 3 and test_arr.shape[2] == 4:
+                visible_pixels = np.sum(test_arr[:, :, 3] > 10)
+            else:
+                visible_pixels = overlap_w * overlap_h
+            
+            if visible_pixels > best_visible_area:
+                best_visible_area = visible_pixels
+                best_angle_area = angle
+        
+        # STEP 2: Test vertically mirrored angle and choose based on bright pixels
+        # Mirror formula: if angle is X, mirror is 180 - X (for vertical mirror across horizontal axis)
+        # But we want to maintain orientation, so we test small deviations around the found angle
+        mirrored_angle = (180 - best_angle_area) % 360
+        
+        # Test both angles and count bright pixels in the overlap region
+        def count_bright_pixels(angle):
+            test_card = card_scaled.rotate(-angle, expand=True, resample=Image.BICUBIC, fillcolor=(0, 0, 0, 0))
+            rot_w, rot_h = test_card.size
+            overlap_w = min(rot_w, box_w)
+            overlap_h = min(rot_h, box_h)
+            overlap_region = test_card.crop((0, 0, overlap_w, overlap_h))
+            
+            # Convert to grayscale to measure brightness
+            if overlap_region.mode == 'RGBA':
+                # Only consider non-transparent pixels
+                arr = np.array(overlap_region)
+                rgb = arr[:, :, :3]
+                alpha = arr[:, :, 3]
+                brightness = np.mean(rgb, axis=2)
+                # Count bright pixels (>128) that are not transparent
+                bright_pixels = np.sum((brightness > 128) & (alpha > 10))
+            else:
+                gray = overlap_region.convert('L')
+                arr = np.array(gray)
+                bright_pixels = np.sum(arr > 128)
+            
+            return bright_pixels
+        
+        bright_original = count_bright_pixels(best_angle_area)
+        bright_mirrored = count_bright_pixels(mirrored_angle)
+        
+        # Choose the angle with more bright pixels
+        if bright_mirrored > bright_original:
+            best_angle = mirrored_angle
+        else:
+            best_angle = best_angle_area
+        
+        # STEP 3: If right half of screen, rotate 180° more
+        img_center_x = w / 2
+        if box_x + box_w/2 >= img_center_x:
+            best_angle = (best_angle + 180) % 360
     
     # Apply best rotation WITH expansion
     if best_angle != 0:
@@ -565,60 +1005,91 @@ def paste_card(template_img, card_img, bbox, avg_aspect, high_avg_aspect, avg_ar
     else:
         card_rotated = card_scaled
     
-    # Crop or center card in bbox
+    # Crop or center card in bbox WITH RANDOM OFFSET for variety
     card_w, card_h = card_rotated.size
+    
+    # ALWAYS apply random alignment to simulate partial occlusion from all directions
+    # Choose random alignment independently for X and Y axes
+    h_align = random.choice(['left', 'center', 'right'])
+    v_align = random.choice(['top', 'center', 'bottom'])
+    
+    # Calculate the "ideal" position based on alignment
+    if h_align == 'left':
+        ideal_x = 0
+    elif h_align == 'right':
+        ideal_x = max(0, card_w - box_w)
+    else:  # center
+        ideal_x = max(0, (card_w - box_w) // 2)
+    
+    if v_align == 'top':
+        ideal_y = 0
+    elif v_align == 'bottom':
+        ideal_y = max(0, card_h - box_h)
+    else:  # center
+        ideal_y = max(0, (card_h - box_h) // 2)
+    
+    # Apply random jitter to create more variation (±10% of card size)
+    jitter_x = int(random.uniform(-0.1, 0.1) * card_w)
+    jitter_y = int(random.uniform(-0.1, 0.1) * card_h)
+    
+    crop_x = max(0, min(card_w - box_w, ideal_x + jitter_x)) if card_w > box_w else 0
+    crop_y = max(0, min(card_h - box_h, ideal_y + jitter_y)) if card_h > box_h else 0
+    
     if card_w > box_w or card_h > box_h:
-        # Card is larger - crop to bbox (randomly choose corner alignment)
-        corner = random.choice(['tl', 'tr', 'bl', 'br', 'center'])
-        if corner == 'tl':
-            crop_x, crop_y = 0, 0
-        elif corner == 'tr':
-            crop_x, crop_y = max(0, card_w - box_w), 0
-        elif corner == 'bl':
-            crop_x, crop_y = 0, max(0, card_h - box_h)
-        elif corner == 'br':
-            crop_x, crop_y = max(0, card_w - box_w), max(0, card_h - box_h)
-        else:  # center
-            crop_x = max(0, (card_w - box_w) // 2)
-            crop_y = max(0, (card_h - box_h) // 2)
-        
+        # Card is larger - crop with randomized position
         card_final = card_rotated.crop((crop_x, crop_y, crop_x + box_w, crop_y + box_h))
     else:
-        # Card is smaller - center it in bbox with transparent padding
+        # Card is smaller - but still apply offset instead of perfect centering
         card_final = Image.new('RGBA', (box_w, box_h), (0, 0, 0, 0))
-        paste_x = (box_w - card_w) // 2
-        paste_y = (box_h - card_h) // 2
+        
+        # Add random offset to paste position (±20% of available space)
+        available_x = box_w - card_w
+        available_y = box_h - card_h
+        
+        base_x = available_x // 2  # Start with center
+        base_y = available_y // 2
+        
+        offset_x = int(random.uniform(-0.4, 0.4) * available_x) if available_x > 0 else 0
+        offset_y = int(random.uniform(-0.4, 0.4) * available_y) if available_y > 0 else 0
+        
+        paste_x = max(0, min(available_x, base_x + offset_x))
+        paste_y = max(0, min(available_y, base_y + offset_y))
         card_final.paste(card_rotated, (paste_x, paste_y), card_rotated)
     
     # Post-processing: sample background properties and apply to card
-    # Sample bounding box region from template
-    bbox_crop = template_img.crop((box_x, box_y, box_x + box_w, box_y + box_h)).convert('RGB')
-    # Calculate average brightness
-    arr = np.array(bbox_crop)
-    avg_brightness = np.mean(arr)
-    # Calculate average color for tint overlay
-    avg_color = tuple(np.mean(arr, axis=(0, 1)).astype(int))
-    
-    # Estimate blur by variance of Laplacian (simple proxy)
-    gray = np.mean(arr, axis=2)
-    laplacian = np.abs(np.gradient(gray)[0]) + np.abs(np.gradient(gray)[1])
-    blur_level = max(0.5, min(2.5, 2.5 - np.var(laplacian) / 50))  # scale to [0.5, 2.5]
-    
-    # Apply blur to card
-    card_post = card_final.filter(ImageFilter.GaussianBlur(radius=blur_level))
-    # Match brightness
-    card_post = ImageEnhance.Brightness(card_post).enhance(avg_brightness / 128)
-    
-    # Apply translucent color tint from background, preserving alpha
-    from PIL import Image as PILImage
-    tint_layer = PILImage.new('RGB', card_post.size, avg_color)
-    card_rgb = card_post.convert('RGB')
-    card_tinted = PILImage.blend(card_rgb, tint_layer, alpha=0.15)
-    # Restore alpha channel
-    card_post_final = PILImage.new('RGBA', card_post.size)
-    card_post_final.paste(card_tinted, (0, 0))
-    if card_post.mode == 'RGBA':
-        card_post_final.putalpha(card_post.split()[3])  # Copy original alpha
+    # Skip background tinting in chaos mode (synthetic backgrounds cause extreme tints)
+    if not skip_bg_tint:
+        # Sample bounding box region from template
+        bbox_crop = template_img.crop((box_x, box_y, box_x + box_w, box_y + box_h)).convert('RGB')
+        # Calculate average brightness
+        arr = np.array(bbox_crop)
+        avg_brightness = np.mean(arr)
+        # Calculate average color for tint overlay
+        avg_color = tuple(np.mean(arr, axis=(0, 1)).astype(int))
+        
+        # Estimate blur by variance of Laplacian (simple proxy)
+        gray = np.mean(arr, axis=2)
+        laplacian = np.abs(np.gradient(gray)[0]) + np.abs(np.gradient(gray)[1])
+        blur_level = max(0.5, min(2.5, 2.5 - np.var(laplacian) / 50))  # scale to [0.5, 2.5]
+        
+        # Apply blur to card
+        card_post = card_final.filter(ImageFilter.GaussianBlur(radius=blur_level))
+        # Match brightness
+        card_post = ImageEnhance.Brightness(card_post).enhance(avg_brightness / 128)
+        
+        # Apply translucent color tint from background, preserving alpha
+        from PIL import Image as PILImage
+        tint_layer = PILImage.new('RGB', card_post.size, avg_color)
+        card_rgb = card_post.convert('RGB')
+        card_tinted = PILImage.blend(card_rgb, tint_layer, alpha=0.15)
+        # Restore alpha channel
+        card_post_final = PILImage.new('RGBA', card_post.size)
+        card_post_final.paste(card_tinted, (0, 0))
+        if card_post.mode == 'RGBA':
+            card_post_final.putalpha(card_post.split()[3])  # Copy original alpha
+    else:
+        # Chaos mode: minimal processing - just slight blur
+        card_post_final = card_final.filter(ImageFilter.GaussianBlur(radius=0.8))
     
     # Paste processed card at bbox location with alpha transparency
     template_img.paste(card_post_final, (box_x, box_y), card_post_final)
@@ -649,6 +1120,11 @@ parser.add_argument('--coverage-file', type=str, default=None, help='Path to cov
 parser.add_argument('--seed', type=int, default=None, help='Optional RNG seed for reproducibility')
 parser.add_argument('--makeup-min', type=int, default=0, help='If >0, ensure at least this many labels per class in the specified split (best effort within num-images)')
 parser.add_argument('--makeup-split', type=str, choices=['train','valid','test'], default=None, help='Split to apply makeup-min target to; defaults to the split being generated each iteration')
+parser.add_argument('--popularity-min', type=int, default=None, help='Minimum popularity rank (inclusive) - e.g., 1 for top cards, 301 for cards after top 300')
+parser.add_argument('--popularity-max', type=int, default=None, help='Maximum popularity rank (inclusive) - e.g., 300 for top 300, 600 for top 600')
+parser.add_argument('--use-popularity-weights', action='store_true', help='Use popularity weights for weighted card sampling (biases towards more popular cards)')
+parser.add_argument('--popularity-weights-path', type=str, default=None, help='Path to card popularity weights JSON file')
+# Chaos mode removed - see generate_chaos_mode.py for synthetic background generation
 args = parser.parse_args()
 
 # Number of synthetic images to generate
@@ -658,8 +1134,25 @@ NUM_SYNTHETIC_IMAGES = args.num_images if args.num_images is not None else NUM_S
 if args.card_dirs:
     CARD_SET_DIRS = args.card_dirs
 
+# Load popularity weights if available
+popularity_weights_path = args.popularity_weights_path or POPULARITY_WEIGHTS_PATH
+weights_dict, rank_dict = load_popularity_weights(popularity_weights_path)
+
+# Validate popularity rank arguments
+if args.popularity_min is not None and args.popularity_max is not None:
+    if args.popularity_min > args.popularity_max:
+        raise ValueError(f"--popularity-min ({args.popularity_min}) cannot be greater than --popularity-max ({args.popularity_max})")
+    if args.popularity_min < 1:
+        raise ValueError(f"--popularity-min must be at least 1")
+
 # Load card files for this run
 card_files = load_card_files(CARD_SET_DIRS)
+
+# Filter cards by popularity rank if specified
+if args.popularity_min is not None or args.popularity_max is not None:
+    card_files = filter_cards_by_popularity_rank(card_files, rank_dict, args.popularity_min, args.popularity_max)
+    if not card_files:
+        raise RuntimeError(f"No cards found within popularity rank range [{args.popularity_min or 1}, {args.popularity_max or 'end'}]")
 
 # Load and update persistent class index with any new card names from this run
 class_index_path = os.path.join(OUTPUT_BASE_DIR, 'classes.yaml')
@@ -863,78 +1356,68 @@ for _ in range(NUM_SYNTHETIC_IMAGES):
     with Image.open(template_path).convert('RGB') as template_img:
         with open(label_path, 'r') as lf:
             lines = lf.readlines()
+        
+        # Copy template for processing
         img_copy = template_img.copy()
+        
         label_copy = []
-        # Find min_height for all bounding boxes in this image
-        heights = []
-        areas = []
+        
+        # Calculate average bbox dimensions using ONLY "Ref" class (class_id==1)
+        # This provides accurate sizing since Ref boxes are perfectly aligned
+        ref_bbox_widths = []
+        ref_bbox_heights = []
+        
         for line in lines:
             parts = line.strip().split()
             if len(parts) == 5:
-                _, cx, cy, bw, bh = parts
-                heights.append(float(bh))
-                # Calculate area for each bounding box
-                bw = float(bw)
-                bh = float(bh)
-                areas.append(bw * bh)
-        min_height = min(heights) if heights else 1.0
-        
-        # Calculate average area, but filter out outliers (covered/partial cards)
-        # Also track the actual bbox dimensions (not just areas)
-        bbox_widths = []
-        bbox_heights = []
-        highlighted_card_threshold = None  # For detecting blown-up cards
-        
-        if areas:
-            # Sort areas to find the central cluster
-            sorted_areas = sorted(areas)
-            n_areas = len(sorted_areas)
-            
-            # Find median area as the cluster center
-            if n_areas % 2 == 0:
-                median_area = (sorted_areas[n_areas//2 - 1] + sorted_areas[n_areas//2]) / 2
-            else:
-                median_area = sorted_areas[n_areas//2]
-            
-            # Filter: keep only boxes within ±10% of median (normal cards)
-            # Exclude boxes >1.5x median (highlighted/blown-up cards)
-            lower_bound = median_area * 0.9
-            upper_bound = median_area * 1.1
-            highlighted_card_threshold = median_area * 1.5  # Cards bigger than this are "highlighted"
-            
-            # Collect dimensions of filtered boxes (normal cards only)
-            for line in lines:
-                parts = line.strip().split()
-                if len(parts) == 5:
-                    _, cx, cy, bw, bh = parts
+                class_id, cx, cy, bw, bh = parts
+                class_id = int(class_id)
+                
+                # Only use Ref class (class_id==1) for sizing calculations
+                if class_id == CLASS_ID_REF:
                     bw = float(bw)
                     bh = float(bh)
-                    area = bw * bh
-                    if lower_bound <= area <= upper_bound:
-                        # Convert normalized coords to pixels
-                        bbox_widths.append(bw * template_img.size[0])
-                        bbox_heights.append(bh * template_img.size[1])
+                    # Convert normalized coords to pixels
+                    ref_bbox_widths.append(bw * template_img.size[0])
+                    ref_bbox_heights.append(bh * template_img.size[1])
+        
+        # Calculate median dimensions from Ref boxes
+        if ref_bbox_widths and ref_bbox_heights:
+            ref_bbox_widths_sorted = sorted(ref_bbox_widths)
+            ref_bbox_heights_sorted = sorted(ref_bbox_heights)
+            n_ref = len(ref_bbox_widths_sorted)
             
-            # Use median of filtered boxes (more robust than average)
-            if len(bbox_widths) >= max(3, n_areas // 3):  # At least 3 or 1/3 of boxes
-                bbox_widths_sorted = sorted(bbox_widths)
-                bbox_heights_sorted = sorted(bbox_heights)
-                n_filtered = len(bbox_widths_sorted)
-                
-                if n_filtered % 2 == 0:
-                    avg_bbox_width = (bbox_widths_sorted[n_filtered//2 - 1] + bbox_widths_sorted[n_filtered//2]) / 2
-                    avg_bbox_height = (bbox_heights_sorted[n_filtered//2 - 1] + bbox_heights_sorted[n_filtered//2]) / 2
-                else:
-                    avg_bbox_width = bbox_widths_sorted[n_filtered//2]
-                    avg_bbox_height = bbox_heights_sorted[n_filtered//2]
-                
-                avg_area = avg_bbox_width * avg_bbox_height
+            if n_ref % 2 == 0:
+                avg_bbox_width = (ref_bbox_widths_sorted[n_ref//2 - 1] + ref_bbox_widths_sorted[n_ref//2]) / 2
+                avg_bbox_height = (ref_bbox_heights_sorted[n_ref//2 - 1] + ref_bbox_heights_sorted[n_ref//2]) / 2
             else:
-                # Fall back to median calculation
-                avg_area = median_area * template_img.size[0] * template_img.size[1]
-                avg_bbox_width = math.sqrt(avg_area / 1.4)
-                avg_bbox_height = avg_bbox_width * 1.4
+                avg_bbox_width = ref_bbox_widths_sorted[n_ref//2]
+                avg_bbox_height = ref_bbox_heights_sorted[n_ref//2]
+            
+            avg_area = avg_bbox_width * avg_bbox_height
+            # Set threshold to detect "highlighted" cards (normalized area > 2.5x average)
+            # These are oversized cards in broadcast overlays that should scale independently
+            highlighted_card_threshold = 2.5 * (avg_area / (template_img.size[0] * template_img.size[1]))
+            
+            print(f"[sizing] Using {n_ref} Ref boxes: avg_width={avg_bbox_width:.1f}px, avg_height={avg_bbox_height:.1f}px")
+            
+            # Try to load positioning cache
+            positioning_cache = None
+            cache_path = get_positioning_cache_path(template_path, POSITIONING_CACHE_DIR)
+            positioning_cache = load_positioning_cache(cache_path)
+            
+            if positioning_cache is None:
+                # Cache doesn't exist - build it now
+                print(f"[cache] No cache found, building for template: {os.path.basename(template_path)}")
+                positioning_cache = build_positioning_cache(
+                    template_img, lines, avg_bbox_width, avg_bbox_height, avg_area, highlighted_card_threshold
+                )
+                save_positioning_cache(cache_path, positioning_cache)
+            else:
+                print(f"[cache] Loaded cache for template: {os.path.basename(template_path)}")
         else:
+            # Fallback if no Ref boxes found (shouldn't happen with new data)
+            print("[warning] No Ref boxes found, using fallback sizing")
             avg_area = None
             avg_bbox_width = 300
             avg_bbox_height = 420
@@ -966,29 +1449,49 @@ for _ in range(NUM_SYNTHETIC_IMAGES):
         high_threshold = 1.5 * ASPECT_SCALE
         high_aspects = [ar * ASPECT_SCALE for ar in aspect_ratios if ar >= 1.5]
         high_avg_aspect = sum(high_aspects) / len(high_aspects) if high_aspects else avg_aspect * 2.4
+        
+        # Process each bounding box with independent card selection
+        box_index = 0
         for line in lines:
             parts = line.strip().split()
             if len(parts) == 5:
-                # Select a card image from provided set directories
+                # Select a card image from provided set directories (independent sampling)
                 if not card_files:
                     raise RuntimeError("No card PNG files found in the specified card directories.")
-                # Coverage-guided pick or random fallback
+                
+                # Coverage-guided pick or random/weighted fallback
                 if args.coverage_guided and class_to_files:
                     target_split = args.makeup_split or split_folder
                     class_name = choose_class_for_split(coverage, target_split, class_to_files.keys(), makeup_min=args.makeup_min)
-                    # If chosen class has no files (shouldn't happen), fall back to random
-                    files_for_class = class_to_files.get(class_name) or [random.choice(card_files)]
-                    set_dir, card_filename = random.choice(files_for_class)
+                    
+                    # Use weighted selection within the chosen class if weights enabled
+                    if args.use_popularity_weights:
+                        set_dir, card_filename = weighted_card_choice(card_files, weights_dict, class_to_files, class_name)
+                    else:
+                        # If chosen class has no files (shouldn't happen), fall back to random
+                        files_for_class = class_to_files.get(class_name) or [random.choice(card_files)]
+                        set_dir, card_filename = random.choice(files_for_class)
                 else:
-                    set_dir, card_filename = random.choice(card_files)
+                    # Use weighted selection if enabled, otherwise uniform random
+                    if args.use_popularity_weights:
+                        set_dir, card_filename = weighted_card_choice(card_files, weights_dict)
+                    else:
+                        set_dir, card_filename = random.choice(card_files)
                     raw_name = os.path.splitext(card_filename)[0]
                     class_name = canonicalize_name(raw_name)
+                
                 card_path = os.path.join(set_dir, card_filename)
                 raw_name = os.path.splitext(card_filename)[0]
                 class_name = canonicalize_name(raw_name)
                 class_id = name_to_id[class_name]
+                
+                # Get cached rotation for this box if available
+                cached_rotation = None
+                if positioning_cache and box_index < len(positioning_cache.get('boxes', [])):
+                    cached_rotation = positioning_cache['boxes'][box_index].get('best_rotation')
+                
                 with Image.open(card_path).convert('RGBA') as card_img:
-                    img_copy = paste_card(img_copy, card_img, parts[1:], avg_aspect, high_avg_aspect, avg_area, avg_bbox_width, avg_bbox_height, highlighted_card_threshold)
+                    img_copy = paste_card(img_copy, card_img, parts[1:], avg_aspect, high_avg_aspect, avg_area, avg_bbox_width, avg_bbox_height, highlighted_card_threshold, cached_rotation, skip_bg_tint=False)
                 # Update class id using the persistent mapping
                 label_copy.append(f"{class_id} {' '.join(parts[1:])}\n")
                 # Update in-memory coverage counters
@@ -998,6 +1501,8 @@ for _ in range(NUM_SYNTHETIC_IMAGES):
                         coverage['counts']['total'][class_name] += 1
                     except Exception:
                         pass
+                
+                box_index += 1
     # Final random rotation (0, 90, 180, 270 degrees) and label update
     final_angle = random.choice([0, 90, 180, 270])
     if final_angle != 0:
