@@ -2,22 +2,27 @@
 # Change these paths to select which sets and backgrounds to use
 
 # Folder containing background images (playmat screenshots) with Card/Ref labels
-TEMPLATE_BASE = r'C:\VS Code\FaB Code\data\images\YouTube_Labeled'
+TEMPLATE_BASE = '/root/FaBCode/data/images/YouTube_Labeled'
 
 # Base folder containing all card image sets
-CARD_IMAGES_BASE = r'c:\VS Code\FaB Code\data\images'
+CARD_IMAGES_BASE = '/root/FaBCode/data/images'
 
 # Folder to save synthetic output (will create train, test, valid subfolders)
-OUTPUT_BASE_DIR = r'c:\VS Code\FaB Code\data\synthetic_2'
+OUTPUT_BASE_DIR = '/root/FaBCode/data/synthetic'
 
 # Folder to save positioning cache files (saves card placement calculations)
-POSITIONING_CACHE_DIR = r'c:\VS Code\FaB Code\data\positioning_cache'
+POSITIONING_CACHE_DIR = '/root/FaBCode/data/positioning_cache'
 
 # Number of synthetic images to generate (set this for each run)
 NUM_SYNTHETIC_IMAGES = 20  # <--- Change this value for your trial runs
 
 # Path to card popularity weights JSON file
-POPULARITY_WEIGHTS_PATH = r'c:\VS Code\FaB Code\data\card_popularity_weights.json'
+POPULARITY_WEIGHTS_PATH = '/root/FaBCode/data/card_popularity_weights.json'
+
+# Dampening power for popularity weights (0.92 = moderate smoothing)
+# Lower values = more equal distribution, Higher values (closer to 1.0) = keep original distribution
+# 0.92 reduces top card advantage from 23.5x to 18.2x
+WEIGHT_DAMPENING_POWER = 0.92
 
 # Class IDs for Card and Ref (from YOLO labels)
 CLASS_ID_CARD = 0
@@ -33,11 +38,60 @@ from PIL import Image, ImageFilter, ImageDraw
 import yaml
 import argparse
 import re
+import multiprocessing
+
+# ===================== SYSTEM DETECTION =====================
+def detect_system_resources():
+    """Detect available GPUs and CPU cores."""
+    gpu_available = False
+    gpu_count = 0
+    cpu_count = multiprocessing.cpu_count()
+    
+    try:
+        import torch
+        if torch.cuda.is_available():
+            gpu_available = True
+            gpu_count = torch.cuda.device_count()
+            print(f"[system] Detected {gpu_count} GPU(s): {torch.cuda.get_device_name(0)}")
+        else:
+            print(f"[system] No GPU detected, using CPU only")
+    except ImportError:
+        print(f"[system] PyTorch not available, using CPU only")
+    
+    print(f"[system] Available CPU cores: {cpu_count}")
+    
+    # Determine optimal thread count for card processing
+    # Leave some cores for system and other processes
+    if cpu_count >= 96:
+        # High-end system with 96+ cores
+        optimal_threads = min(16, cpu_count // 8)  # Use up to 16 threads per process
+    elif cpu_count >= 32:
+        # Mid-range server with 32-96 cores
+        optimal_threads = min(12, cpu_count // 4)
+    elif cpu_count >= 16:
+        # Workstation with 16-32 cores
+        optimal_threads = min(8, cpu_count // 2)
+    else:
+        # Desktop with <16 cores
+        optimal_threads = max(4, cpu_count // 2)
+    
+    return {
+        'gpu_available': gpu_available,
+        'gpu_count': gpu_count,
+        'cpu_count': cpu_count,
+        'optimal_threads': optimal_threads
+    }
+
+# Detect system resources at module load time
+SYSTEM_RESOURCES = detect_system_resources()
+
+# ==============================================================
 import json
 import io
 import numpy as np
 import math
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import pathlib
 
@@ -517,6 +571,10 @@ def weighted_card_choice(card_files, weights_dict, class_to_files=None, target_c
         canon_name = canonicalize_name(raw_name)
         weight = weights_dict.get(canon_name, 0.0)
         
+        # Apply dampening to smooth distribution
+        if weight > 0:
+            weight = weight ** WEIGHT_DAMPENING_POWER
+        
         # Use a minimum weight to ensure all cards have some chance
         weight = max(weight, 0.001)
         candidate_weights.append(weight)
@@ -869,6 +927,154 @@ def guess_rotation_direction(template_img, box_x, box_y, box_w, box_h):
     # If left is brighter, rotate one way; else, the other
     return 1 if left_brightness > right_brightness else -1
 
+
+def process_single_card(card_path, bbox, avg_aspect, high_avg_aspect, avg_area, 
+                       target_bbox_width, target_bbox_height, highlighted_threshold, 
+                       cached_rotation, template_img, skip_bg_tint=False):
+    """
+    Process a single card: load, resize, rotate, crop, and apply post-processing.
+    Returns the processed card image ready for pasting and its bounding box position.
+    
+    This function is designed to be called in parallel for all cards in a scene.
+    
+    Returns:
+        tuple: (processed_card_img, box_x, box_y, box_w, box_h)
+    """
+    from PIL import ImageFilter, ImageEnhance
+    import numpy as np
+    
+    # Parse bounding box
+    w, h = template_img.size
+    cx, cy, bw, bh = [float(x) for x in bbox]
+    box_w, box_h = int(bw * w), int(bh * h)
+    box_x, box_y = int((cx - bw/2) * w), int((cy - bh/2) * h)
+    
+    # Load and convert card image
+    with Image.open(card_path).convert('RGBA') as card_img:
+        # Get original card dimensions
+        orig_w, orig_h = card_img.size
+        
+        # Check if this is a "highlighted" card (blown up for broadcast overlay)
+        bbox_area = bw * bh
+        is_highlighted = highlighted_threshold and bbox_area > highlighted_threshold
+        
+        if is_highlighted:
+            # Highlighted card: scale to fit its bbox independently (maintain aspect ratio)
+            scale_w = box_w / orig_w
+            scale_h = box_h / orig_h
+            card_scale = min(scale_w, scale_h)  # Fit within bbox without stretching
+        else:
+            # Normal card: use uniform scale based on target bbox dimensions
+            # Use average of width/height scales to balance filling the bbox
+            scale_w = target_bbox_width / orig_w
+            scale_h = target_bbox_height / orig_h
+            card_scale = (scale_w + scale_h) / 2.0  # Average scale - balances both dimensions
+        
+        # Apply 3.5% reduction to prevent cards from being slightly too large
+        card_scale = card_scale * 0.965
+        
+        # Apply uniform scale to card (same for all cards in scene)
+        scaled_w = int(orig_w * card_scale)
+        scaled_h = int(orig_h * card_scale)
+        card_scaled = card_img.resize((scaled_w, scaled_h), Image.LANCZOS)
+        
+        # Apply rotation (using cached rotation, no calculation needed)
+        best_angle = cached_rotation if cached_rotation is not None else 0
+        
+        # Apply best rotation WITH expansion
+        if best_angle != 0:
+            card_rotated = card_scaled.rotate(-best_angle, expand=True, resample=Image.BICUBIC, fillcolor=(0, 0, 0, 0))
+        else:
+            card_rotated = card_scaled
+        
+        # Crop or center card in bbox WITH RANDOM OFFSET for variety
+        card_w, card_h = card_rotated.size
+        
+        # ALWAYS apply random alignment to simulate partial occlusion from all directions
+        # Choose random alignment independently for X and Y axes
+        h_align = random.choice(['left', 'center', 'right'])
+        v_align = random.choice(['top', 'center', 'bottom'])
+        
+        # Calculate the "ideal" position based on alignment
+        if h_align == 'left':
+            ideal_x = 0
+        elif h_align == 'right':
+            ideal_x = max(0, card_w - box_w)
+        else:  # center
+            ideal_x = max(0, (card_w - box_w) // 2)
+        
+        if v_align == 'top':
+            ideal_y = 0
+        elif v_align == 'bottom':
+            ideal_y = max(0, card_h - box_h)
+        else:  # center
+            ideal_y = max(0, (card_h - box_h) // 2)
+        
+        # Apply random jitter to create more variation (±10% of card size)
+        jitter_x = int(random.uniform(-0.1, 0.1) * card_w)
+        jitter_y = int(random.uniform(-0.1, 0.1) * card_h)
+        
+        crop_x = max(0, min(card_w - box_w, ideal_x + jitter_x)) if card_w > box_w else 0
+        crop_y = max(0, min(card_h - box_h, ideal_y + jitter_y)) if card_h > box_h else 0
+        
+        if card_w > box_w or card_h > box_h:
+            # Card is larger - crop with randomized position
+            card_final = card_rotated.crop((crop_x, crop_y, crop_x + box_w, crop_y + box_h))
+        else:
+            # Card is smaller - but still apply offset instead of perfect centering
+            card_final = Image.new('RGBA', (box_w, box_h), (0, 0, 0, 0))
+            
+            # Add random offset to paste position (±20% of available space)
+            available_x = box_w - card_w
+            available_y = box_h - card_h
+            
+            base_x = available_x // 2  # Start with center
+            base_y = available_y // 2
+            
+            offset_x = int(random.uniform(-0.4, 0.4) * available_x) if available_x > 0 else 0
+            offset_y = int(random.uniform(-0.4, 0.4) * available_y) if available_y > 0 else 0
+            
+            paste_x = max(0, min(available_x, base_x + offset_x))
+            paste_y = max(0, min(available_y, base_y + offset_y))
+            card_final.paste(card_rotated, (paste_x, paste_y), card_rotated)
+        
+        # Post-processing: sample background properties and apply to card
+        # Skip background tinting in chaos mode (synthetic backgrounds cause extreme tints)
+        if not skip_bg_tint:
+            # Sample bounding box region from template
+            bbox_crop = template_img.crop((box_x, box_y, box_x + box_w, box_y + box_h)).convert('RGB')
+            # Calculate average brightness
+            arr = np.array(bbox_crop)
+            avg_brightness = np.mean(arr)
+            # Calculate average color for tint overlay
+            avg_color = tuple(np.mean(arr, axis=(0, 1)).astype(int))
+            
+            # Estimate blur by variance of Laplacian (simple proxy)
+            gray = np.mean(arr, axis=2)
+            laplacian = np.abs(np.gradient(gray)[0]) + np.abs(np.gradient(gray)[1])
+            blur_level = max(0.5, min(2.5, 2.5 - np.var(laplacian) / 50))  # scale to [0.5, 2.5]
+            
+            # Apply blur to card
+            card_post = card_final.filter(ImageFilter.GaussianBlur(radius=blur_level))
+            # Match brightness
+            card_post = ImageEnhance.Brightness(card_post).enhance(avg_brightness / 128)
+            
+            # Apply translucent color tint from background, preserving alpha
+            from PIL import Image as PILImage
+            tint_layer = PILImage.new('RGB', card_post.size, avg_color)
+            card_rgb = card_post.convert('RGB')
+            card_tinted = PILImage.blend(card_rgb, tint_layer, alpha=0.15)
+            # Restore alpha channel
+            card_post_final = PILImage.new('RGBA', card_post.size)
+            card_post_final.paste(card_tinted, (0, 0))
+            if card_post.mode == 'RGBA':
+                card_post_final.putalpha(card_post.split()[3])  # Copy original alpha
+        else:
+            # Chaos mode: minimal processing - just slight blur
+            card_post_final = card_final.filter(ImageFilter.GaussianBlur(radius=0.8))
+        
+        return (card_post_final, box_x, box_y)
+
 def paste_card(template_img, card_img, bbox, avg_aspect, high_avg_aspect, avg_area, target_bbox_width, target_bbox_height, highlighted_threshold, cached_rotation=None, skip_bg_tint=False):
     """
     Place card in bbox with uniform scale across all cards:
@@ -1115,6 +1321,7 @@ def refined_rotation(ratio, high_avg_aspect):
 parser = argparse.ArgumentParser(description='Generate synthetic FaB card images.')
 parser.add_argument('--num-images', type=int, default=None, help='Number of synthetic images to generate')
 parser.add_argument('--card-dirs', nargs='*', default=None, help='One or more directories containing card PNG files')
+parser.add_argument('--threads', type=int, default=None, help=f'Number of parallel threads for card processing (default: auto-detected {SYSTEM_RESOURCES["optimal_threads"]} based on {SYSTEM_RESOURCES["cpu_count"]} CPU cores)')
 parser.add_argument('--coverage-guided', action='store_true', help='Select cards prioritizing underrepresented classes per split')
 parser.add_argument('--coverage-file', type=str, default=None, help='Path to coverage tracking YAML (defaults to <OUTPUT_BASE_DIR>/coverage.yaml)')
 parser.add_argument('--seed', type=int, default=None, help='Optional RNG seed for reproducibility')
@@ -1124,11 +1331,23 @@ parser.add_argument('--popularity-min', type=int, default=None, help='Minimum po
 parser.add_argument('--popularity-max', type=int, default=None, help='Maximum popularity rank (inclusive) - e.g., 300 for top 300, 600 for top 600')
 parser.add_argument('--use-popularity-weights', action='store_true', help='Use popularity weights for weighted card sampling (biases towards more popular cards)')
 parser.add_argument('--popularity-weights-path', type=str, default=None, help='Path to card popularity weights JSON file')
+parser.add_argument('--output-dir', type=str, default=None, help='Override output directory (defaults to OUTPUT_BASE_DIR from script)')
 # Chaos mode removed - see generate_chaos_mode.py for synthetic background generation
 args = parser.parse_args()
 
+# Override thread count if specified
+if args.threads is not None:
+    SYSTEM_RESOURCES['optimal_threads'] = args.threads
+    print(f"[system] Thread count overridden to: {args.threads}")
+
 # Number of synthetic images to generate
 NUM_SYNTHETIC_IMAGES = args.num_images if args.num_images is not None else NUM_SYNTHETIC_IMAGES
+
+# Override output directory from CLI if provided
+if args.output_dir:
+    OUTPUT_BASE_DIR = args.output_dir
+    # Keep POSITIONING_CACHE_DIR pointing to shared cache location
+    # POSITIONING_CACHE_DIR = os.path.join(OUTPUT_BASE_DIR, 'positioning_cache')
 
 # Override card set directories from CLI if provided
 if args.card_dirs:
@@ -1422,6 +1641,7 @@ for _ in range(NUM_SYNTHETIC_IMAGES):
             avg_bbox_width = 300
             avg_bbox_height = 420
             highlighted_card_threshold = None
+            positioning_cache = None
         
         # Calculate uniform card scale
         # We'll pass the target bbox dimensions to paste_card
@@ -1450,8 +1670,11 @@ for _ in range(NUM_SYNTHETIC_IMAGES):
         high_aspects = [ar * ASPECT_SCALE for ar in aspect_ratios if ar >= 1.5]
         high_avg_aspect = sum(high_aspects) / len(high_aspects) if high_aspects else avg_aspect * 2.4
         
-        # Process each bounding box with independent card selection
+        # Prepare all card processing tasks for parallel execution
+        card_tasks = []
+        card_metadata = []  # Store class info for each card
         box_index = 0
+        
         for line in lines:
             parts = line.strip().split()
             if len(parts) == 5:
@@ -1490,19 +1713,64 @@ for _ in range(NUM_SYNTHETIC_IMAGES):
                 if positioning_cache and box_index < len(positioning_cache.get('boxes', [])):
                     cached_rotation = positioning_cache['boxes'][box_index].get('best_rotation')
                 
-                with Image.open(card_path).convert('RGBA') as card_img:
-                    img_copy = paste_card(img_copy, card_img, parts[1:], avg_aspect, high_avg_aspect, avg_area, avg_bbox_width, avg_bbox_height, highlighted_card_threshold, cached_rotation, skip_bg_tint=False)
-                # Update class id using the persistent mapping
-                label_copy.append(f"{class_id} {' '.join(parts[1:])}\n")
-                # Update in-memory coverage counters
-                if args.coverage_guided:
-                    try:
-                        coverage['counts'][split_folder][class_name] += 1
-                        coverage['counts']['total'][class_name] += 1
-                    except Exception:
-                        pass
+                # Store task parameters for parallel processing
+                card_tasks.append({
+                    'card_path': card_path,
+                    'bbox': parts[1:],
+                    'cached_rotation': cached_rotation,
+                })
+                
+                # Store metadata for labeling
+                card_metadata.append({
+                    'class_id': class_id,
+                    'class_name': class_name,
+                    'bbox_str': ' '.join(parts[1:]),
+                })
                 
                 box_index += 1
+        
+        # Process all cards in parallel using ThreadPoolExecutor
+        processed_cards = []
+        num_workers = SYSTEM_RESOURCES['optimal_threads']
+        with ThreadPoolExecutor(max_workers=num_workers) as executor:
+            # Submit all card processing tasks
+            futures = []
+            for task in card_tasks:
+                future = executor.submit(
+                    process_single_card,
+                    task['card_path'],
+                    task['bbox'],
+                    avg_aspect,
+                    high_avg_aspect,
+                    avg_area,
+                    avg_bbox_width,
+                    avg_bbox_height,
+                    highlighted_card_threshold,
+                    task['cached_rotation'],
+                    template_img,
+                    skip_bg_tint=False
+                )
+                futures.append(future)
+            
+            # Collect results as they complete
+            for future in futures:
+                processed_cards.append(future.result())
+        
+        # Composite all processed cards onto the template (sequential, maintains layering)
+        for i, (card_img, box_x, box_y) in enumerate(processed_cards):
+            img_copy.paste(card_img, (box_x, box_y), card_img)
+            
+            # Update labels
+            metadata = card_metadata[i]
+            label_copy.append(f"{metadata['class_id']} {metadata['bbox_str']}\n")
+            
+            # Update in-memory coverage counters
+            if args.coverage_guided:
+                try:
+                    coverage['counts'][split_folder][metadata['class_name']] += 1
+                    coverage['counts']['total'][metadata['class_name']] += 1
+                except Exception:
+                    pass
     # Final random rotation (0, 90, 180, 270 degrees) and label update
     final_angle = random.choice([0, 90, 180, 270])
     if final_angle != 0:

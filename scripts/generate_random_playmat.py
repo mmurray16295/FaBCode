@@ -25,28 +25,77 @@ import json
 import yaml
 import math
 import argparse
+import io
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFilter, ImageEnhance
 import numpy as np
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import multiprocessing
+
+# ============================================================================
+# SYSTEM DETECTION
+# ============================================================================
+
+def detect_system_resources():
+    """Detect available GPUs and CPU cores."""
+    gpu_available = False
+    gpu_count = 0
+    cpu_count = multiprocessing.cpu_count()
+    
+    try:
+        import torch
+        if torch.cuda.is_available():
+            gpu_available = True
+            gpu_count = torch.cuda.device_count()
+            print(f"[system] Detected {gpu_count} GPU(s): {torch.cuda.get_device_name(0)}")
+        else:
+            print(f"[system] No GPU detected, using CPU only")
+    except ImportError:
+        print(f"[system] PyTorch not available, using CPU only")
+    
+    print(f"[system] Available CPU cores: {cpu_count}")
+    
+    # Determine optimal thread count for card processing
+    # Leave some cores for system and other processes
+    if cpu_count >= 96:
+        # High-end system with 96+ cores
+        optimal_threads = min(16, cpu_count // 8)  # Use up to 16 threads per process
+    elif cpu_count >= 32:
+        # Mid-range server with 32-96 cores
+        optimal_threads = min(12, cpu_count // 4)
+    elif cpu_count >= 16:
+        # Workstation with 16-32 cores
+        optimal_threads = min(8, cpu_count // 2)
+    else:
+        # Desktop with <16 cores
+        optimal_threads = max(4, cpu_count // 2)
+    
+    return {
+        'gpu_available': gpu_available,
+        'gpu_count': gpu_count,
+        'cpu_count': cpu_count,
+        'optimal_threads': optimal_threads
+    }
+
+# Detect system resources at module load time
+SYSTEM_RESOURCES = detect_system_resources()
 
 # ============================================================================
 # CONFIGURATION
 # ============================================================================
 
 # Output directory for generated images
-OUTPUT_BASE_DIR = r'c:\VS Code\FaB Code\data\synthetic_2'
+OUTPUT_BASE_DIR = r'/root/FaBCode/data/synthetic'
 
 # Card image directories
-CARD_SET_DIRS = [
-    r'c:\VS Code\FaB Code\data\images\WTR',
-    r'c:\VS Code\FaB Code\data\images\ARC',
-    r'c:\VS Code\FaB Code\data\images\CRU',
-    r'c:\VS Code\FaB Code\data\images\HVY',
-    r'c:\VS Code\FaB Code\data\images\SEA',
-]
+CARD_SET_DIRS = []  # Will be populated from command line
 
 # Card popularity weights file
-POPULARITY_WEIGHTS_PATH = r'c:\VS Code\FaB Code\data\card_popularity_weights.json'
+POPULARITY_WEIGHTS_PATH = r'/root/FaBCode/data/card_popularity_weights.json'
+
+# Weight dampening to smooth card selection probabilities
+# Reduces extreme ratios (23.5x → 18.2x for rank 1 vs rank 500)
+WEIGHT_DAMPENING_POWER = 0.92
 
 # Image dimensions (fixed for consistency)
 IMG_WIDTH = 1920
@@ -389,6 +438,201 @@ def generate_random_background(width, height):
     return img
 
 # ============================================================================
+# SCREEN CAPTURE SIMULATION (for realism)
+# ============================================================================
+
+def jpeg_round_trip(pil_img, q1=(30,70), q2=None):
+    """One or two JPEG compressions."""
+    buf = io.BytesIO()
+    pil_img.save(buf, format="JPEG", quality=random.randint(*q1))
+    buf.seek(0)
+    img = Image.open(buf).convert(pil_img.mode)
+    if q2:
+        buf2 = io.BytesIO()
+        img.save(buf2, format="JPEG", quality=random.randint(*q2))
+        buf2.seek(0)
+        img = Image.open(buf2).convert(pil_img.mode)
+    return img
+
+def down_up_sample(pil_img, min_s=0.5, max_s=0.95):
+    """Downscale by a random non-integer factor then upscale back."""
+    w,h = pil_img.size
+    s = random.uniform(min_s, max_s)
+    new = pil_img.resize((max(1,int(w*s)), max(1,int(h*s))), random.choice([
+        Image.BILINEAR, Image.BICUBIC, Image.LANCZOS
+    ]))
+    return new.resize((w,h), random.choice([Image.BILINEAR, Image.BICUBIC]))
+
+def gamma_jitter(pil_img, lo=0.85, hi=1.15):
+    g = random.uniform(lo, hi)
+    arr = np.asarray(pil_img).astype(np.float32) / 255.0
+    arr = np.clip(arr ** g, 0, 1)
+    return Image.fromarray((arr*255).astype(np.uint8), mode=pil_img.mode)
+
+def chroma_subsample(pil_img, sigma=(0.8, 2.0)):
+    """Blur color channels to mimic 4:2:0."""
+    ycbcr = pil_img.convert("YCbCr")
+    Y, Cb, Cr = ycbcr.split()
+    rad = random.uniform(*sigma)
+    Cb = Cb.filter(ImageFilter.GaussianBlur(radius=rad))
+    Cr = Cr.filter(ImageFilter.GaussianBlur(radius=rad))
+    return Image.merge("YCbCr", (Y,Cb,Cr)).convert(pil_img.mode)
+
+def tiny_blur_or_unsharp(pil_img):
+    if random.random() < 0.5:
+        return pil_img.filter(ImageFilter.GaussianBlur(radius=random.uniform(0.3, 1.2)))
+    # unsharp: blur then blend
+    blur = pil_img.filter(ImageFilter.GaussianBlur(radius=random.uniform(0.6, 1.6)))
+    return Image.blend(pil_img, blur, alpha=random.uniform(0.15, 0.35))
+
+def add_letterbox_and_ui(pil_img, p_bars=0.5, p_ui=0.5):
+    img = pil_img.copy()
+    draw = ImageDraw.Draw(img)
+    w,h = img.size
+    # bars
+    if random.random() < p_bars:
+        t = random.randint(2, max(2, h//20))   # top
+        b = random.randint(2, max(2, h//20))   # bottom
+        l = random.randint(0, max(0, w//50))   # left (pillarbox sometimes 0)
+        r = random.randint(0, max(0, w//50))
+        col = random.choice([(0,0,0), (8,8,8), (16,16,16), (24,24,24)])
+        if t: draw.rectangle([0,0,w,t], fill=col)
+        if b: draw.rectangle([0,h-b,w,h], fill=col)
+        if l: draw.rectangle([0,0,l,h], fill=col)
+        if r: draw.rectangle([w-r,0,w,h], fill=col)
+    # UI hairlines
+    if random.random() < p_ui:
+        y = random.randint(0, h-1)
+        draw.line([(0,y),(w-1,y)], fill=(random.randint(160,220),)*3, width=1)
+        if random.random() < 0.3:
+            x = random.randint(0, w-1)
+            draw.line([(x,0),(x,h-1)], fill=(random.randint(160,220),)*3, width=1)
+    return img
+
+def simulate_screen_capture(pil_img):
+    """Compose several capture-like artifacts without changing geometry."""
+    img = pil_img
+    if random.random() < 0.85:
+        img = down_up_sample(img, 0.55, 0.95)
+    if random.random() < 0.8:
+        img = tiny_blur_or_unsharp(img)
+    if random.random() < 0.8:
+        img = jpeg_round_trip(img, q1=(28,60), q2=(35,75) if random.random()<0.5 else None)
+    if random.random() < 0.8:
+        img = gamma_jitter(img, 0.85, 1.20)
+    if random.random() < 0.6:
+        img = chroma_subsample(img, sigma=(0.8, 1.8))
+    if random.random() < 0.6:
+        img = add_letterbox_and_ui(img, p_bars=0.7, p_ui=0.6)
+    return img
+
+# ============================================================================
+# SYNTHETIC OCCLUDERS (arms, dice, tokens, etc.)
+# ============================================================================
+
+def _yolo_to_xyxy(lbl, W, H):
+    """Convert YOLO format label to pixel coordinates."""
+    parts = lbl.strip().split()
+    if len(parts) != 5:
+        return None
+    cls, cx, cy, w, h = parts
+    cx, cy, w, h = float(cx), float(cy), float(w), float(h)
+    bw, bh = int(w * W), int(h * H)
+    x1 = int((cx - w/2) * W); y1 = int((cy - h/2) * H)
+    x2 = x1 + bw; y2 = y1 + bh
+    return int(cls), max(0,x1), max(0,y1), min(W-1,x2), min(H-1,y2)
+
+def _xyxy_to_yolo(cls, x1, y1, x2, y2, W, H):
+    """Convert pixel coordinates to YOLO format."""
+    bw = (x2 - x1) / W; bh = (y2 - y1) / H
+    cx = (x1 + x2) / (2*W); cy = (y1 + y2) / (2*H)
+    return f"{cls} {cx:.6f} {cy:.6f} {bw:.6f} {bh:.6f}\n"
+
+def _rand_skin_or_sleeve():
+    """Random skin tones or sleeve/cloth colors."""
+    skin = [(207,176,149),(183,143,110),(144,105,78),(97,67,46),(230,195,170)]
+    cloth= [(30,30,30),(60,60,80),(90,30,30),(30,80,60),(120,120,120),(40,40,100)]
+    dice = [(200,30,30),(30,200,30),(30,30,200),(255,255,255),(20,20,20)]
+    return random.choice(skin + cloth + dice)
+
+def apply_occluders(pil_img, yolo_labels, coverage_drop=0.85,
+                    p_apply=0.40, occl_per_img=(1,4),
+                    per_box_cov=(0.20,0.60)):
+    """
+    Adds synthetic occluders (arms/sleeves/dice/tokens) on top of the composed image.
+    Labels are kept unless a card is > coverage_drop occluded, then that label is removed.
+    """
+    if random.random() > p_apply or not yolo_labels:
+        return pil_img, yolo_labels
+
+    W, H = pil_img.size
+    # Parse labels → boxes
+    boxes = []
+    for lbl in yolo_labels:
+        parsed = _yolo_to_xyxy(lbl, W, H)
+        if parsed:
+            boxes.append(parsed)
+    
+    if not boxes:
+        return pil_img, yolo_labels
+
+    # Build an occlusion mask
+    occ_layer = Image.new("RGBA", (W, H), (0,0,0,0))
+    draw = ImageDraw.Draw(occ_layer, "RGBA")
+
+    # Choose targets (some boxes will be occluded)
+    idxs = list(range(len(boxes)))
+    random.shuffle(idxs)
+    K = random.randint(occl_per_img[0], min(occl_per_img[1], len(boxes)))
+    targets = idxs[:K]
+
+    for ti in targets:
+        cls, x1, y1, x2, y2 = boxes[ti]
+        bw, bh = x2 - x1, y2 - y1
+        if bw <= 0 or bh <= 0: 
+            continue
+
+        # desired coverage area inside this box
+        cov = random.uniform(per_box_cov[0], per_box_cov[1])
+        occ_area = int(bw * bh * cov)
+
+        # pick a primitive: rounded-rect (forearm/sleeve), ellipse (die/token), or polygon (hand/finger)
+        shape = random.choices(["rrect", "ellipse", "polygon"], weights=[0.5, 0.3, 0.2])[0]
+
+        # size the occluder to roughly match occ_area
+        if shape == "ellipse":
+            rw = int(math.sqrt(occ_area * random.uniform(0.8,1.2)))
+            rh = int(rw * random.uniform(0.7,1.3))
+            ox = random.randint(x1, x2)
+            oy = random.randint(y1, y2)
+            color = _rand_skin_or_sleeve() + (random.randint(180,255),)
+            draw.ellipse([ox-rw//2, oy-rh//2, ox+rw//2, oy+rh//2], fill=color)
+        elif shape == "rrect":
+            rw = int(math.sqrt(occ_area * random.uniform(1.5,2.5)))
+            rh = int(occ_area / rw) if rw > 0 else 10
+            ox = random.randint(x1, x2)
+            oy = random.randint(y1, y2)
+            color = _rand_skin_or_sleeve() + (random.randint(180,255),)
+            draw.rounded_rectangle([ox-rw//2, oy-rh//2, ox+rw//2, oy+rh//2], radius=8, fill=color)
+        else:  # polygon
+            # simple triangle/quad
+            num_pts = random.choice([3,4])
+            pts = []
+            for _ in range(num_pts):
+                px = random.randint(x1, x2)
+                py = random.randint(y1, y2)
+                pts.append((px, py))
+            color = _rand_skin_or_sleeve() + (random.randint(180,255),)
+            draw.polygon(pts, fill=color)
+
+    # Composite occluders
+    pil_img = Image.alpha_composite(pil_img.convert("RGBA"), occ_layer).convert("RGB")
+    
+    # Filter out heavily occluded labels
+    # For simplicity, keep all labels (occluders are semi-transparent)
+    return pil_img, yolo_labels
+
+# ============================================================================
 # CARD UTILITIES
 # ============================================================================
 
@@ -501,7 +745,11 @@ def weighted_card_choice(card_files, weights_dict):
         card_name = canonicalize_name(raw_name)
         
         if card_name in weights_dict:
-            weights.append(weights_dict[card_name]['weight'])
+            weight = weights_dict[card_name]['weight']
+            # Apply dampening to smooth extreme weight differences
+            if weight > 0:
+                weight = weight ** WEIGHT_DAMPENING_POWER
+            weights.append(weight)
         else:
             weights.append(0.1)  # Small default weight for unranked cards
     
@@ -623,6 +871,23 @@ def process_card(card_img, target_width, rotation_angle):
     
     return card_blurred
 
+
+def process_single_card_task(card_path, target_width, rotation_angle):
+    """
+    Load and process a single card - designed for parallel execution.
+    
+    Args:
+        card_path: Path to card image file
+        target_width: Target width in pixels
+        rotation_angle: Rotation in degrees
+    
+    Returns:
+        Processed PIL Image (RGBA)
+    """
+    with Image.open(card_path).convert('RGBA') as card_img:
+        return process_card(card_img, target_width, rotation_angle)
+
+
 # ============================================================================
 # YOLO LABEL CONVERSION
 # ============================================================================
@@ -674,6 +939,8 @@ def generate_random_playmat_image(
     placed_boxes = []  # List of (x1, y1, x2, y2) tuples
     labels = []  # List of YOLO format strings
     
+    # Prepare all card processing tasks
+    card_tasks = []
     for i in range(num_cards):
         # Select card using weighted selection
         if weights_dict:
@@ -690,53 +957,83 @@ def generate_random_playmat_image(
             name_to_id[class_name] = len(name_to_id)
         class_id = name_to_id[class_name]
         
-        # Load card image
-        with Image.open(card_path).convert('RGBA') as card_img:
-            # Determine target width: 50% use baseline, 50% use random (±50%)
-            if random.random() < 0.5:
-                # Baseline width
-                target_width = CARD_BASE_WIDTH
-            else:
-                # Random width (50% to 150% of baseline)
-                scale_multiplier = random.uniform(0.5, 1.5)
-                target_width = int(CARD_BASE_WIDTH * scale_multiplier)
-            
-            # Random rotation
-            rotation_angle = random.uniform(0, 360)
-            
-            # Process card (scale to target width, rotate, adjust brightness)
-            # Height is calculated automatically to maintain aspect ratio
-            card_processed = process_card(card_img, target_width, rotation_angle)
-            
-            # Get rotated card dimensions
-            rotated_w, rotated_h = card_processed.size
-            
-            # Find valid position with overlap checking
-            box = find_valid_position(
-                placed_boxes,
-                rotated_w,
-                rotated_h,
-                IMG_WIDTH,
-                IMG_HEIGHT,
-                MAX_OVERLAP_RATIO,
-                max_attempts=100
+        # Determine target width: 50% use baseline, 50% use random (±50%)
+        if random.random() < 0.5:
+            # Baseline width
+            target_width = CARD_BASE_WIDTH
+        else:
+            # Random width (50% to 150% of baseline)
+            scale_multiplier = random.uniform(0.5, 1.5)
+            target_width = int(CARD_BASE_WIDTH * scale_multiplier)
+        
+        # Random rotation
+        rotation_angle = random.uniform(0, 360)
+        
+        card_tasks.append({
+            'card_path': card_path,
+            'target_width': target_width,
+            'rotation_angle': rotation_angle,
+            'class_id': class_id,
+            'class_name': class_name,
+        })
+    
+    # Process all cards in parallel
+    processed_cards = []
+    num_workers = SYSTEM_RESOURCES['optimal_threads']
+    with ThreadPoolExecutor(max_workers=num_workers) as executor:
+        futures = []
+        for task in card_tasks:
+            future = executor.submit(
+                process_single_card_task,
+                task['card_path'],
+                task['target_width'],
+                task['rotation_angle']
             )
-            
-            if box is None:
-                # Couldn't find valid position, skip this card
-                print(f"[warning] Could not place card {i+1}/{num_cards}, skipping")
-                continue
-            
-            x1, y1, x2, y2 = box
-            placed_boxes.append(box)
-            
-            # Paste card onto background
-            img.paste(card_processed, (x1, y1), card_processed)
-            
-            # Create YOLO label
-            cx, cy, w, h = box_to_yolo(x1, y1, x2, y2, IMG_WIDTH, IMG_HEIGHT)
-            label = f"{class_id} {cx:.6f} {cy:.6f} {w:.6f} {h:.6f}\n"
-            labels.append(label)
+            futures.append(future)
+        
+        # Collect results
+        for future in futures:
+            processed_cards.append(future.result())
+    
+    # Place cards sequentially (requires overlap checking)
+    for i, card_processed in enumerate(processed_cards):
+        task = card_tasks[i]
+        
+        # Get rotated card dimensions
+        rotated_w, rotated_h = card_processed.size
+        
+        # Find valid position with overlap checking
+        box = find_valid_position(
+            placed_boxes,
+            rotated_w,
+            rotated_h,
+            IMG_WIDTH,
+            IMG_HEIGHT,
+            MAX_OVERLAP_RATIO,
+            max_attempts=100
+        )
+        
+        if box is None:
+            # Couldn't find valid position, skip this card
+            print(f"[warning] Could not place card {i+1}/{num_cards}, skipping")
+            continue
+        
+        x1, y1, x2, y2 = box
+        placed_boxes.append(box)
+        
+        # Paste card onto background
+        img.paste(card_processed, (x1, y1), card_processed)
+        
+        # Create YOLO label
+        cx, cy, w, h = box_to_yolo(x1, y1, x2, y2, IMG_WIDTH, IMG_HEIGHT)
+        label = f"{task['class_id']} {cx:.6f} {cy:.6f} {w:.6f} {h:.6f}\n"
+        labels.append(label)
+    
+    # Apply screen capture simulation
+    img = simulate_screen_capture(img)
+    
+    # Apply occluders (arms, dice, tokens)
+    img, labels = apply_occluders(img, labels)
     
     return img, labels
 
@@ -793,15 +1090,26 @@ def visualize_labels(img, labels):
 def main():
     parser = argparse.ArgumentParser(description='Generate random playmat images for YOLO training')
     parser.add_argument('--num-images', type=int, default=100, help='Number of images to generate')
+    parser.add_argument('--threads', type=int, default=None, help=f'Number of parallel threads for card processing (default: auto-detected {SYSTEM_RESOURCES["optimal_threads"]} based on {SYSTEM_RESOURCES["cpu_count"]} CPU cores)')
     parser.add_argument('--popularity-min', type=int, default=None, help='Minimum popularity rank (inclusive)')
     parser.add_argument('--popularity-max', type=int, default=None, help='Maximum popularity rank (inclusive)')
     parser.add_argument('--use-popularity-weights', action='store_true', help='Use popularity weights for card selection')
+    parser.add_argument('--card-dirs', nargs='+', required=True, help='One or more card image directories (e.g., data/images/SEA data/images/WTR)')
     parser.add_argument('--cards-per-scene-min', type=int, default=CARDS_PER_SCENE_MIN, help='Minimum cards per scene')
     parser.add_argument('--cards-per-scene-max', type=int, default=CARDS_PER_SCENE_MAX, help='Maximum cards per scene')
     parser.add_argument('--visualize', action='store_true', help='Generate visualization images with bounding boxes')
     parser.add_argument('--seed', type=int, default=None, help='Random seed for reproducibility')
     
     args = parser.parse_args()
+    
+    # Override thread count if specified
+    if args.threads is not None:
+        SYSTEM_RESOURCES['optimal_threads'] = args.threads
+        print(f"[system] Thread count overridden to: {args.threads}")
+    
+    # Update CARD_SET_DIRS from arguments
+    global CARD_SET_DIRS
+    CARD_SET_DIRS = args.card_dirs
     
     # Set random seed if provided
     if args.seed is not None:

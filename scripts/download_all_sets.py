@@ -27,7 +27,7 @@ for i, set_id in enumerate(sorted_sets, 1):
     
     try:
         result = subprocess.run(
-            [sys.executable, 'download_images.py', '--set-id', set_id],
+            [sys.executable, 'download_images_parallel.py', '--set-id', set_id, '--workers', '10'],
             capture_output=False,
             text=True,
             check=False

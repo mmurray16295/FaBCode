@@ -3,11 +3,11 @@ import random
 import shutil
 
 # Source directories
-src_img_dir = r"C:\VS Code\FaB Code\data\images\YouTube_Labeled\Full Size Card Detection.v2-full-size.yolov11\train\images"
-src_lbl_dir = r"C:\VS Code\FaB Code\data\images\YouTube_Labeled\Full Size Card Detection.v2-full-size.yolov11\train\labels"
+src_img_dir = r"/root/FaBCode/data/images/YouTube_Labeled/Full Size Card Detection.v2-full-size.yolov11/train/images"
+src_lbl_dir = r"/root/FaBCode/data/images/YouTube_Labeled/Full Size Card Detection.v2-full-size.yolov11/train/labels"
 
 # Destination base (YouTube_Labeled folder for background templates)
-dst_base = r"C:\VS Code\FaB Code\data\images\YouTube_Labeled"
+dst_base = r"/root/FaBCode/data/images/YouTube_Labeled"
 splits = {"train": 0.7, "valid": 0.2, "test": 0.1}
 
 # Gather all image files

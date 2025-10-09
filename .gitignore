@@ -1,6 +1,8 @@
 # Ignore synthetic data (all variations)
 data/synthetic/
 data/synthetic*/
+data/benchmark_synth*/
+data/synthetic_benchmark/
 
 # Ignore all training runs except train12
 runs/detect/train*/
@@ -13,6 +15,23 @@ runs/detect/train12/weights/*
 
 # Ignore all card images and backgrounds
 data/images/
+
+# Ignore training logs and outputs
+*.log
+runs/train/
+
+# Ignore benchmark files
+benchmark_*.py
+benchmark_*.txt
+benchmark_*.log
+
+# Ignore positioning cache
+data/positioning_cache/
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+*.pyo
 
 .venv/
 
