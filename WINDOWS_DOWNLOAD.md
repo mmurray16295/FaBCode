@@ -4,7 +4,7 @@
 
 **Download the Windows installer here:**
 ```
-https://github.com/mmurray16295/FaBCode/raw/runpod-setup/packages/FaBCardDetector_Windows_20251009_233717.zip
+https://github.com/mmurray16295/FaBCode/raw/runpod-setup/packages/FaBCardDetector_Windows_20251009_234654.zip
 ```
 
 **Size:** 12MB compressed
