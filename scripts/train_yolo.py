@@ -31,8 +31,8 @@ def main():
                         help='Resume training from last checkpoint')
     parser.add_argument('--patience', type=int, default=50,
                         help='Early stopping patience (default: 50)')
-    parser.add_argument('--cache', action='store_true',
-                        help='Cache images for faster training')
+    parser.add_argument('--cache', type=str, default='',
+                        help='Cache images: "ram" for RAM, "disk" for disk, or empty for no cache (default: no cache)')
     
     args = parser.parse_args()
     
@@ -70,7 +70,7 @@ def main():
         name=args.name,
         resume=args.resume,
         patience=args.patience,
-        cache=args.cache,
+        cache=args.cache if args.cache else False,
         plots=True,
         save=True,
         verbose=True,

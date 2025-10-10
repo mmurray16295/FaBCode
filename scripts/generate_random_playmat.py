@@ -1099,8 +1099,15 @@ def main():
     parser.add_argument('--cards-per-scene-max', type=int, default=CARDS_PER_SCENE_MAX, help='Maximum cards per scene')
     parser.add_argument('--visualize', action='store_true', help='Generate visualization images with bounding boxes')
     parser.add_argument('--seed', type=int, default=None, help='Random seed for reproducibility')
+    parser.add_argument('--output-dir', type=str, default=None, help='Output directory (overrides default OUTPUT_BASE_DIR)')
     
     args = parser.parse_args()
+    
+    # Override output directory if specified
+    global OUTPUT_BASE_DIR
+    if args.output_dir is not None:
+        OUTPUT_BASE_DIR = args.output_dir
+        print(f"[system] Output directory overridden to: {OUTPUT_BASE_DIR}")
     
     # Override thread count if specified
     if args.threads is not None:

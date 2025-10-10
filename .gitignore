@@ -4,6 +4,15 @@ data/synthetic*/
 data/benchmark_synth*/
 data/synthetic_benchmark/
 
+# Ignore all generated training data
+data/generated/
+data/phase*/
+
+# Ignore current Phase 2 directories (legacy - use data/generated/ for future)
+data/phase2_500classes/
+data/phase2_random/
+data/phase2_random_p*/
+
 # Ignore all training runs except train12
 runs/detect/train*/
 !runs/detect/train12/
@@ -18,6 +27,7 @@ data/images/
 
 # Ignore training logs and outputs
 *.log
+logs/
 runs/train/
 
 # Ignore benchmark files

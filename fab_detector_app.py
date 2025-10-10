@@ -168,6 +168,10 @@ class DetectorGUI:
         ttk.Checkbutton(overlay_frame, text="Click-through mode (Windows only)", 
                        variable=self.click_through).pack(anchor="w", pady=2)
         
+        self.show_card_preview = tk.BooleanVar(value=True)
+        ttk.Checkbutton(overlay_frame, text="Show card preview on hover", 
+                       variable=self.show_card_preview).pack(anchor="w", pady=2)
+        
         ttk.Label(overlay_frame, text="Card Preview Size:").pack(anchor="w", pady=5)
         size_frame = ttk.Frame(overlay_frame)
         size_frame.pack(anchor="w", padx=20)
@@ -296,6 +300,7 @@ class DetectorGUI:
                 transparent=self.transparent.get() and self.mode.get() == "overlay",
                 chroma=(255, 0, 255),
                 click_through=self.click_through.get() and self.mode.get() == "overlay",
+                show_card_preview=self.show_card_preview.get(),
                 video=None
             )
             
@@ -332,13 +337,37 @@ class CardDetector:
         
     def _load_card_data(self):
         """Load card metadata."""
-        card_json_path = Path('data/card.json')
-        if card_json_path.exists():
-            try:
-                with open(card_json_path, 'r', encoding='utf-8') as f:
-                    return json.load(f)
-            except Exception as e:
-                print(f"[warning] Could not load card.json: {e}")
+        # Try multiple locations for card.json
+        # 1. PyInstaller temporary folder (when packaged)
+        # 2. Relative to script location (development)
+        # 3. Current directory
+        
+        possible_paths = []
+        
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        if getattr(sys, 'frozen', False):
+            base_path = Path(sys._MEIPASS)
+            possible_paths.append(base_path / 'data' / 'card.json')
+        
+        # Development paths
+        script_dir = Path(__file__).parent
+        possible_paths.extend([
+            script_dir / 'data' / 'card.json',
+            Path('data/card.json'),
+            Path.cwd() / 'data' / 'card.json'
+        ])
+        
+        for card_json_path in possible_paths:
+            if card_json_path.exists():
+                try:
+                    with open(card_json_path, 'r', encoding='utf-8') as f:
+                        data = json.load(f)
+                        print(f"[init] Loaded {len(data)} cards from {card_json_path}")
+                        return data
+                except Exception as e:
+                    print(f"[warning] Could not load {card_json_path}: {e}")
+        
+        print("[warning] card.json not found - card preview will not work")
         return []
     
     def _mouse_callback(self, event, x, y, flags, param):
@@ -348,6 +377,10 @@ class CardDetector:
     
     def get_image_url_by_name(self, card_name):
         """Get card image URL by name."""
+        # Model outputs names like: "Card_Name_SET001"
+        # card.json has names like: "Card Name"
+        
+        # Try exact match first (replace underscores with spaces)
         search_name = card_name.replace('_', ' ').lower().strip()
         
         for card in self.card_data:
@@ -365,6 +398,17 @@ class CardDetector:
                 printings = card.get('printings', [])
                 if printings:
                     return printings[0].get('image_url')
+        
+        # Try matching without set code (e.g., "Card Name SET001" -> "Card Name")
+        # Remove common set code patterns like WTR001, ELE002, etc.
+        name_without_set = re.sub(r'[A-Z]{3}\d{3}$', '', card_name).replace('_', ' ').strip().lower()
+        if name_without_set != search_name:
+            for card in self.card_data:
+                card_display_name = card.get('name', '').lower().strip()
+                if card_display_name == name_without_set:
+                    printings = card.get('printings', [])
+                    if printings:
+                        return printings[0].get('image_url')
         
         return None
     
@@ -545,38 +589,38 @@ class CardDetector:
     def _create_display_frame(self, frame, base_h, base_w, boxes, clss, names, mouse_over_box, card_w, card_h):
         """Create the display frame with boxes and card overlay."""
         if self.args.overlay_only:
-            # Transparent overlay mode
+            # Transparent overlay mode - start with chroma key or black background
             if self.args.transparent:
                 r, g, b = self.args.chroma
                 display_frame = np.full((base_h, base_w, 3), (b, g, r), dtype=np.uint8)
             else:
                 display_frame = np.zeros((base_h, base_w, 3), dtype=np.uint8)
         else:
-            # Windowed mode
+            # Windowed mode - show actual captured frame
             display_frame = frame.copy()
-            
-            # Draw all boxes
-            for i, box in enumerate(boxes):
-                x1, y1, x2, y2 = [int(v) for v in box]
-                class_id = int(clss[i]) if i < len(clss) else -1
-                
-                if isinstance(names, dict):
-                    label = names.get(class_id, str(class_id))
-                else:
-                    label = str(class_id)
-                
-                # Draw box
-                color = (0, 255, 0) if mouse_over_box and (x1, y1, x2, y2, label) == mouse_over_box else (255, 0, 0)
-                cv2.rectangle(display_frame, (x1, y1), (x2, y2), color, 2)
-                
-                # Draw label
-                (w, h), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)
-                cv2.rectangle(display_frame, (x1, y1 - h - 10), (x1 + w, y1), color, -1)
-                cv2.putText(display_frame, label, (x1, y1 - 5), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
         
-        # Draw card preview if hovering
-        if mouse_over_box:
+        # Draw all boxes (for both modes now)
+        for i, box in enumerate(boxes):
+            x1, y1, x2, y2 = [int(v) for v in box]
+            class_id = int(clss[i]) if i < len(clss) else -1
+            
+            if isinstance(names, dict):
+                label = names.get(class_id, str(class_id))
+            else:
+                label = str(class_id)
+            
+            # Draw box
+            color = (0, 255, 0) if mouse_over_box and (x1, y1, x2, y2, label) == mouse_over_box else (255, 0, 0)
+            cv2.rectangle(display_frame, (x1, y1), (x2, y2), color, 2)
+            
+            # Draw label
+            (w, h), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)
+            cv2.rectangle(display_frame, (x1, y1 - h - 10), (x1 + w, y1), color, -1)
+            cv2.putText(display_frame, label, (x1, y1 - 5), 
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+        
+        # Draw card preview if hovering (and enabled)
+        if mouse_over_box and self.args.show_card_preview:
             bx1, by1, bx2, by2, class_name = mouse_over_box
             image_url = self.get_image_url_by_name(class_name)
             
@@ -598,6 +642,12 @@ class CardDetector:
                     if roi.shape[:2] == card_np.shape[:2]:
                         alpha = card_np[:, :, 3:] / 255.0
                         roi[:] = (alpha * card_np[:, :, :3] + (1 - alpha) * roi).astype(np.uint8)
+                else:
+                    # Debug: Card image failed to load
+                    print(f"[debug] Failed to load card image for: {class_name} from URL: {image_url}")
+            else:
+                # Debug: No URL found for card
+                print(f"[debug] No image URL found for card: {class_name}")
         
         return display_frame
     
