@@ -36,7 +36,8 @@ def create_portable_package():
     app_files = [
         "fab_detector_app.py",
         "live_detector.py",
-        "requirements.txt"
+        "requirements.txt",
+        "GUI_INSTALLER.py"
     ]
     
     for file in app_files:
@@ -94,31 +95,123 @@ def create_portable_package():
             print(f"  ✅ {file}")
     
     # Create batch files for Windows
-    print("\n📦 Creating Windows batch files...")
+    print("\n📦 Creating Windows installer scripts...")
     
-    # Install script
-    install_bat = package_dir / "INSTALL_WINDOWS.bat"
+    # GUI installer (main installer - professional)
+    install_bat = project_root / "INSTALL.bat"
+    if install_bat.exists():
+        shutil.copy2(install_bat, package_dir / "INSTALL.bat")
+        print(f"  ✅ INSTALL.bat (GUI installer launcher)")
+    
+    # GUI runner
+    run_bat = project_root / "RUN.bat"
+    if run_bat.exists():
+        shutil.copy2(run_bat, package_dir / "RUN.bat")
+        print(f"  ✅ RUN.bat (Application launcher)")
+    
+    # Auto-installer PowerShell script (advanced users)
+    auto_install_ps1 = project_root / "AUTO_INSTALL.ps1"
+    if auto_install_ps1.exists():
+        shutil.copy2(auto_install_ps1, package_dir / "AUTO_INSTALL.ps1")
+        print(f"  ✅ AUTO_INSTALL.ps1 (PowerShell installer - advanced)")
+    
+    # Auto-installer batch launcher (advanced users)
+    auto_install_bat = project_root / "AUTO_INSTALL.bat"
+    if auto_install_bat.exists():
+        shutil.copy2(auto_install_bat, package_dir / "AUTO_INSTALL.bat")
+        print(f"  ✅ AUTO_INSTALL.bat (Auto installer - advanced)")
+    
+    # System checker
+    check_system_py = project_root / "CHECK_SYSTEM.py"
+    if check_system_py.exists():
+        shutil.copy2(check_system_py, package_dir / "CHECK_SYSTEM.py")
+        print(f"  ✅ CHECK_SYSTEM.py")
+    
+    check_system_bat = project_root / "CHECK_SYSTEM.bat"
+    if check_system_bat.exists():
+        shutil.copy2(check_system_bat, package_dir / "CHECK_SYSTEM.bat")
+        print(f"  ✅ CHECK_SYSTEM.bat (System checker)")
+    
+    # Troubleshooting guide
+    troubleshooting_txt = project_root / "TROUBLESHOOTING.txt"
+    if troubleshooting_txt.exists():
+        shutil.copy2(troubleshooting_txt, package_dir / "TROUBLESHOOTING.txt")
+        print(f"  ✅ TROUBLESHOOTING.txt (Help guide)")
+    
+    # Legacy manual installer (for reference)
+    legacy_install_bat = package_dir / "INSTALL_WINDOWS_MANUAL.bat"
     install_bat.write_text("""@echo off
 echo ========================================
 echo FaB Card Detector - Installation
 echo ========================================
 echo.
-echo This will install required Python packages.
-echo Make sure you have Python 3.8+ installed!
-echo.
-pause
 
-python --version
+REM Check if Python is installed
+python --version >nul 2>&1
 if errorlevel 1 (
-    echo ERROR: Python not found! Please install Python 3.8 or higher.
+    echo ERROR: Python not found!
+    echo.
+    echo Please install Python 3.8 or higher from:
+    echo https://www.python.org/downloads/
+    echo.
+    echo Make sure to check "Add Python to PATH" during installation!
+    echo.
     pause
     exit /b 1
 )
 
+REM Show Python version
+echo Checking Python version...
+python --version
+
+REM Check Python version is 3.8+
+python -c "import sys; exit(0 if sys.version_info >= (3, 8) else 1)" >nul 2>&1
+if errorlevel 1 (
+    echo.
+    echo ERROR: Python 3.8 or higher is required!
+    echo Your Python version is too old.
+    echo.
+    echo Please install Python 3.8 or higher from:
+    echo https://www.python.org/downloads/
+    echo.
+    echo See TROUBLESHOOTING.txt for help.
+    echo.
+    pause
+    exit /b 1
+)
+
+echo Python version OK!
 echo.
-echo Installing packages...
+
+REM Upgrade pip first
+echo Upgrading pip...
 python -m pip install --upgrade pip
+if errorlevel 1 (
+    echo WARNING: Failed to upgrade pip, continuing anyway...
+)
+
+echo.
+echo Installing required packages...
+echo This may take 5-10 minutes...
+echo.
+
 python -m pip install -r requirements.txt
+
+if errorlevel 1 (
+    echo.
+    echo ERROR: Installation failed!
+    echo.
+    echo Please check:
+    echo 1. You have Python 3.8 or higher
+    echo 2. You have an internet connection
+    echo 3. Run this as Administrator
+    echo.
+    echo See TROUBLESHOOTING.txt for detailed help.
+    echo Or run CHECK_SYSTEM.bat to diagnose issues.
+    echo.
+    pause
+    exit /b 1
+)
 
 echo.
 echo ========================================
@@ -126,6 +219,8 @@ echo Installation Complete!
 echo ========================================
 echo.
 echo Run RUN_DETECTOR.bat to start the application.
+echo Or run CHECK_SYSTEM.bat to verify installation.
+echo.
 pause
 """)
     print(f"  ✅ INSTALL_WINDOWS.bat")
@@ -149,103 +244,39 @@ if errorlevel 1 (
 """)
     print(f"  ✅ RUN_DETECTOR.bat")
     
-    # Create README
-    print("\n📦 Creating documentation...")
+    # Copy README
+    print("\n📦 Copying documentation...")
     
-    readme = package_dir / "README_WINDOWS.txt"
-    readme.write_text(f"""
-========================================
-FaB Card Detector - Windows Package
-========================================
-
-Model: {model_info}
-Package Date: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
-
-INSTALLATION
-============
-
-1. Make sure you have Python 3.8 or higher installed
-   Download from: https://www.python.org/downloads/
-   
-2. Double-click INSTALL_WINDOWS.bat
-   This will install all required packages
-
-3. Wait for installation to complete
-
-RUNNING THE APPLICATION
-=======================
-
-1. Double-click RUN_DETECTOR.bat
-2. The GUI will open automatically
-3. Configure your settings:
-   - Model file: models/best.pt (pre-selected)
-   - Choose Windowed or Overlay mode
-   - Adjust confidence threshold (default: 0.69)
-   - Enable/disable card preview on hover
-4. Click "Start Detection"
-
-FEATURES
-========
-
-• Windowed Mode: Shows captured screen with detection boxes
-• Overlay Mode: Transparent overlay for streaming (with detection boxes)
-• Card Preview: Hover over detected cards to see full image
-• Multi-monitor Support: Capture from one monitor, display on another
-• Adjustable Confidence: Fine-tune detection sensitivity
-
-TROUBLESHOOTING
-===============
-
-Q: Python not found error
-A: Install Python from python.org and make sure to check "Add Python to PATH" during installation
-
-Q: Module not found errors
-A: Run INSTALL_WINDOWS.bat again
-
-Q: Card preview not working
-A: Make sure data/card.json exists and card names match your model
-
-Q: Low detection accuracy
-A: Try adjusting the confidence threshold (lower = more detections, higher = fewer false positives)
-
-SYSTEM REQUIREMENTS
-===================
-
-- Windows 10 or 11
-- Python 3.8 or higher
-- 4GB RAM minimum (8GB recommended)
-- Webcam or screen capture support
-- Internet connection (for initial setup only)
-
-WHAT'S INCLUDED
-===============
-
-Files:
-- fab_detector_app.py: Main application (GUI)
-- live_detector.py: Detection engine
-- models/best.pt: Trained YOLO model
-- data/: Card metadata and class information
-- requirements.txt: Python dependencies
-
-For support or issues, visit: https://github.com/mmurray16295/FaBCode
-
-""")
+    readme_source = Path(__file__).parent.parent / "README_WINDOWS.txt"
+    readme_dest = package_dir / "README_WINDOWS.txt"
+    
+    # Add model info and date to the top of README
+    with open(readme_source, 'r') as f:
+        readme_content = f.read()
+    
+    # Insert model info after the title
+    lines = readme_content.split('\n')
+    header_end = next(i for i, line in enumerate(lines) if line.startswith('QUICK START'))
+    lines.insert(header_end, f"Model: {model_info}")
+    lines.insert(header_end + 1, f"Package Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    lines.insert(header_end + 2, "")
+    
+    readme_dest.write_text('\n'.join(lines))
     print(f"  ✅ README_WINDOWS.txt")
     
     # Create quickstart
     quickstart = package_dir / "QUICKSTART.txt"
-    quickstart.write_text("""
-QUICK START GUIDE
+    quickstart_content = """QUICK START GUIDE
 ==================
 
-Step 1: Double-click INSTALL_WINDOWS.bat
+Step 1: Double-click INSTALL.bat (GUI installer)
 Step 2: Wait for installation (5-10 minutes)
-Step 3: Double-click RUN_DETECTOR.bat
+Step 3: Double-click RUN.bat
 Step 4: Click "Start Detection" in the GUI
 
-That's it!
-
-""")
+Done!
+"""
+    quickstart.write_text(quickstart_content)
     print(f"  ✅ QUICKSTART.txt")
     
     # Calculate package size

@@ -1,0 +1,9 @@
+QUICK START GUIDE
+==================
+
+Step 1: Double-click INSTALL.bat (GUI installer)
+Step 2: Wait for installation (5-10 minutes)
+Step 3: Double-click RUN.bat
+Step 4: Click "Start Detection" in the GUI
+
+Done!
