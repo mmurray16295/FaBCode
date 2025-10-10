@@ -241,14 +241,31 @@ def _rand_skin_or_sleeve():
     """Random skin tones or sleeve/cloth colors."""
     skin = [(207,176,149),(183,143,110),(144,105,78),(97,67,46),(230,195,170)]
     cloth= [(30,30,30),(60,60,80),(90,30,30),(30,80,60),(120,120,120),(40,40,100)]
-    dice = [(200,30,30),(30,200,30),(30,30,200),(255,255,255),(20,20,20)]
-    return random.choice(skin + cloth + dice)
+    return random.choice(skin + cloth)
+
+def _rand_dice_color():
+    """Random dice colors - common d6 colors used in FaB."""
+    # Most common: white, red, black
+    # Less common: blue, green, clear/translucent, orange
+    dice_colors = [
+        (255, 255, 255),  # White (most common)
+        (255, 255, 255),  # White (duplicate for higher probability)
+        (220, 20, 20),     # Red
+        (220, 20, 20),     # Red (duplicate for higher probability)
+        (20, 20, 20),      # Black
+        (30, 30, 200),     # Blue
+        (30, 180, 30),     # Green
+        (255, 140, 0),     # Orange
+        (180, 180, 200),   # Clear/translucent gray
+    ]
+    return random.choice(dice_colors)
 
 # Chaos mode removed - now implemented in separate script: generate_chaos_mode.py
 
 def apply_occluders(pil_img, yolo_labels, coverage_drop=0.85,
                     p_apply=0.40, occl_per_img=(1,4),
-                    per_box_cov=(0.20,0.60), blur=(0.8,2.0), shadow=True):
+                    per_box_cov=(0.20,0.60), blur=(0.8,2.0), shadow=True,
+                    dice_probability=0.25):
     """
     Adds synthetic occluders (arms/sleeves/dice/tokens) on top of the composed image.
     Labels are kept unless a card is > coverage_drop occluded, then that label is removed.
@@ -262,6 +279,7 @@ def apply_occluders(pil_img, yolo_labels, coverage_drop=0.85,
         per_box_cov: Tuple (min, max) fraction of each card to occlude
         blur: Tuple (min, max) blur radius for occluders
         shadow: Whether to add subtle shadows
+        dice_probability: Probability each card gets dice on it (default 0.25 = 25%)
     
     Returns:
         (occluded_image, filtered_labels)
@@ -392,6 +410,94 @@ def apply_occluders(pil_img, yolo_labels, coverage_drop=0.85,
                 occ_layer.paste(temp, (ox1-10, oy1-10), temp)
             else:
                 draw.rounded_rectangle([ox1,oy1,ox2,oy2], radius=r, fill=(*col, alpha))
+
+    # ===== DICE OCCLUDERS =====
+    # Separately add dice to ~25% of cards (centered, 15-30% card size)
+    for idx, (cls, x1, y1, x2, y2) in enumerate(boxes):
+        if random.random() > dice_probability:
+            continue  # Skip this card
+        
+        bw, bh = x2 - x1, y2 - y1
+        if bw <= 10 or bh <= 10:
+            continue
+        
+        # Dice size: 15-30% of card area
+        dice_coverage = random.uniform(0.15, 0.30)
+        dice_area = int(bw * bh * dice_coverage)
+        
+        # Dice are typically square-ish (d6) or circular
+        dice_shape = random.choice(["circle", "rounded_square"])
+        
+        if dice_shape == "circle":
+            # Circular dice (or d20-ish)
+            radius = int(math.sqrt(dice_area / math.pi))
+            radius = max(8, min(radius, int(min(bw, bh) * 0.35)))  # Clamp size
+        else:
+            # Rounded square dice (d6)
+            side = int(math.sqrt(dice_area))
+            side = max(12, min(side, int(min(bw, bh) * 0.40)))  # Clamp size
+            radius = side // 2
+        
+        # Position: centered on card with small random offset
+        center_x = (x1 + x2) // 2
+        center_y = (y1 + y2) // 2
+        
+        # Small jitter (±10% of card size) to avoid perfect centering
+        jitter_x = random.randint(-int(bw*0.10), int(bw*0.10))
+        jitter_y = random.randint(-int(bh*0.10), int(bh*0.10))
+        
+        cx = center_x + jitter_x
+        cy = center_y + jitter_y
+        
+        # Dice color
+        dice_col = _rand_dice_color()
+        dice_alpha = random.randint(220, 255)  # Dice are usually opaque
+        
+        # Draw shadow first
+        if shadow:
+            sh = Image.new("RGBA", (W, H), (0,0,0,0))
+            sd = ImageDraw.Draw(sh, "RGBA")
+            s_off = random.randint(2,4)
+            
+            if dice_shape == "circle":
+                sd.ellipse([cx-radius+s_off, cy-radius+s_off, 
+                           cx+radius+s_off, cy+radius+s_off],
+                          fill=(0,0,0,random.randint(60,100)))
+            else:
+                corner_r = max(2, radius//4)
+                sd.rounded_rectangle([cx-radius+s_off, cy-radius+s_off,
+                                     cx+radius+s_off, cy+radius+s_off],
+                                    radius=corner_r,
+                                    fill=(0,0,0,random.randint(60,100)))
+            sh = sh.filter(ImageFilter.GaussianBlur(radius=random.uniform(1.5,3.0)))
+            occ_layer = Image.alpha_composite(occ_layer, sh)
+        
+        # Draw the dice
+        if dice_shape == "circle":
+            draw.ellipse([cx-radius, cy-radius, cx+radius, cy+radius],
+                        fill=(*dice_col, dice_alpha))
+            # Optional: add a subtle highlight for 3D effect
+            if random.random() < 0.5:
+                highlight_r = int(radius * 0.3)
+                highlight_x = cx - int(radius * 0.3)
+                highlight_y = cy - int(radius * 0.3)
+                draw.ellipse([highlight_x-highlight_r, highlight_y-highlight_r,
+                             highlight_x+highlight_r, highlight_y+highlight_r],
+                            fill=(255,255,255,random.randint(40,80)))
+        else:
+            corner_r = max(2, radius//4)
+            draw.rounded_rectangle([cx-radius, cy-radius, cx+radius, cy+radius],
+                                  radius=corner_r,
+                                  fill=(*dice_col, dice_alpha))
+            # Optional: add a subtle highlight for 3D effect
+            if random.random() < 0.5:
+                highlight_size = int(radius * 0.4)
+                highlight_x = cx - int(radius * 0.4)
+                highlight_y = cy - int(radius * 0.4)
+                draw.rounded_rectangle([highlight_x-highlight_size, highlight_y-highlight_size,
+                                       highlight_x+highlight_size, highlight_y+highlight_size],
+                                      radius=corner_r//2,
+                                      fill=(255,255,255,random.randint(30,70)))
 
     # soften occluders a touch to blend
     occ_layer = occ_layer.filter(ImageFilter.GaussianBlur(radius=random.uniform(*blur)))
