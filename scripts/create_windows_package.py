@@ -94,155 +94,24 @@ def create_portable_package():
             shutil.copy2(src, data_dir / file)
             print(f"  ✅ {file}")
     
-    # Create batch files for Windows
-    print("\n📦 Creating Windows installer scripts...")
+    # Create installer files for Windows
+    print("\n📦 Copying installer scripts...")
     
-    # GUI installer (main installer - professional)
-    install_bat = project_root / "INSTALL.bat"
-    if install_bat.exists():
-        shutil.copy2(install_bat, package_dir / "INSTALL.bat")
-        print(f"  ✅ INSTALL.bat (GUI installer launcher)")
+    # PowerShell installer
+    install_ps1 = project_root / "INSTALL.ps1"
+    if install_ps1.exists():
+        shutil.copy2(install_ps1, package_dir / "INSTALL.ps1")
+        print(f"  ✅ INSTALL.ps1 (Automatic installer)")
+    else:
+        print(f"  ⚠️  WARNING: INSTALL.ps1 not found!")
     
-    # GUI runner
+    # Application runner
     run_bat = project_root / "RUN.bat"
     if run_bat.exists():
         shutil.copy2(run_bat, package_dir / "RUN.bat")
         print(f"  ✅ RUN.bat (Application launcher)")
-    
-    # Auto-installer PowerShell script (advanced users)
-    auto_install_ps1 = project_root / "AUTO_INSTALL.ps1"
-    if auto_install_ps1.exists():
-        shutil.copy2(auto_install_ps1, package_dir / "AUTO_INSTALL.ps1")
-        print(f"  ✅ AUTO_INSTALL.ps1 (PowerShell installer - advanced)")
-    
-    # Auto-installer batch launcher (advanced users)
-    auto_install_bat = project_root / "AUTO_INSTALL.bat"
-    if auto_install_bat.exists():
-        shutil.copy2(auto_install_bat, package_dir / "AUTO_INSTALL.bat")
-        print(f"  ✅ AUTO_INSTALL.bat (Auto installer - advanced)")
-    
-    # System checker
-    check_system_py = project_root / "CHECK_SYSTEM.py"
-    if check_system_py.exists():
-        shutil.copy2(check_system_py, package_dir / "CHECK_SYSTEM.py")
-        print(f"  ✅ CHECK_SYSTEM.py")
-    
-    check_system_bat = project_root / "CHECK_SYSTEM.bat"
-    if check_system_bat.exists():
-        shutil.copy2(check_system_bat, package_dir / "CHECK_SYSTEM.bat")
-        print(f"  ✅ CHECK_SYSTEM.bat (System checker)")
-    
-    # Troubleshooting guide
-    troubleshooting_txt = project_root / "TROUBLESHOOTING.txt"
-    if troubleshooting_txt.exists():
-        shutil.copy2(troubleshooting_txt, package_dir / "TROUBLESHOOTING.txt")
-        print(f"  ✅ TROUBLESHOOTING.txt (Help guide)")
-    
-    # Legacy manual installer (for reference)
-    legacy_install_bat = package_dir / "INSTALL_WINDOWS_MANUAL.bat"
-    install_bat.write_text("""@echo off
-echo ========================================
-echo FaB Card Detector - Installation
-echo ========================================
-echo.
-
-REM Check if Python is installed
-python --version >nul 2>&1
-if errorlevel 1 (
-    echo ERROR: Python not found!
-    echo.
-    echo Please install Python 3.8 or higher from:
-    echo https://www.python.org/downloads/
-    echo.
-    echo Make sure to check "Add Python to PATH" during installation!
-    echo.
-    pause
-    exit /b 1
-)
-
-REM Show Python version
-echo Checking Python version...
-python --version
-
-REM Check Python version is 3.8+
-python -c "import sys; exit(0 if sys.version_info >= (3, 8) else 1)" >nul 2>&1
-if errorlevel 1 (
-    echo.
-    echo ERROR: Python 3.8 or higher is required!
-    echo Your Python version is too old.
-    echo.
-    echo Please install Python 3.8 or higher from:
-    echo https://www.python.org/downloads/
-    echo.
-    echo See TROUBLESHOOTING.txt for help.
-    echo.
-    pause
-    exit /b 1
-)
-
-echo Python version OK!
-echo.
-
-REM Upgrade pip first
-echo Upgrading pip...
-python -m pip install --upgrade pip
-if errorlevel 1 (
-    echo WARNING: Failed to upgrade pip, continuing anyway...
-)
-
-echo.
-echo Installing required packages...
-echo This may take 5-10 minutes...
-echo.
-
-python -m pip install -r requirements.txt
-
-if errorlevel 1 (
-    echo.
-    echo ERROR: Installation failed!
-    echo.
-    echo Please check:
-    echo 1. You have Python 3.8 or higher
-    echo 2. You have an internet connection
-    echo 3. Run this as Administrator
-    echo.
-    echo See TROUBLESHOOTING.txt for detailed help.
-    echo Or run CHECK_SYSTEM.bat to diagnose issues.
-    echo.
-    pause
-    exit /b 1
-)
-
-echo.
-echo ========================================
-echo Installation Complete!
-echo ========================================
-echo.
-echo Run RUN_DETECTOR.bat to start the application.
-echo Or run CHECK_SYSTEM.bat to verify installation.
-echo.
-pause
-""")
-    print(f"  ✅ INSTALL_WINDOWS.bat")
-    
-    # Run script
-    run_bat = package_dir / "RUN_DETECTOR.bat"
-    run_bat.write_text("""@echo off
-echo ========================================
-echo FaB Card Detector - Starting...
-echo ========================================
-echo.
-
-python fab_detector_app.py
-
-if errorlevel 1 (
-    echo.
-    echo ERROR: Application failed to start!
-    echo Make sure you ran INSTALL_WINDOWS.bat first.
-    pause
-)
-""")
-    print(f"  ✅ RUN_DETECTOR.bat")
+    else:
+        print(f"  ⚠️  WARNING: RUN.bat not found!")
     
     # Copy README
     print("\n📦 Copying documentation...")
@@ -269,7 +138,7 @@ if errorlevel 1 (
     quickstart_content = """QUICK START GUIDE
 ==================
 
-Step 1: Double-click INSTALL.bat (GUI installer)
+Step 1: Right-click INSTALL.ps1 -> "Run with PowerShell"
 Step 2: Wait for installation (5-10 minutes)
 Step 3: Double-click RUN.bat
 Step 4: Click "Start Detection" in the GUI

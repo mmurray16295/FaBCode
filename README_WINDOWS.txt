@@ -2,114 +2,26 @@
 FaB Card Detector - Windows Package
 ========================================
 
-QUICK START (EASIEST)
-=====================
+QUICK START
+===========
 
-1. Double-click INSTALL.bat
-   - A professional GUI installer will open
-   - Click "Install" button
-   - Wait 5-10 minutes for completion
-   - Will automatically install Python if needed (NO IDE OR CODE EDITOR REQUIRED!)
+1. Right-click INSTALL.ps1 and select "Run with PowerShell"
+   - If prompted, click "Yes" to allow admin privileges
+   - Wait 5-10 minutes for automatic installation
+   - Python will be installed automatically if needed
 
-2. Double-click RUN.bat
-   - The card detector application will launch
-   - No console window clutter!
+2. Double-click RUN.bat to start the application
 
-FEATURES
-========
+That's it!
 
-* Professional GUI installer with progress bar
-* Automatic Python installation (no manual steps!)
-* Hidden console windows (clean interface)
-* Optional detailed output for troubleshooting
-* Works on ANY Windows computer (10/11)
-* NO PROGRAMMING KNOWLEDGE NEEDED!
+WHAT DOES THE INSTALLER DO?
+============================
 
-INSTALLATION OPTIONS
-====================
-
-OPTION 1: GUI Installer (RECOMMENDED)
---------------------------------------
-Double-click: INSTALL.bat
-- Professional interface with progress bar
-- Automatic Python detection and installation
-- No console windows
-- Perfect for end users
-- NO IDE OR CODE EDITOR REQUIRED!
-- The installer downloads and installs Python automatically
-
-OPTION 2: Advanced Auto-Installer
-----------------------------------
-Right-click AUTO_INSTALL.bat -> "Run as Administrator"
-- Command-line interface
-- Automatic Python installation
-- More detailed output
-- For advanced users
-
-OPTION 3: Manual Installation
-------------------------------
-1. Install Python 3.8+ from: https://www.python.org/downloads/
-2. Double-click: INSTALL_WINDOWS_MANUAL.bat
-3. For users who prefer manual control
-
-TROUBLESHOOTING
-===============
-
-If INSTALL.bat does not work:
-- Run CHECK_SYSTEM.bat to diagnose issues
-- See TROUBLESHOOTING.txt for detailed help
-- Try AUTO_INSTALL.bat as Administrator
-
-RUNNING THE APPLICATION
-=======================
-
-1. Double-click RUN.bat (recommended)
-   - Launches without console window
-   - Clean, professional appearance
-
-2. Or double-click RUN_DETECTOR.bat (shows console)
-   - Useful for debugging
-   - Shows detailed output
-
-3. Configure settings in the GUI:
-   - Model file: models/best.pt (pre-selected)
-   - Choose Windowed or Overlay mode
-   - Adjust confidence threshold (default: 0.69)
-   - Enable/disable card preview on hover
-
-4. Click "Start Detection"
-
-APPLICATION FEATURES
-====================
-
-- Windowed Mode: Shows captured screen with detection boxes
-- Overlay Mode: Transparent overlay for streaming (with detection boxes)
-- Card Preview: Hover over detected cards to see full image
-- Multi-monitor Support: Capture from one monitor, display on another
-- Adjustable Confidence: Fine-tune detection sensitivity
-
-COMMON QUESTIONS
-================
-
-Q: Do I need to know how to code?
-A: NO! Just double-click INSTALL.bat and then RUN.bat. Everything is automatic.
-
-Q: Do I need Visual Studio Code or any IDE?
-A: NO! The installer will download and install Python automatically.
-   You don't need any coding tools or editors.
-
-Q: Python not found error?
-A: Just run INSTALL.bat - it will automatically install Python for you!
-   No IDE or code editor needed. The GUI installer handles everything.
-
-Q: Module not found errors?
-A: Run INSTALL.bat again or try AUTO_INSTALL.bat as Administrator
-
-Q: Card preview not working?
-A: Make sure data/card.json exists and card names match your model
-
-Q: Low detection accuracy?
-A: Try adjusting the confidence threshold (lower = more detections, higher = fewer false positives)
+The INSTALL.ps1 script automatically:
+- Checks if Python 3.8+ is installed
+- Downloads and installs Python 3.11.9 if needed
+- Installs all required packages (PyTorch, OpenCV, etc.)
+- No manual steps required!
 
 SYSTEM REQUIREMENTS
 ===================
@@ -117,21 +29,47 @@ SYSTEM REQUIREMENTS
 - Windows 10 or 11 (64-bit)
 - 4GB RAM minimum (8GB recommended)
 - 2GB free disk space
-- Python 3.8+ (will be installed automatically if missing)
-- Webcam or screen capture capability
-- Internet connection (for initial Python download only)
+- Internet connection (for initial installation only)
+- Administrator privileges (for installation only)
+
+APPLICATION FEATURES
+====================
+
+- 500 card detection classes
+- Windowed Mode: Shows captured screen with detection boxes
+- Overlay Mode: Transparent overlay for streaming
+- Card Preview: Hover over detected cards to see full image
+- Multi-monitor Support: Capture from one monitor, display on another
+- Adjustable Confidence: Fine-tune detection sensitivity
+
+TROUBLESHOOTING
+===============
+
+Q: "Running scripts is disabled on this system"
+A: Right-click INSTALL.ps1 -> Properties -> Check "Unblock" -> Apply -> OK
+   Then try running again
+
+Q: Installation fails or hangs
+A: Check your internet connection and try again
+   Make sure you have administrator privileges
+
+Q: Python already installed but packages fail
+A: Open PowerShell as Administrator and run:
+   python -m pip install -r requirements.txt
+
+Q: Application won't start
+A: Make sure INSTALL.ps1 completed successfully
+   Check that Python is installed: python --version
 
 WHAT'S INCLUDED
 ===============
 
-- models/: Pre-trained YOLO detection model (500 card classes)
+- models/best.pt: Pre-trained YOLO model (500 card classes)
 - data/: Card metadata and class information
+- fab_detector_app.py: Main application
+- live_detector.py: Detection engine
 - requirements.txt: Python dependencies
-- GUI_INSTALLER.py: Automatic installer (installs Python if needed)
-- INSTALL.bat: Simple double-click installation
-- RUN.bat: Launch application without console window
-- AUTO_INSTALL.ps1/bat: Advanced PowerShell installer
-- CHECK_SYSTEM.py/bat: System diagnostic tool
-- TROUBLESHOOTING.txt: Detailed help guide
+- INSTALL.ps1: Automatic installer
+- RUN.bat: Application launcher
 
 For support or issues, visit: https://github.com/mmurray16295/FaBCode
