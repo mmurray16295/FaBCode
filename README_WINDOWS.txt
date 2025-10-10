@@ -5,32 +5,31 @@ FaB Card Detector - Windows Package
 QUICK START
 ===========
 
-1. Right-click INSTALL.ps1 and select "Run with PowerShell"
-   - If prompted, click "Yes" to allow admin privileges
-   - Wait 5-10 minutes for automatic installation
-   - Python will be installed automatically if needed
+STEP 1: Install Python (if you don't have it)
+   - Go to: https://www.python.org/downloads/
+   - Download Python 3.8 or higher
+   - During installation, CHECK THE BOX "Add Python to PATH"
+   - This is a one-time setup
 
-2. Double-click RUN.bat to start the application
+STEP 2: Run INSTALL.bat
+   - Double-click INSTALL.bat
+   - Wait 5-10 minutes for packages to install
+   - You only need to do this once
+
+STEP 3: Run the application
+   - Double-click RUN.bat
+   - Configure your settings and click "Start Detection"
 
 That's it!
-
-WHAT DOES THE INSTALLER DO?
-============================
-
-The INSTALL.ps1 script automatically:
-- Checks if Python 3.8+ is installed
-- Downloads and installs Python 3.11.9 if needed
-- Installs all required packages (PyTorch, OpenCV, etc.)
-- No manual steps required!
 
 SYSTEM REQUIREMENTS
 ===================
 
 - Windows 10 or 11 (64-bit)
+- Python 3.8 or higher (download from python.org)
 - 4GB RAM minimum (8GB recommended)
 - 2GB free disk space
 - Internet connection (for initial installation only)
-- Administrator privileges (for installation only)
 
 APPLICATION FEATURES
 ====================
@@ -45,21 +44,21 @@ APPLICATION FEATURES
 TROUBLESHOOTING
 ===============
 
-Q: "Running scripts is disabled on this system"
-A: Right-click INSTALL.ps1 -> Properties -> Check "Unblock" -> Apply -> OK
-   Then try running again
+Q: "Python not found" error
+A: Install Python from https://www.python.org/downloads/
+   Make sure to check "Add Python to PATH" during installation!
 
-Q: Installation fails or hangs
-A: Check your internet connection and try again
-   Make sure you have administrator privileges
-
-Q: Python already installed but packages fail
-A: Open PowerShell as Administrator and run:
-   python -m pip install -r requirements.txt
+Q: Installation fails
+A: 1. Check your internet connection
+   2. Try running INSTALL.bat as Administrator (right-click -> Run as Administrator)
+   3. Make sure you have Python 3.8 or higher
 
 Q: Application won't start
-A: Make sure INSTALL.ps1 completed successfully
-   Check that Python is installed: python --version
+A: Make sure INSTALL.bat completed successfully
+   Check that Python is installed: Open Command Prompt and type: python --version
+
+Q: "Module not found" errors
+A: Run INSTALL.bat again
 
 WHAT'S INCLUDED
 ===============
@@ -69,7 +68,7 @@ WHAT'S INCLUDED
 - fab_detector_app.py: Main application
 - live_detector.py: Detection engine
 - requirements.txt: Python dependencies
-- INSTALL.ps1: Automatic installer
+- INSTALL.bat: Package installer
 - RUN.bat: Application launcher
 
 For support or issues, visit: https://github.com/mmurray16295/FaBCode

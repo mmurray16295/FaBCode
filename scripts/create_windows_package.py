@@ -97,13 +97,13 @@ def create_portable_package():
     # Create installer files for Windows
     print("\n📦 Copying installer scripts...")
     
-    # PowerShell installer
-    install_ps1 = project_root / "INSTALL.ps1"
-    if install_ps1.exists():
-        shutil.copy2(install_ps1, package_dir / "INSTALL.ps1")
-        print(f"  ✅ INSTALL.ps1 (Automatic installer)")
+    # Batch installer
+    install_bat = project_root / "INSTALL.bat"
+    if install_bat.exists():
+        shutil.copy2(install_bat, package_dir / "INSTALL.bat")
+        print(f"  ✅ INSTALL.bat (Package installer)")
     else:
-        print(f"  ⚠️  WARNING: INSTALL.ps1 not found!")
+        print(f"  ⚠️  WARNING: INSTALL.bat not found!")
     
     # Application runner
     run_bat = project_root / "RUN.bat"
@@ -138,9 +138,14 @@ def create_portable_package():
     quickstart_content = """QUICK START GUIDE
 ==================
 
-Step 1: Right-click INSTALL.ps1 -> "Run with PowerShell"
-Step 2: Wait for installation (5-10 minutes)
+Step 1: Install Python from https://www.python.org/downloads/
+        (Check "Add Python to PATH" during installation)
+
+Step 2: Double-click INSTALL.bat
+        (Wait 5-10 minutes)
+
 Step 3: Double-click RUN.bat
+
 Step 4: Click "Start Detection" in the GUI
 
 Done!

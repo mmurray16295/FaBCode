@@ -1,9 +1,0 @@
-QUICK START GUIDE
-==================
-
-Step 1: Right-click INSTALL.ps1 -> "Run with PowerShell"
-Step 2: Wait for installation (5-10 minutes)
-Step 3: Double-click RUN.bat
-Step 4: Click "Start Detection" in the GUI
-
-Done!
