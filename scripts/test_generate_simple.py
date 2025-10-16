@@ -486,7 +486,7 @@ def apply_occluders_to_playmat(playmat, card_placements, tokens_dir, probability
     return result
 
 
-def apply_hard_case(card_img):
+def apply_hard_case(card_img, include_artifacts=True):
     """
     Apply a hard case effect to a card image.
     Creates a clearish white halo with extra glare and black edge artifacts to simulate
@@ -494,6 +494,8 @@ def apply_hard_case(card_img):
     
     Args:
         card_img: PIL Image of the card
+        include_artifacts: If True, adds challenging visual artifacts (splotching effect) for harder training.
+                          If False, creates more realistic hard cases with just glare and borders.
         
     Returns:
         PIL Image with hard case effect applied (RGBA with transparent background)
@@ -578,7 +580,19 @@ def apply_hard_case(card_img):
                         if case_array[py, px, 3] > 0:
                             distance_ratio = np.sqrt(dx*dx + dy*dy) / glare_radius
                             glare_boost = int(80 * (1 - distance_ratio))  # MUCH stronger glare
-                            case_array[py, px, :3] = np.clip(case_array[py, px, :3] + glare_boost, 0, 255)
+                            
+                            if include_artifacts:
+                                # Original behavior: direct addition (can cause artifacts/splotching)
+                                # This creates challenging training data with visual distortions
+                                case_array[py, px, :3] = np.clip(case_array[py, px, :3] + glare_boost, 0, 255)
+                            else:
+                                # Realistic behavior: proper brightening without artifacts
+                                # Blend white light into existing colors
+                                blend_factor = glare_boost / 255.0
+                                case_array[py, px, :3] = np.clip(
+                                    case_array[py, px, :3] * (1 - blend_factor) + 255 * blend_factor,
+                                    0, 255
+                                ).astype(np.uint8)
     
     # Add black lines/artifacts parallel to edges (simulating case seams/edges)
     # RGBA format: set RGB to dark and alpha to fully opaque
@@ -645,7 +659,7 @@ def apply_hard_case(card_img):
     return Image.fromarray(case_array, 'RGBA')
 
 
-def apply_card_augmentations(card_img, augmentation_config, blur_intensity=None, glare_intensity=None, glare_pattern=None, color_params=None, sleeve_color=None, card_types=None, use_hard_case=False):
+def apply_card_augmentations(card_img, augmentation_config, blur_intensity=None, glare_intensity=None, glare_pattern=None, color_params=None, sleeve_color=None, card_types=None, use_hard_case=False, hard_case_artifacts=True):
     """
     Apply all augmentations to a card image.
     Converts PIL → NumPy → apply augmentations → PIL
@@ -660,6 +674,7 @@ def apply_card_augmentations(card_img, augmentation_config, blur_intensity=None,
         sleeve_color: Tuple (R, G, B) for sleeve color. If None, no sleeve is applied.
         card_types: List of card types to determine if color strip degradation should be applied
         use_hard_case: Boolean, if True applies hard case effect instead of sleeve
+        hard_case_artifacts: Boolean, if True includes challenging visual artifacts in hard cases (default: True)
         
     Returns:
         Augmented PIL Image (with sleeve or hard case if applied)
@@ -706,7 +721,7 @@ def apply_card_augmentations(card_img, augmentation_config, blur_intensity=None,
     # Apply hard case OR sleeve AFTER color strip degradation (mutually exclusive)
     if use_hard_case:
         # Apply hard case effect (for Equipment, Weapon, Hero cards)
-        card_img = apply_hard_case(card_img)
+        card_img = apply_hard_case(card_img, include_artifacts=hard_case_artifacts)
         has_alpha = True  # Hard case NOW creates RGBA image with transparent background
     elif sleeve_color is not None:
         # Create a sleeve background that's 3px larger on each side
@@ -1082,7 +1097,7 @@ def place_card_on_playmat(playmat, card_img, x, y, rotation=0, scale=1.0):
 
 def place_hero_card(hero_img_path, hero_zone, hero_card, image_cache, playmat, 
                     aug_config, blur_intensity, glare_pattern, color_params, 
-                    sleeve_color, light_source_pos, img_width, img_height, uniform_scale_factor=1.0):
+                    sleeve_color, light_source_pos, img_width, img_height, uniform_scale_factor=1.0, hard_case_artifacts=True):
     """Helper function to place hero card with augmentations and rotation (OPTIMIZATION: eliminates code duplication)."""
     x, y, zone_w, zone_h = yolo_to_pixel_coords(hero_zone, img_width, img_height)
     hero_img = image_cache[str(hero_img_path)]  # OPTIMIZATION: use cached image
@@ -1093,7 +1108,7 @@ def place_hero_card(hero_img_path, hero_zone, hero_card, image_cache, playmat,
         glare_intensity = calculate_glare_intensity(card_center_x, card_center_y, light_source_pos, img_width, img_height)
         # Heroes have 50% chance of getting hard case (per card decision)
         use_hard_case = random.random() < 0.5
-        hero_img = apply_card_augmentations(hero_img, aug_config, blur_intensity, glare_intensity, glare_pattern, color_params, sleeve_color, card_types=['Hero'], use_hard_case=use_hard_case)
+        hero_img = apply_card_augmentations(hero_img, aug_config, blur_intensity, glare_intensity, glare_pattern, color_params, sleeve_color, card_types=['Hero'], use_hard_case=use_hard_case, hard_case_artifacts=hard_case_artifacts)
     
     # Apply base rotation based on X position
     target_width = 140
@@ -1119,7 +1134,7 @@ def place_hero_card(hero_img_path, hero_zone, hero_card, image_cache, playmat,
 
 def place_standard_card(card, img_path, zone, image_cache, playmat, aug_config, 
                        blur_intensity, glare_pattern, color_params, sleeve_color, 
-                       light_source_pos, img_width, img_height, uniform_scale_factor=1.0):
+                       light_source_pos, img_width, img_height, uniform_scale_factor=1.0, hard_case_artifacts=True):
     """Helper function to place standard zone card with augmentations and rotation (OPTIMIZATION: eliminates code duplication)."""
     x, y, zone_w, zone_h = yolo_to_pixel_coords(zone, img_width, img_height)
     card_img = image_cache[str(img_path)]  # OPTIMIZATION: use cached image
@@ -1136,7 +1151,7 @@ def place_standard_card(card, img_path, zone, image_cache, playmat, aug_config,
         # Each eligible card has 50% chance of getting hard case (per card decision)
         should_use_hard_case = is_eligible and (random.random() < 0.5)
         
-        card_img = apply_card_augmentations(card_img, aug_config, blur_intensity, glare_intensity, glare_pattern, color_params, sleeve_color, card_types=card_types, use_hard_case=should_use_hard_case)
+        card_img = apply_card_augmentations(card_img, aug_config, blur_intensity, glare_intensity, glare_pattern, color_params, sleeve_color, card_types=card_types, use_hard_case=should_use_hard_case, hard_case_artifacts=hard_case_artifacts)
     
     # Standard zones: target 140x100px after rotation
     target_width = 140
@@ -1165,7 +1180,7 @@ def place_standard_card(card, img_path, zone, image_cache, playmat, aug_config,
 
 def place_combat_chain_card(card, img_path, zone, chain_name, zone_id, card_placements, 
                             image_cache, aug_config, blur_intensity, glare_pattern, 
-                            color_params, sleeve_color, light_source_pos, img_width, img_height, playmat, uniform_scale_factor=1.0):
+                            color_params, sleeve_color, light_source_pos, img_width, img_height, playmat, uniform_scale_factor=1.0, hard_case_artifacts=True):
     """Helper function to place combat chain card with rotation and overlap detection (OPTIMIZATION: eliminates code duplication)."""
     card_img_original = image_cache[str(img_path)]  # OPTIMIZATION: use cached image
     rotation = random.uniform(-180, 180)
@@ -1192,7 +1207,7 @@ def place_combat_chain_card(card, img_path, zone, chain_name, zone_id, card_plac
         card_center_x = x + max_dim / 2
         card_center_y = y + max_dim / 2
         glare_intensity = calculate_glare_intensity(card_center_x, card_center_y, light_source_pos, img_width, img_height)
-        card_img = apply_card_augmentations(card_img_original, aug_config, blur_intensity, glare_intensity, glare_pattern, color_params, sleeve_color, card_types=card.get('types', []), use_hard_case=False)
+        card_img = apply_card_augmentations(card_img_original, aug_config, blur_intensity, glare_intensity, glare_pattern, color_params, sleeve_color, card_types=card.get('types', []), use_hard_case=False, hard_case_artifacts=hard_case_artifacts)
     else:
         card_img = card_img_original
     
@@ -1331,8 +1346,17 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None):
         # Random scale between 0.93 and 1.07 (±7%)
         uniform_scale_factor = random.uniform(0.93, 1.07)
         print(f"   Uniform card scale: {uniform_scale_factor:.3f}× ({(uniform_scale_factor - 1.0) * 100:+.1f}%)")
+        
+        # Decide whether to include hard case artifacts (challenging splotching effect)
+        # 50% chance for realistic cases, 50% chance for artifact-heavy cases (extra challenge)
+        hard_case_artifacts = random.random() < 0.5
+        if hard_case_artifacts:
+            print(f"   Hard case mode: With artifacts (challenging training data)")
+        else:
+            print(f"   Hard case mode: Realistic only (clean glare)")
     else:
         uniform_scale_factor = 1.0  # No scaling when augmentations disabled
+        hard_case_artifacts = False  # No artifacts when augmentations disabled
             
     if not draw_bboxes:
         print(f"   Bounding box visualization disabled")
@@ -1680,14 +1704,14 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None):
         if hero1_zone:
             placement = place_hero_card(hero1_img_path, hero1_zone, hero1_card, image_cache, playmat,
                                        aug_config, blur_intensity, glare_pattern, color_params, 
-                                       sleeve_color, light_source_pos, img_width, img_height, uniform_scale_factor)
+                                       sleeve_color, light_source_pos, img_width, img_height, uniform_scale_factor, hard_case_artifacts)
             card_placements.append(placement)
         
         # Place Hero 2 (OPTIMIZATION: using helper function)
         if hero2_zone:
             placement = place_hero_card(hero2_img_path, hero2_zone, hero2_card, image_cache, playmat,
                                        aug_config, blur_intensity, glare_pattern, color_params, 
-                                       sleeve_color, light_source_pos, img_width, img_height, uniform_scale_factor)
+                                       sleeve_color, light_source_pos, img_width, img_height, uniform_scale_factor, hard_case_artifacts)
             card_placements.append(placement)
         
         # Get hero 1 zones (no number or ending without ' 2')
@@ -1700,7 +1724,7 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None):
         for (card, img_path), zone in zip(hero1_card_images, hero1_zones_used):
             placement = place_standard_card(card, img_path, zone, image_cache, playmat, aug_config,
                                           blur_intensity, glare_pattern, color_params, sleeve_color,
-                                          light_source_pos, img_width, img_height, uniform_scale_factor)
+                                          light_source_pos, img_width, img_height, uniform_scale_factor, hard_case_artifacts)
             card_placements.append(placement)
         
         # Place Hero 2 cards (OPTIMIZATION: using helper function)
@@ -1708,7 +1732,7 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None):
             print(f"   DEBUG: Placing {card['name']} (types: {card.get('types', [])}) in zone {zone['zone_name']}")
             placement = place_standard_card(card, img_path, zone, image_cache, playmat, aug_config,
                                           blur_intensity, glare_pattern, color_params, sleeve_color,
-                                          light_source_pos, img_width, img_height, uniform_scale_factor)
+                                          light_source_pos, img_width, img_height, uniform_scale_factor, hard_case_artifacts)
             card_placements.append(placement)
         
         # Place Combat Chain 1 cards (OPTIMIZATION: using helper function)
@@ -1718,7 +1742,7 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None):
                 placement = place_combat_chain_card(card, img_path, combat_chain1_zone, "Combat Chain 1", 7,
                                                    card_placements, image_cache, aug_config, blur_intensity,
                                                    glare_pattern, color_params, sleeve_color, light_source_pos,
-                                                   img_width, img_height, playmat, uniform_scale_factor)
+                                                   img_width, img_height, playmat, uniform_scale_factor, hard_case_artifacts)
                 if placement:
                     card_placements.append(placement)
                 else:
@@ -1731,7 +1755,7 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None):
                 placement = place_combat_chain_card(card, img_path, combat_chain2_zone, "Combat Chain 2", 8,
                                                    card_placements, image_cache, aug_config, blur_intensity,
                                                    glare_pattern, color_params, sleeve_color, light_source_pos,
-                                                   img_width, img_height, playmat, uniform_scale_factor)
+                                                   img_width, img_height, playmat, uniform_scale_factor, hard_case_artifacts)
                 if placement:
                     card_placements.append(placement)
                 else:
@@ -1745,7 +1769,7 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None):
             glare_intensity = calculate_glare_intensity(50, 50, light_source_pos, img_width, img_height)
             # Heroes have 50% chance of getting hard case (per card decision)
             use_hard_case_hero1 = random.random() < 0.5
-            hero1_img = apply_card_augmentations(hero1_img, aug_config, blur_intensity, glare_intensity, glare_pattern, color_params, sleeve_color, card_types=['Hero'], use_hard_case=use_hard_case_hero1)
+            hero1_img = apply_card_augmentations(hero1_img, aug_config, blur_intensity, glare_intensity, glare_pattern, color_params, sleeve_color, card_types=['Hero'], use_hard_case=use_hard_case_hero1, hard_case_artifacts=hard_case_artifacts)
         hero1_width, hero1_height = place_card_on_playmat(playmat, hero1_img, x=50, y=50, scale=0.6 * uniform_scale_factor)
         card_placements.append({'x': 50, 'y': 50, 'width': hero1_width, 'height': hero1_height, 'label': f"Hero 1: {hero1_card['name']}", 'zone_name': 'Hero', 'card_name': hero1_card['name']})
         
@@ -1754,7 +1778,7 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None):
             glare_intensity = calculate_glare_intensity(50, 500, light_source_pos, img_width, img_height)
             # Heroes have 50% chance of getting hard case (per card decision)
             use_hard_case_hero2 = random.random() < 0.5
-            hero2_img = apply_card_augmentations(hero2_img, aug_config, blur_intensity, glare_intensity, glare_pattern, color_params, sleeve_color, card_types=['Hero'], use_hard_case=use_hard_case_hero2)
+            hero2_img = apply_card_augmentations(hero2_img, aug_config, blur_intensity, glare_intensity, glare_pattern, color_params, sleeve_color, card_types=['Hero'], use_hard_case=use_hard_case_hero2, hard_case_artifacts=hard_case_artifacts)
         hero2_width, hero2_height = place_card_on_playmat(playmat, hero2_img, x=50, y=500, scale=0.6 * uniform_scale_factor)
         card_placements.append({'x': 50, 'y': 500, 'width': hero2_width, 'height': hero2_height, 'label': f"Hero 2: {hero2_card['name']}", 'zone_name': 'Hero 2', 'card_name': hero2_card['name']})
         
@@ -1789,7 +1813,7 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None):
                 
                 # Calculate glare based on position (for fallback grid layout)
                 glare_intensity = calculate_glare_intensity(x, y, light_source_pos, img_width, img_height)
-                card_img = apply_card_augmentations(card_img, aug_config, blur_intensity, glare_intensity, glare_pattern, color_params, sleeve_color, card_types=card_types, use_hard_case=should_use_hard_case)
+                card_img = apply_card_augmentations(card_img, aug_config, blur_intensity, glare_intensity, glare_pattern, color_params, sleeve_color, card_types=card_types, use_hard_case=should_use_hard_case, hard_case_artifacts=hard_case_artifacts)
             
             card_width, card_height = place_card_on_playmat(playmat, card_img, x, y, rotation=rotation, scale=card_scale * uniform_scale_factor)
             card_placements.append({'x': x, 'y': y, 'width': card_width, 'height': card_height, 'label': card['name'], 'zone_name': 'Card', 'card_name': card['name']})
