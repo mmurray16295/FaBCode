@@ -25,6 +25,12 @@ runs/detect/train12/weights/*
 # Ignore all card images and backgrounds
 data/images/
 
+# Ignore YOLO model weights (download via scripts instead)
+yolo*.pt
+*.pt
+!runs/detect/train12/weights/best.pt
+!runs/detect/train12/weights/last.pt
+
 # Ignore training logs and outputs
 *.log
 logs/

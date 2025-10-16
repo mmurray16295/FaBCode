@@ -1,10 +1,24 @@
 """
-Visualize YOLO labels by drawing bounding boxes on images.
+Visualize YOLO labels by drawing bounding boxes on images with card names.
 This helps verify that labels match the actual card positions after all transformations.
 """
 import os
 import glob
+import json
 from PIL import Image, ImageDraw, ImageFont
+
+def load_card_mapping():
+    """Load the card name to class ID mapping."""
+    try:
+        with open('data/card_name_to_class_id.json', 'r', encoding='utf-8') as f:
+            card_name_to_class_id = json.load(f)
+        
+        # Create reverse mapping (class_id -> card_name)
+        class_id_to_card_name = {v: k for k, v in card_name_to_class_id.items()}
+        return class_id_to_card_name
+    except FileNotFoundError:
+        print("WARNING: card_name_to_class_id.json not found. Using class IDs only.")
+        return {}
 
 def draw_boxes_on_images(base_dir, splits=['train', 'valid', 'test'], max_images_per_split=None):
     """
@@ -15,6 +29,9 @@ def draw_boxes_on_images(base_dir, splits=['train', 'valid', 'test'], max_images
         splits: List of split names to process
         max_images_per_split: Optional limit on number of images to process per split
     """
+    # Load card name mapping
+    class_id_to_card_name = load_card_mapping()
+    
     colors = [
         (255, 0, 0),      # Red
         (0, 255, 0),      # Green
@@ -69,6 +86,7 @@ def draw_boxes_on_images(base_dir, splits=['train', 'valid', 'test'], max_images
                     continue
                 
                 class_id, cx, cy, bw, bh = parts
+                class_id_int = int(class_id)
                 cx, cy, bw, bh = float(cx), float(cy), float(bw), float(bh)
                 
                 # Convert YOLO format (normalized center + size) to pixel coordinates
@@ -81,8 +99,10 @@ def draw_boxes_on_images(base_dir, splits=['train', 'valid', 'test'], max_images
                 color = colors[idx % len(colors)]
                 draw.rectangle([x1, y1, x2, y2], outline=color, width=3)
                 
-                # Draw class ID label at top-left of box
-                label_text = f"C{class_id}"
+                # Get card name from mapping, fallback to class ID if not found
+                card_name = class_id_to_card_name.get(class_id_int, f"Class_{class_id}")
+                label_text = f"{card_name} (C{class_id})"
+                
                 # Draw text background for readability
                 text_bbox = draw.textbbox((x1 + 2, y1 + 2), label_text)
                 draw.rectangle(text_bbox, fill=(0, 0, 0, 200))
