@@ -1,0 +1,16 @@
+# Core training & data tools
+ultralytics
+torch
+torchvision
+opencv-python
+numpy
+pillow
+pyyaml
+matplotlib
+scikit-learn
+mss
+
+# Labeling UI (LabelImg needs these)
+labelImg
+PyQt5
+lxml

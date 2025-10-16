@@ -17,7 +17,7 @@ import sys
 def load_card_database(card_json_path: str) -> Dict[str, dict]:
     """Load card.json and create lookup by card ID"""
     print(f"Loading card database from {card_json_path}...")
-    with open(card_json_path, 'r') as f:
+    with open(card_json_path, 'r', encoding='utf-8') as f:
         cards = json.load(f)
     
     # Create lookup by card ID (e.g., "EVR018")
@@ -68,10 +68,11 @@ def get_hero_list_with_percentages() -> Dict[str, float]:
     print(f"Found {len(hero_percentages)} heroes, total decks: {total_decks}")
     return hero_percentages
 
-def scrape_hero_page(hero_identifier: str, hero_percentage: float, card_lookup: Dict[str, dict]) -> List[Tuple[str, str, float]]:
+def scrape_hero_page(hero_identifier: str, hero_percentage: float, card_lookup: Dict[str, dict]) -> Dict[str, List[Tuple[str, str, float]]]:
     """
     Scrape a hero page for card usage data
-    Returns: [(card_name, card_id, usage_percentage)]
+    Returns: {section_name: [(card_name, card_id, usage_percentage)]}
+    Preserves website's section ordering (equipment, weapon, maindeck, etc.)
     """
     url = f"https://fabrec.gg/hero/{hero_identifier}"
     print(f"\nScraping {url}... (hero at {hero_percentage:.4f}% of decks)")
@@ -83,7 +84,7 @@ def scrape_hero_page(hero_identifier: str, hero_percentage: float, card_lookup: 
     script_tag = soup.find('script', {'id': '__NEXT_DATA__'})
     if not script_tag:
         print(f"ERROR: Could not find data for {hero_identifier}")
-        return []
+        return {}
     
     data = json.loads(script_tag.string)
     
@@ -91,27 +92,29 @@ def scrape_hero_page(hero_identifier: str, hero_percentage: float, card_lookup: 
         page_props = data['props']['pageProps']
         
         # Find card usage data in cardlists
-        cards_found = []
+        cards_by_section = {}
         
         if 'cardData' not in page_props:
             print("  No cardData found")
-            return []
+            return {}
         
         card_data = page_props['cardData']
         
         # cardlists are in container.cardlists
         if 'container' not in card_data or 'cardlists' not in card_data['container']:
             print("  No cardlists found")
-            return []
+            return {}
         
         cardlists = card_data['container']['cardlists'].get('jsonData', {})
         
         # Process different card sections (equipment, weapon, maindeck, sideboard, etc.)
+        # Preserve the order from the website
         for section, cards in cardlists.items():
             if not isinstance(cards, list) or len(cards) == 0:
                 continue
             print(f"  Processing section: {section} ({len(cards)} cards)")
             
+            section_cards = []
             for card_info in cards:
                 # Extract card ID (e.g., "EVR018-CF" or "EVR018")
                 card_id_full = card_info.get('card', '')
@@ -128,12 +131,15 @@ def scrape_hero_page(hero_identifier: str, hero_percentage: float, card_lookup: 
                 # Look up card name using base card ID
                 if card_id in card_lookup:
                     card_name = card_lookup[card_id]['name']
-                    cards_found.append((card_name, card_id, usage_pct))
+                    section_cards.append((card_name, card_id, usage_pct))
                     print(f"    Found: {card_name} ({card_id}) - {usage_pct:.2f}% of decks")
                 else:
                     print(f"    WARNING: Card ID {card_id} not found in card database")
+            
+            if section_cards:
+                cards_by_section[section] = section_cards
         
-        return cards_found
+        return cards_by_section
         
     except Exception as e:
         print(f"ERROR parsing hero page: {e}")
@@ -142,7 +148,7 @@ def scrape_hero_page(hero_identifier: str, hero_percentage: float, card_lookup: 
         # Print first 2000 chars of data structure for debugging
         print("\nData structure preview:")
         print(json.dumps(data, indent=2)[:2000])
-        return 0.0, []
+        return {}
 
 def normalize_card_name(name: str, card_id: str) -> str:
     """Convert card name to filename format: Remove punctuation, spaces to underscores"""
@@ -155,8 +161,8 @@ def normalize_card_name(name: str, card_id: str) -> str:
 
 def main():
     # Configuration
-    CARD_JSON_PATH = '/workspace/fab/src/data/card.json'
-    OUTPUT_PATH = '/workspace/fab/src/data/card_popularity_weights.json'
+    CARD_JSON_PATH = 'data/card.json'
+    OUTPUT_PATH = 'data/card_popularity_weights_by_hero.json'
     MAX_HEROES = int(sys.argv[1]) if len(sys.argv) > 1 else None  # None = all heroes
     
     # Load card database
@@ -165,17 +171,16 @@ def main():
     # Get hero list with percentages
     hero_percentages = get_hero_list_with_percentages()
     
-    # Get list of heroes to scrape
-    heroes_to_scrape = list(hero_percentages.keys())
+    # Get list of heroes to scrape (sorted alphabetically)
+    heroes_to_scrape = sorted(list(hero_percentages.keys()))
     if MAX_HEROES:
         heroes_to_scrape = heroes_to_scrape[:MAX_HEROES]
     
-    print(f"\nWill scrape {len(heroes_to_scrape)} heroes")
+    print(f"\nWill scrape {len(heroes_to_scrape)} heroes (alphabetically sorted)")
     
-    # Dictionary to accumulate weights per card
-    # Format: {normalized_card_name: [weight1, weight2, ...]}
-    card_weights = defaultdict(list)
-    card_metadata = {}  # Store full card info for each normalized name
+    # Dictionary to store hero-centric data
+    # Format: {hero_name: {section_name: [{card_name, card_id, usage_pct, normalized_name}]}}
+    hero_data = {}
     
     # Scrape each hero
     for hero_id in heroes_to_scrape:
@@ -185,53 +190,49 @@ def main():
             print(f"WARNING: No deck percentage found for {hero_id}, skipping...")
             continue
         
-        cards = scrape_hero_page(hero_id, hero_pct, card_lookup)
+        cards_by_section = scrape_hero_page(hero_id, hero_pct, card_lookup)
         
-        # Calculate weights for each card
-        for card_name, card_id, usage_pct in cards:
-            weight = (hero_pct / 100.0) * (usage_pct / 100.0)
-            normalized_name = normalize_card_name(card_name, card_id)
-            
-            card_weights[normalized_name].append(weight)
-            
-            if normalized_name not in card_metadata:
-                card_metadata[normalized_name] = {
-                    'original_name': card_name,
+        if not cards_by_section:
+            print(f"WARNING: No cards found for {hero_id}")
+            continue
+        
+        # Build hero's card data with sections preserved
+        hero_sections = {}
+        total_cards = 0
+        
+        for section, cards in cards_by_section.items():
+            section_data = []
+            for card_name, card_id, usage_pct in cards:
+                normalized_name = normalize_card_name(card_name, card_id)
+                section_data.append({
+                    'card_name': card_name,
                     'card_id': card_id,
-                    'hero_contributions': []
-                }
+                    'normalized_name': normalized_name,
+                    'usage_percentage': usage_pct
+                })
+                total_cards += 1
             
-            card_metadata[normalized_name]['hero_contributions'].append({
-                'hero': hero_id,
-                'hero_pct': hero_pct,
-                'usage_pct': usage_pct,
-                'weight': weight
-            })
+            # Sort cards within section by usage percentage (descending)
+            section_data.sort(key=lambda x: x['usage_percentage'], reverse=True)
+            hero_sections[section] = section_data
+        
+        hero_data[hero_id] = {
+            'hero_deck_percentage': hero_pct,
+            'total_unique_cards': total_cards,
+            'sections': hero_sections
+        }
         
         # Be nice to the server
         time.sleep(1)
     
-    # Calculate total weights
-    final_weights = {}
-    for card_name, weights in card_weights.items():
-        total_weight = sum(weights)
-        final_weights[card_name] = {
-            'total_weight': total_weight,
-            'individual_weights': weights,
-            'metadata': card_metadata[card_name]
-        }
-    
-    # Sort by total weight (descending)
-    sorted_weights = dict(sorted(final_weights.items(), key=lambda x: x[1]['total_weight'], reverse=True))
-    
     # Save results
     output_data = {
         'metadata': {
-            'total_cards': len(sorted_weights),
-            'total_heroes_scraped': len(heroes_to_scrape),
-            'generation_timestamp': time.strftime('%Y-%m-%d %H:%M:%S')
+            'total_heroes': len(hero_data),
+            'generation_timestamp': time.strftime('%Y-%m-%d %H:%M:%S'),
+            'description': 'Card popularity data organized by hero. Each hero contains cards sorted by section (equipment, weapon, etc.) and usage percentage.'
         },
-        'weights': sorted_weights
+        'heroes': hero_data
     }
     
     with open(OUTPUT_PATH, 'w') as f:
@@ -239,13 +240,14 @@ def main():
     
     print(f"\n{'='*60}")
     print(f"Scraping complete!")
-    print(f"Total cards found: {len(sorted_weights)}")
+    print(f"Total heroes scraped: {len(hero_data)}")
     print(f"Output saved to: {OUTPUT_PATH}")
-    print(f"\nTop 10 most popular cards:")
-    for i, (card_name, data) in enumerate(list(sorted_weights.items())[:10], 1):
-        print(f"  {i}. {data['metadata']['original_name']} ({data['metadata']['card_id']})")
-        print(f"     Total weight: {data['total_weight']:.6f}")
-        print(f"     Used by {len(data['individual_weights'])} heroes")
+    print(f"\nHero summary (first 5):")
+    for i, (hero_name, data) in enumerate(list(hero_data.items())[:5], 1):
+        print(f"  {i}. {hero_name}")
+        print(f"     Deck percentage: {data['hero_deck_percentage']:.2f}%")
+        print(f"     Total cards: {data['total_unique_cards']}")
+        print(f"     Sections: {', '.join(data['sections'].keys())}")
 
 if __name__ == '__main__':
     main()
