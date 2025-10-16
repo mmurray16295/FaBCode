@@ -108,19 +108,20 @@ def sanitize_filename(name):
 def downscale_image(image_bytes, max_dimension):
     """
     Downscale image to max_dimension while maintaining aspect ratio.
+    Preserves RGBA mode (including transparency/alpha channel).
     
     Args:
         image_bytes: Raw image bytes
         max_dimension: Maximum width or height
     
     Returns:
-        PIL Image object (downscaled)
+        PIL Image object (downscaled, RGBA mode)
     """
     img = Image.open(BytesIO(image_bytes))
     
-    # Convert to RGB if necessary (handles RGBA, grayscale, etc.)
-    if img.mode != 'RGB':
-        img = img.convert('RGB')
+    # Ensure RGBA mode (preserve alpha channel if present, add if not)
+    if img.mode != 'RGBA':
+        img = img.convert('RGBA')
     
     # Calculate new dimensions maintaining aspect ratio
     width, height = img.size
