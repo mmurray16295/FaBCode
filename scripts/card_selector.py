@@ -4,7 +4,7 @@ Simplified card selection system for synthetic playmat generation.
 Data Flow:
 1. Select hero from card_popularity_weights_by_hero.json
 2. Look up hero card data in card.json
-3. Select cards: 90% from weights, 10% non-weighted (4% generic, 1% class, 1% talent, 4% both)
+3. Select cards: 75% from weights, 25% non-weighted (8% generic, 8% class, 4% talent, 5% both)
 4. Look up each card's properties in card.json
 """
 
@@ -70,10 +70,12 @@ class CardSelector:
         print(f"Loaded {len(self.all_cards)} cards, {len(self.card_lookup)} unique names")
         print(f"Loaded {len(self.weights_data.get('heroes', {}))} heroes with weights")
     
-    def select_random_hero(self) -> Tuple[str, Dict, Dict]:
+    def select_random_hero(self, format: str = None) -> Tuple[str, Dict, Dict]:
         """
         Select a random hero from weights file.
-        Only selects heroes that are legal in at least one format.
+        
+        Args:
+            format: Optional format to filter by ('cc', 'll', 'blitz'). If None, any legal hero.
         
         Returns:
             (hero_key, hero_card_data, hero_weights)
@@ -86,14 +88,18 @@ class CardSelector:
             hero_weights = self.weights_data['heroes'][hero_key]
             
             # Find matching hero card in card.json
-            # Normalize by removing punctuation and converting to lowercase
-            hero_key_normalized = hero_key.lower().replace('-', ' ').replace(',', '').replace('  ', ' ')
+            # Normalize by removing ALL punctuation and spaces for comparison
+            # This handles cases like "dash-io" vs "Dash I/O", "arakni-5lp3d..." vs "Arakni, 5L!p3d..."
+            hero_key_normalized = hero_key.lower().replace('-', '').replace(' ', '').replace(',', '').replace("'", '').replace('!', '').replace('/', '')
             hero_card = None
             
             for card in self.all_cards:
                 if 'Hero' in card.get('types', []):
-                    name_normalized = card['name'].lower().replace(',', '').replace('  ', ' ')
-                    if hero_key_normalized in name_normalized or name_normalized in hero_key_normalized:
+                    # Remove ALL punctuation and spaces from card name too
+                    name_normalized = card['name'].lower().replace(' ', '').replace(',', '').replace("'", '').replace('!', '').replace('/', '')
+                    # Only match if the hero_key is IN the card name (not vice versa)
+                    # This ensures "arakni huntsman" matches "Arakni, Huntsman" but not just "Arakni"
+                    if hero_key_normalized in name_normalized:
                         hero_card = card
                         break
             
@@ -101,11 +107,22 @@ class CardSelector:
             if not hero_card:
                 continue
             
-            # Check if hero is legal in at least one format
-            if hero_card.get('cc_legal') or hero_card.get('ll_legal') or hero_card.get('blitz_legal'):
-                return hero_key, hero_card, hero_weights
+            # If format specified, check if hero is legal for that format
+            if format:
+                if format == 'cc' and not hero_card.get('cc_legal'):
+                    continue
+                elif format == 'll' and not hero_card.get('ll_legal'):
+                    continue
+                elif format == 'blitz' and not hero_card.get('blitz_legal'):
+                    continue
+            else:
+                # No format specified - check if hero is legal in at least one format
+                if not (hero_card.get('cc_legal') or hero_card.get('ll_legal') or hero_card.get('blitz_legal')):
+                    continue
+            
+            return hero_key, hero_card, hero_weights
         
-        raise ValueError("Could not find any legal hero in weights file")
+        raise ValueError(f"Could not find any legal hero for format: {format}")
     
     def get_hero_classes_and_talents(self, hero_card: Dict) -> Tuple[Set[str], Set[str]]:
         """Extract classes and talents from hero card, including Essence bonuses."""
@@ -257,8 +274,8 @@ class CardSelector:
     def select_card(self, card_pools: Dict[str, List[Dict]]) -> Optional[Dict]:
         """
         Select a single card using the distribution:
-        - 90% from weighted list (with popularity weights)
-        - 10% from non-weighted pools (4% generic, 1% class, 1% talent, 4% both)
+        - 75% from weighted list (with popularity weights)
+        - 25% from non-weighted pools (8% generic, 8% class, 4% talent, 5% both)
         
         When selecting from weighted list, cards are chosen based on their
         deck usage percentages converted to selection weights.
@@ -268,22 +285,22 @@ class CardSelector:
         """
         roll = random.random()
         
-        if roll < 0.90:  # 90% weighted
+        if roll < 0.75:  # 75% weighted
             if card_pools['weighted']:
                 # Use usage_percentage for weighted selection, converted to weights
                 cards = card_pools['weighted']
                 weights = [self._convert_usage_to_weight(c.get('usage_percentage', 1.0)) for c in cards]
                 return random.choices(cards, weights=weights, k=1)[0]
-        elif roll < 0.94:  # 4% generic (90-94%)
+        elif roll < 0.83:  # 8% generic (75-83%)
             if card_pools['generic']:
                 return random.choice(card_pools['generic'])
-        elif roll < 0.95:  # 1% class-only (94-95%)
+        elif roll < 0.91:  # 8% class-only (83-91%)
             if card_pools['class_only']:
                 return random.choice(card_pools['class_only'])
-        elif roll < 0.96:  # 1% talent-only (95-96%)
+        elif roll < 0.95:  # 4% talent-only (91-95%)
             if card_pools['talent_only']:
                 return random.choice(card_pools['talent_only'])
-        else:  # 4% both (96-100%)
+        else:  # 5% both (95-100%)
             if card_pools['both']:
                 return random.choice(card_pools['both'])
         

@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "total_heroes": 48,
-    "generation_timestamp": "2025-10-14 16:43:20",
+    "total_heroes": 54,
+    "generation_timestamp": "2025-10-17 05:35:08",
     "description": "Card popularity data organized by hero. Each hero contains cards sorted by section (equipment, weapon, etc.) and usage percentage."
   },
   "heroes": {
@@ -3613,9 +3613,9 @@
         ],
         "resource": [
           {
-            "card_name": "Riches of Tr\u014dpal-Dhani",
+            "card_name": "Riches of Trōpal-Dhani",
             "card_id": "SEA000",
-            "normalized_name": "Riches_of_Tr\u014dpal-Dhani_SEA000",
+            "normalized_name": "Riches_of_Trōpal-Dhani_SEA000",
             "usage_percentage": 28.240740740740737
           },
           {
@@ -10155,9 +10155,9 @@
         ],
         "resource": [
           {
-            "card_name": "Riches of Tr\u014dpal-Dhani",
+            "card_name": "Riches of Trōpal-Dhani",
             "card_id": "SEA000",
-            "normalized_name": "Riches_of_Tr\u014dpal-Dhani_SEA000",
+            "normalized_name": "Riches_of_Trōpal-Dhani_SEA000",
             "usage_percentage": 11.76470588235294
           },
           {
@@ -13523,9 +13523,9 @@
             "usage_percentage": 33.262935586061246
           },
           {
-            "card_name": "Potion of D\u00e9j\u00e0 Vu",
+            "card_name": "Potion of Déjà Vu",
             "card_id": "EVR185",
-            "normalized_name": "Potion_of_D\u00e9j\u00e0_Vu_EVR185",
+            "normalized_name": "Potion_of_Déjà_Vu_EVR185",
             "usage_percentage": 31.740464708461204
           },
           {
@@ -14249,9 +14249,9 @@
         ],
         "resource": [
           {
-            "card_name": "Riches of Tr\u014dpal-Dhani",
+            "card_name": "Riches of Trōpal-Dhani",
             "card_id": "SEA000",
-            "normalized_name": "Riches_of_Tr\u014dpal-Dhani_SEA000",
+            "normalized_name": "Riches_of_Trōpal-Dhani_SEA000",
             "usage_percentage": 89.14549653579677
           },
           {
@@ -20513,9 +20513,9 @@
         ],
         "resource": [
           {
-            "card_name": "Riches of Tr\u014dpal-Dhani",
+            "card_name": "Riches of Trōpal-Dhani",
             "card_id": "SEA000",
-            "normalized_name": "Riches_of_Tr\u014dpal-Dhani_SEA000",
+            "normalized_name": "Riches_of_Trōpal-Dhani_SEA000",
             "usage_percentage": 33.87096774193548
           },
           {
@@ -21013,9 +21013,9 @@
             "usage_percentage": 9.017412935323383
           },
           {
-            "card_name": "Riches of Tr\u014dpal-Dhani",
+            "card_name": "Riches of Trōpal-Dhani",
             "card_id": "SEA000",
-            "normalized_name": "Riches_of_Tr\u014dpal-Dhani_SEA000",
+            "normalized_name": "Riches_of_Trōpal-Dhani_SEA000",
             "usage_percentage": 5.194805194805195
           }
         ]
@@ -21537,9 +21537,9 @@
             "usage_percentage": 45.35595815258995
           },
           {
-            "card_name": "Riches of Tr\u014dpal-Dhani",
+            "card_name": "Riches of Trōpal-Dhani",
             "card_id": "SEA000",
-            "normalized_name": "Riches_of_Tr\u014dpal-Dhani_SEA000",
+            "normalized_name": "Riches_of_Trōpal-Dhani_SEA000",
             "usage_percentage": 31.818181818181817
           },
           {
@@ -21983,9 +21983,9 @@
         ],
         "resource": [
           {
-            "card_name": "Riches of Tr\u014dpal-Dhani",
+            "card_name": "Riches of Trōpal-Dhani",
             "card_id": "SEA000",
-            "normalized_name": "Riches_of_Tr\u014dpal-Dhani_SEA000",
+            "normalized_name": "Riches_of_Trōpal-Dhani_SEA000",
             "usage_percentage": 42.10526315789473
           },
           {
@@ -27715,9 +27715,9 @@
         ],
         "resource": [
           {
-            "card_name": "Riches of Tr\u014dpal-Dhani",
+            "card_name": "Riches of Trōpal-Dhani",
             "card_id": "SEA000",
-            "normalized_name": "Riches_of_Tr\u014dpal-Dhani_SEA000",
+            "normalized_name": "Riches_of_Trōpal-Dhani_SEA000",
             "usage_percentage": 83.21060382916053
           }
         ]
@@ -28891,9 +28891,9 @@
             "usage_percentage": 92.96597787518263
           },
           {
-            "card_name": "Twelve Petal K\u0101\u1e63\u0101ya",
+            "card_name": "Twelve Petal Kāṣāya",
             "card_id": "MST048",
-            "normalized_name": "Twelve_Petal_K\u0101\u1e63\u0101ya_MST048",
+            "normalized_name": "Twelve_Petal_Kāṣāya_MST048",
             "usage_percentage": 92.31893132957629
           },
           {
@@ -29521,6 +29521,2995 @@
             "card_id": "ROS224",
             "normalized_name": "Count_Your_Blessings_ROS224",
             "usage_percentage": 5.749293119698398
+          }
+        ]
+      }
+    },
+    "puffin-hightail": {
+      "hero_deck_percentage": 0.01,
+      "total_unique_cards": 87,
+      "sections": {
+        "equipment": [
+          {
+            "card_name": "Cogwerx Tinker Rings",
+            "card_id": "SEA008",
+            "usage_percentage": 83.13413014608234
+          },
+          {
+            "card_name": "Unicycle",
+            "card_id": "SEA010",
+            "usage_percentage": 79.6812749003984
+          },
+          {
+            "card_name": "Fyendal's Spring Tunic",
+            "card_id": "WTR150",
+            "usage_percentage": 66.53386454183267
+          },
+          {
+            "card_name": "Viziertronic Model i",
+            "card_id": "CRU102",
+            "usage_percentage": 63.081009296148736
+          },
+          {
+            "card_name": "Crown of Dominion",
+            "card_id": "DYN234",
+            "usage_percentage": 49.136786188579016
+          },
+          {
+            "card_name": "Crown of Providence",
+            "card_id": "UPR182",
+            "usage_percentage": 48.60557768924303
+          },
+          {
+            "card_name": "Adaptive Dissolver",
+            "card_id": "ROS246",
+            "usage_percentage": 44.35590969455511
+          },
+          {
+            "card_name": "Adaptive Plating",
+            "card_id": "EVO013",
+            "usage_percentage": 25.49800796812749
+          },
+          {
+            "card_name": "Teklo Foundry Heart",
+            "card_id": "ARC004",
+            "usage_percentage": 24.43559096945551
+          },
+          {
+            "card_name": "Achilles Accelerator",
+            "card_id": "ARC005",
+            "usage_percentage": 22.177954847277555
+          },
+          {
+            "card_name": "Balance of Justice",
+            "card_id": "HVY195",
+            "usage_percentage": 13.147410358565736
+          },
+          {
+            "card_name": "Gold-Baited Hook",
+            "card_id": "SEA125",
+            "usage_percentage": 11.155378486055776
+          },
+          {
+            "card_name": "Adaptive Alpha Mold",
+            "card_id": "SUP253",
+            "usage_percentage": 10.0
+          },
+          {
+            "card_name": "Rust Belt",
+            "card_id": "SEA009",
+            "usage_percentage": 8.233731739707835
+          },
+          {
+            "card_name": "Quickdodge Flexors",
+            "card_id": "HNT215",
+            "usage_percentage": 7.171314741035857
+          }
+        ],
+        "weapon": [
+          {
+            "card_name": "Spitfire",
+            "card_id": "SEA007",
+            "usage_percentage": 69.58831341301462
+          },
+          {
+            "card_name": "Cogwerx Blunderbuss",
+            "card_id": "SEA006",
+            "usage_percentage": 21.38114209827357
+          },
+          {
+            "card_name": "Teklo Plasma Pistol",
+            "card_id": "ARC003",
+            "usage_percentage": 10.756972111553784
+          }
+        ],
+        "action": [
+          {
+            "card_name": "Cog in the Machine",
+            "card_id": "SEA013",
+            "usage_percentage": 89.2430278884462
+          },
+          {
+            "card_name": "Cogwerx Workshop",
+            "card_id": "SEA014",
+            "usage_percentage": 83.53253652058433
+          },
+          {
+            "card_name": "Copper Cog",
+            "card_id": "SEA021",
+            "usage_percentage": 57.50332005312085
+          },
+          {
+            "card_name": "Goldwing Turbine",
+            "card_id": "SEA036",
+            "usage_percentage": 36.65338645418327
+          },
+          {
+            "card_name": "Sea Floor Salvage",
+            "card_id": "SEA146",
+            "usage_percentage": 32.13811420982736
+          },
+          {
+            "card_name": "Goldwing Turbine",
+            "card_id": "SEA038",
+            "usage_percentage": 26.294820717131472
+          },
+          {
+            "card_name": "Boom Grenade",
+            "card_id": "EVO084",
+            "usage_percentage": 25.763612217795483
+          },
+          {
+            "card_name": "Loan Shark",
+            "card_id": "SEA131",
+            "usage_percentage": 21.115537848605577
+          },
+          {
+            "card_name": "Backup Protocol: RED",
+            "card_id": "EVO081",
+            "usage_percentage": 17.397078353253654
+          },
+          {
+            "card_name": "Tip the Barkeep",
+            "card_id": "SEA132",
+            "usage_percentage": 14.608233731739709
+          },
+          {
+            "card_name": "Perk Up",
+            "card_id": "SEA040",
+            "usage_percentage": 14.342629482071715
+          },
+          {
+            "card_name": "Goldwing Turbine",
+            "card_id": "SEA037",
+            "usage_percentage": 14.342629482071715
+          },
+          {
+            "card_name": "Tighten the Screws",
+            "card_id": "SEA041",
+            "usage_percentage": 11.022576361221779
+          },
+          {
+            "card_name": "Portside Exchange",
+            "card_id": "AGB029",
+            "usage_percentage": 9.9601593625498
+          },
+          {
+            "card_name": "Null Time Zone",
+            "card_id": "HNT251",
+            "usage_percentage": 9.296148738379815
+          },
+          {
+            "card_name": "Boom Grenade",
+            "card_id": "EVO085",
+            "usage_percentage": 6.772908366533864
+          },
+          {
+            "card_name": "Dissolving Shield",
+            "card_id": "EVO087",
+            "usage_percentage": 5.046480743691899
+          }
+        ],
+        "attackAction": [
+          {
+            "card_name": "Backspin Thrust",
+            "card_id": "SUP254",
+            "usage_percentage": 80.0
+          },
+          {
+            "card_name": "Cogwerx Dovetail",
+            "card_id": "SEA011",
+            "usage_percentage": 79.8140770252324
+          },
+          {
+            "card_name": "Palantir Aeronought",
+            "card_id": "SEA012",
+            "usage_percentage": 78.61885790172643
+          },
+          {
+            "card_name": "Golden Skywarden",
+            "card_id": "SEA004",
+            "usage_percentage": 78.35325365205843
+          },
+          {
+            "card_name": "Cogwerx Zeppelin",
+            "card_id": "SEA018",
+            "usage_percentage": 70.2523240371846
+          },
+          {
+            "card_name": "Soup Up",
+            "card_id": "EVO111",
+            "usage_percentage": 65.07304116865869
+          },
+          {
+            "card_name": "Cogwerx Zeppelin",
+            "card_id": "SEA020",
+            "usage_percentage": 56.17529880478087
+          },
+          {
+            "card_name": "Sky Skimmer",
+            "card_id": "SEA027",
+            "usage_percentage": 55.112881806108895
+          },
+          {
+            "card_name": "Conqueror of the High Seas",
+            "card_id": "SEA130",
+            "usage_percentage": 54.31606905710491
+          },
+          {
+            "card_name": "Soup Up",
+            "card_id": "EVO113",
+            "usage_percentage": 48.472775564409034
+          },
+          {
+            "card_name": "Jolly Bludger",
+            "card_id": "SEA005",
+            "usage_percentage": 48.33997343957503
+          },
+          {
+            "card_name": "Cloud Skiff",
+            "card_id": "SEA024",
+            "usage_percentage": 39.176626826029214
+          },
+          {
+            "card_name": "Cogwerx Zeppelin",
+            "card_id": "SEA019",
+            "usage_percentage": 38.24701195219124
+          },
+          {
+            "card_name": "Command and Conquer",
+            "card_id": "ARC159",
+            "usage_percentage": 35.85657370517929
+          },
+          {
+            "card_name": "Battalion Barque",
+            "card_id": "SEA154",
+            "usage_percentage": 18.857901726427624
+          },
+          {
+            "card_name": "Enlightened Strike",
+            "card_id": "WTR159",
+            "usage_percentage": 18.326693227091635
+          },
+          {
+            "card_name": "Zero to Sixty",
+            "card_id": "ARC026",
+            "usage_percentage": 16.600265604249667
+          },
+          {
+            "card_name": "Golden Tipple",
+            "card_id": "SEA160",
+            "usage_percentage": 15.936254980079681
+          },
+          {
+            "card_name": "Soup Up",
+            "card_id": "EVO112",
+            "usage_percentage": 15.53784860557769
+          },
+          {
+            "card_name": "Golden Tipple",
+            "card_id": "AGB021",
+            "usage_percentage": 14.342629482071715
+          },
+          {
+            "card_name": "Golden Tipple",
+            "card_id": "SEA159",
+            "usage_percentage": 13.147410358565736
+          },
+          {
+            "card_name": "Zipper Hit",
+            "card_id": "ARC029",
+            "usage_percentage": 13.014608233731739
+          },
+          {
+            "card_name": "Tough Old Wrench",
+            "card_id": "SEA035",
+            "usage_percentage": 10.756972111553784
+          },
+          {
+            "card_name": "Murderous Rabble",
+            "card_id": "AGB023",
+            "usage_percentage": 10.624169986719787
+          },
+          {
+            "card_name": "Steel Street Hoons",
+            "card_id": "EVO141",
+            "usage_percentage": 10.49136786188579
+          },
+          {
+            "card_name": "Sky Skimmer",
+            "card_id": "SEA029",
+            "usage_percentage": 10.092961487383798
+          },
+          {
+            "card_name": "Cloud Skiff",
+            "card_id": "SEA025",
+            "usage_percentage": 10.092961487383798
+          },
+          {
+            "card_name": "Teeth of the Cog",
+            "card_id": "SEA032",
+            "usage_percentage": 9.827357237715804
+          },
+          {
+            "card_name": "Cloud City Steamboat",
+            "card_id": "SEA017",
+            "usage_percentage": 9.56175298804781
+          },
+          {
+            "card_name": "Cloud City Steamboat",
+            "card_id": "SEA015",
+            "usage_percentage": 9.428950863213812
+          },
+          {
+            "card_name": "Sky Skimmer",
+            "card_id": "SEA028",
+            "usage_percentage": 9.296148738379815
+          },
+          {
+            "card_name": "Fearless Confrontation",
+            "card_id": "MPG128",
+            "usage_percentage": 8.333333333333332
+          },
+          {
+            "card_name": "Cloud Skiff",
+            "card_id": "SEA026",
+            "usage_percentage": 7.968127490039841
+          },
+          {
+            "card_name": "Saltwater Swell",
+            "card_id": "SEA143",
+            "usage_percentage": 7.436918990703852
+          },
+          {
+            "card_name": "Swiftwater Sloop",
+            "card_id": "SEA166",
+            "usage_percentage": 6.507304116865869
+          },
+          {
+            "card_name": "T-Bone",
+            "card_id": "EVR073",
+            "usage_percentage": 6.241699867197875
+          },
+          {
+            "card_name": "Throttle",
+            "card_id": "ARC023",
+            "usage_percentage": 6.108897742363878
+          },
+          {
+            "card_name": "T-Bone",
+            "card_id": "EVR075",
+            "usage_percentage": 5.9760956175298805
+          },
+          {
+            "card_name": "Battalion Barque",
+            "card_id": "AGB008",
+            "usage_percentage": 5.577689243027888
+          },
+          {
+            "card_name": "Swiftwater Sloop",
+            "card_id": "SEA168",
+            "usage_percentage": 5.3120849933598935
+          },
+          {
+            "card_name": "Zipper Hit",
+            "card_id": "ARC030",
+            "usage_percentage": 5.3120849933598935
+          },
+          {
+            "card_name": "Saltwater Swell",
+            "card_id": "SEA141",
+            "usage_percentage": 5.179282868525896
+          }
+        ],
+        "attackReaction": [
+          {
+            "card_name": "Pummel",
+            "card_id": "WTR206",
+            "usage_percentage": 19.256308100929616
+          },
+          {
+            "card_name": "Pummel",
+            "card_id": "WTR208",
+            "usage_percentage": 6.374501992031872
+          }
+        ],
+        "defenseReaction": [
+          {
+            "card_name": "Sink Below",
+            "card_id": "WTR215",
+            "usage_percentage": 34.79415670650731
+          },
+          {
+            "card_name": "Fate Foreseen",
+            "card_id": "ARC200",
+            "usage_percentage": 23.904382470119522
+          },
+          {
+            "card_name": "Shelter from the Storm",
+            "card_id": "HNT222",
+            "usage_percentage": 21.248339973439574
+          }
+        ],
+        "block": [
+          {
+            "card_name": "Sunken Treasure",
+            "card_id": "SEA133",
+            "usage_percentage": 63.081009296148736
+          },
+          {
+            "card_name": "Pinion Sentry",
+            "card_id": "SEA023",
+            "usage_percentage": 58.69853917662683
+          }
+        ],
+        "resource": [
+          {
+            "card_name": "Riches of Trōpal-Dhani",
+            "card_id": "SEA000",
+            "usage_percentage": 22.31075697211155
+          },
+          {
+            "card_name": "Master Cog",
+            "card_id": "EVO000",
+            "usage_percentage": 8.366533864541832
+          },
+          {
+            "card_name": "Authority of Ataya",
+            "card_id": "SUP000",
+            "usage_percentage": 5.0
+          }
+        ]
+      }
+    },
+    "gravy-bones-shipwrecked-looter": {
+      "hero_deck_percentage": 0.01,
+      "total_unique_cards": 71,
+      "sections": {
+        "equipment": [
+          {
+            "card_name": "Compass of Sunken Depths",
+            "card_id": "AGB003",
+            "usage_percentage": 98.31223628691983
+          },
+          {
+            "card_name": "Dead Threads",
+            "card_id": "SEA080",
+            "usage_percentage": 90.2223878742701
+          },
+          {
+            "card_name": "Mage Master Boots",
+            "card_id": "ARC154",
+            "usage_percentage": 90.18366840407049
+          },
+          {
+            "card_name": "Gold-Baited Hook",
+            "card_id": "SEA125",
+            "usage_percentage": 90.04845322400298
+          },
+          {
+            "card_name": "Nullrune Boots",
+            "card_id": "ARC158",
+            "usage_percentage": 80.29287664432862
+          },
+          {
+            "card_name": "Nullrune Hood",
+            "card_id": "ARC155",
+            "usage_percentage": 68.15586994291387
+          },
+          {
+            "card_name": "Quickdodge Flexors",
+            "card_id": "HNT215",
+            "usage_percentage": 64.4204517249938
+          },
+          {
+            "card_name": "Crown of Dominion",
+            "card_id": "DYN234",
+            "usage_percentage": 54.91437081161579
+          },
+          {
+            "card_name": "Balance of Justice",
+            "card_id": "HVY195",
+            "usage_percentage": 48.03921568627451
+          },
+          {
+            "card_name": "Nullrune Gloves",
+            "card_id": "ARC157",
+            "usage_percentage": 42.975924547034005
+          },
+          {
+            "card_name": "Crown of Providence",
+            "card_id": "UPR182",
+            "usage_percentage": 40.13402829486225
+          },
+          {
+            "card_name": "Base of the Mountain",
+            "card_id": "MPG113",
+            "usage_percentage": 26.939203354297693
+          },
+          {
+            "card_name": "Nullrune Robe",
+            "card_id": "ARC156",
+            "usage_percentage": 26.66914867212708
+          },
+          {
+            "card_name": "Tricorn of Saltwater Death",
+            "card_id": "AGB004",
+            "usage_percentage": 13.576569868453712
+          },
+          {
+            "card_name": "Washed Up Wave",
+            "card_id": "AGB006",
+            "usage_percentage": 9.009679821295608
+          },
+          {
+            "card_name": "Graven Justaucorpse",
+            "card_id": "AGB005",
+            "usage_percentage": 7.247455944403078
+          },
+          {
+            "card_name": "Breakwater Undertow",
+            "card_id": "AGB007",
+            "usage_percentage": 6.552494415487714
+          },
+          {
+            "card_name": "Head Stone",
+            "card_id": "SEA081",
+            "usage_percentage": 6.000745434215431
+          }
+        ],
+        "action": [
+          {
+            "card_name": "Sawbones, Dock Hand",
+            "card_id": "AGB019",
+            "usage_percentage": 94.03077686770911
+          },
+          {
+            "card_name": "Portside Exchange",
+            "card_id": "AGB029",
+            "usage_percentage": 93.50955572102258
+          },
+          {
+            "card_name": "Riggermortis",
+            "card_id": "AGB018",
+            "usage_percentage": 91.37503102506825
+          },
+          {
+            "card_name": "Chart the High Seas",
+            "card_id": "SEA048",
+            "usage_percentage": 91.19145235432973
+          },
+          {
+            "card_name": "Avast Ye!",
+            "card_id": "AGB025",
+            "usage_percentage": 89.91064780342516
+          },
+          {
+            "card_name": "Chum, Friendly First Mate",
+            "card_id": "SEA050",
+            "usage_percentage": 85.81190209963971
+          },
+          {
+            "card_name": "Call to the Grave",
+            "card_id": "ROS218",
+            "usage_percentage": 85.00868701911143
+          },
+          {
+            "card_name": "Loot the Hold",
+            "card_id": "AGB028",
+            "usage_percentage": 72.5614296351452
+          },
+          {
+            "card_name": "Tip the Barkeep",
+            "card_id": "SEA132",
+            "usage_percentage": 65.01428748912909
+          },
+          {
+            "card_name": "Oysten, Heart of Gold",
+            "card_id": "AGB017",
+            "usage_percentage": 53.735418217920085
+          },
+          {
+            "card_name": "Swabbie",
+            "card_id": "SEA079",
+            "usage_percentage": 51.534352093427756
+          },
+          {
+            "card_name": "Wailer Humperdinck",
+            "card_id": "SEA052",
+            "usage_percentage": 42.77550006211952
+          },
+          {
+            "card_name": "Gallow, End of the Line",
+            "card_id": "SUP267",
+            "usage_percentage": 40.78212290502793
+          },
+          {
+            "card_name": "Diamond Amulet",
+            "card_id": "SEA190",
+            "usage_percentage": 37.83078643309728
+          },
+          {
+            "card_name": "Anka, Drag Under",
+            "card_id": "AGB014",
+            "usage_percentage": 34.748076445768184
+          },
+          {
+            "card_name": "Limpit, Hop-a-long",
+            "card_id": "AGB016",
+            "usage_percentage": 31.384959046909906
+          },
+          {
+            "card_name": "Give No Quarter",
+            "card_id": "SEA049",
+            "usage_percentage": 28.251956764815507
+          },
+          {
+            "card_name": "Scooba, Salty Sea Dog",
+            "card_id": "SEA061",
+            "usage_percentage": 23.704808050689525
+          },
+          {
+            "card_name": "Prismatic Leyline",
+            "card_id": "MST193",
+            "usage_percentage": 18.6770910896004
+          },
+          {
+            "card_name": "Loot the Arsenal",
+            "card_id": "AGB027",
+            "usage_percentage": 9.878381732439811
+          },
+          {
+            "card_name": "Loan Shark",
+            "card_id": "SEA131",
+            "usage_percentage": 9.777612125729904
+          },
+          {
+            "card_name": "Flying High",
+            "card_id": "SEA208",
+            "usage_percentage": 9.032177910299415
+          },
+          {
+            "card_name": "Cutty Shark, Quick Clip",
+            "card_id": "SEA076",
+            "usage_percentage": 8.522797863088583
+          },
+          {
+            "card_name": "Pearl Amulet",
+            "card_id": "SEA193",
+            "usage_percentage": 7.404646539942849
+          },
+          {
+            "card_name": "Amulet of Echoes",
+            "card_id": "EVR177",
+            "usage_percentage": 6.304293869446513
+          },
+          {
+            "card_name": "Ruby Amulet",
+            "card_id": "SEA196",
+            "usage_percentage": 5.839234687538824
+          }
+        ],
+        "attackAction": [
+          {
+            "card_name": "Golden Tipple",
+            "card_id": "AGB021",
+            "usage_percentage": 97.28220402084885
+          },
+          {
+            "card_name": "Murderous Rabble",
+            "card_id": "AGB023",
+            "usage_percentage": 89.74931744849839
+          },
+          {
+            "card_name": "Conqueror of the High Seas",
+            "card_id": "SEA130",
+            "usage_percentage": 89.53907317679214
+          },
+          {
+            "card_name": "Saltwater Swell",
+            "card_id": "SEA143",
+            "usage_percentage": 76.73002857497826
+          },
+          {
+            "card_name": "Back Alley Breakline",
+            "card_id": "ARC178",
+            "usage_percentage": 53.31347728965004
+          },
+          {
+            "card_name": "Golden Tipple",
+            "card_id": "SEA159",
+            "usage_percentage": 52.98794881351721
+          },
+          {
+            "card_name": "Golden Tipple",
+            "card_id": "SEA160",
+            "usage_percentage": 44.53969437197167
+          },
+          {
+            "card_name": "Fearless Confrontation",
+            "card_id": "MPG128",
+            "usage_percentage": 43.55345911949686
+          },
+          {
+            "card_name": "Saltwater Swell",
+            "card_id": "SEA141",
+            "usage_percentage": 36.650515591999
+          },
+          {
+            "card_name": "Jittery Bones",
+            "card_id": "AGB022",
+            "usage_percentage": 30.007446016381234
+          },
+          {
+            "card_name": "Sea Legs",
+            "card_id": "SEA187",
+            "usage_percentage": 29.556466641818858
+          },
+          {
+            "card_name": "Swiftwater Sloop",
+            "card_id": "SEA166",
+            "usage_percentage": 20.996397067958753
+          },
+          {
+            "card_name": "Command and Conquer",
+            "card_id": "ARC159",
+            "usage_percentage": 13.154628940183668
+          },
+          {
+            "card_name": "Restless Bones",
+            "card_id": "AGB024",
+            "usage_percentage": 8.178207992057583
+          },
+          {
+            "card_name": "Jittery Bones",
+            "card_id": "AGB009",
+            "usage_percentage": 7.88036733680814
+          },
+          {
+            "card_name": "Swiftwater Sloop",
+            "card_id": "SEA168",
+            "usage_percentage": 7.417070443533358
+          },
+          {
+            "card_name": "Restless Bones",
+            "card_id": "AGB011",
+            "usage_percentage": 6.353933978654753
+          },
+          {
+            "card_name": "Battalion Barque",
+            "card_id": "AGB008",
+            "usage_percentage": 5.137751303052867
+          }
+        ],
+        "defenseReaction": [
+          {
+            "card_name": "Blood in the Water",
+            "card_id": "SEA047",
+            "usage_percentage": 54.3545782084731
+          },
+          {
+            "card_name": "Sink Below",
+            "card_id": "WTR215",
+            "usage_percentage": 9.72946140481509
+          }
+        ],
+        "block": [
+          {
+            "card_name": "Sunken Treasure",
+            "card_id": "SEA133",
+            "usage_percentage": 45.471487141259786
+          },
+          {
+            "card_name": "Fiddler's Green",
+            "card_id": "AGB013",
+            "usage_percentage": 24.298833457433606
+          }
+        ],
+        "instant": [
+          {
+            "card_name": "Snag",
+            "card_id": "CRU182",
+            "usage_percentage": 12.372797220153885
+          },
+          {
+            "card_name": "Throw Caution to the Wind",
+            "card_id": "SEA150",
+            "usage_percentage": 6.211951795254069
+          },
+          {
+            "card_name": "Arcane Compliance",
+            "card_id": "SEA261",
+            "usage_percentage": 5.988321530624923
+          }
+        ],
+        "resource": [
+          {
+            "card_name": "Eye of Ophidia",
+            "card_id": "ARC000",
+            "usage_percentage": 35.318937701662946
+          },
+          {
+            "card_name": "Riches of Trōpal-Dhani",
+            "card_id": "SEA000",
+            "usage_percentage": 18.287986085227978
+          }
+        ]
+      }
+    },
+    "marlynn-treasure-hunter": {
+      "hero_deck_percentage": 0.01,
+      "total_unique_cards": 90,
+      "sections": {
+        "equipment": [
+          {
+            "card_name": "Sealace Sarong",
+            "card_id": "SEA095",
+            "usage_percentage": 80.85
+          },
+          {
+            "card_name": "Gold-Baited Hook",
+            "card_id": "SEA125",
+            "usage_percentage": 74.65
+          },
+          {
+            "card_name": "Trench of Sunken Treasure",
+            "card_id": "OUT094",
+            "usage_percentage": 70.42500000000001
+          },
+          {
+            "card_name": "Quiver of Rustling Leaves",
+            "card_id": "OUT096",
+            "usage_percentage": 69.35
+          },
+          {
+            "card_name": "Fyendal's Spring Tunic",
+            "card_id": "WTR150",
+            "usage_percentage": 65.85
+          },
+          {
+            "card_name": "Enchanted Quiver",
+            "card_id": "HNT252",
+            "usage_percentage": 59.699999999999996
+          },
+          {
+            "card_name": "Skullbone Crosswrap",
+            "card_id": "ARC041",
+            "usage_percentage": 50.2
+          },
+          {
+            "card_name": "Nullrune Boots",
+            "card_id": "ARC158",
+            "usage_percentage": 44.3
+          },
+          {
+            "card_name": "Crown of Dominion",
+            "card_id": "DYN234",
+            "usage_percentage": 38.3
+          },
+          {
+            "card_name": "Bull's Eye Bracers",
+            "card_id": "ARC042",
+            "usage_percentage": 29.725
+          },
+          {
+            "card_name": "New Horizon",
+            "card_id": "ELE213",
+            "usage_percentage": 25.45
+          },
+          {
+            "card_name": "Quiver of Abyssal Depths",
+            "card_id": "OUT095",
+            "usage_percentage": 19.075
+          },
+          {
+            "card_name": "Perch Grapplers",
+            "card_id": "CRU122",
+            "usage_percentage": 9.775
+          },
+          {
+            "card_name": "Snapdragon Scalers",
+            "card_id": "WTR154",
+            "usage_percentage": 6.45
+          },
+          {
+            "card_name": "Glidewell Fins",
+            "card_id": "SEA097",
+            "usage_percentage": 5.975
+          },
+          {
+            "card_name": "Longdraw Half-glove",
+            "card_id": "MST232",
+            "usage_percentage": 5.675
+          },
+          {
+            "card_name": "Crown of Providence",
+            "card_id": "UPR182",
+            "usage_percentage": 5.25
+          }
+        ],
+        "weapon": [
+          {
+            "card_name": "Hammerhead, Harpoon Cannon",
+            "card_id": "SEA084",
+            "usage_percentage": 81.375
+          },
+          {
+            "card_name": "Redspine Manta",
+            "card_id": "SEA094",
+            "usage_percentage": 8.275
+          },
+          {
+            "card_name": "Dreadbore",
+            "card_id": "EVR087",
+            "usage_percentage": 6.7250000000000005
+          }
+        ],
+        "action": [
+          {
+            "card_name": "Catch of the Day",
+            "card_id": "SUP268",
+            "usage_percentage": 96.07843137254902
+          },
+          {
+            "card_name": "Codex of Frailty",
+            "card_id": "OUT160",
+            "usage_percentage": 79.65
+          },
+          {
+            "card_name": "Three of a Kind",
+            "card_id": "ARC044",
+            "usage_percentage": 77.825
+          },
+          {
+            "card_name": "Big Game Trophy Shot",
+            "card_id": "SEA087",
+            "usage_percentage": 66.925
+          },
+          {
+            "card_name": "Portside Exchange",
+            "card_id": "AGB029",
+            "usage_percentage": 60.575
+          },
+          {
+            "card_name": "Premeditate",
+            "card_id": "OUT188",
+            "usage_percentage": 48.15
+          },
+          {
+            "card_name": "Gold the Tip",
+            "card_id": "SEA088",
+            "usage_percentage": 43.9
+          },
+          {
+            "card_name": "Take Aim",
+            "card_id": "ARC054",
+            "usage_percentage": 43.25
+          },
+          {
+            "card_name": "Sea Floor Salvage",
+            "card_id": "SEA146",
+            "usage_percentage": 38.5
+          },
+          {
+            "card_name": "Lace with Bloodrot",
+            "card_id": "OUT112",
+            "usage_percentage": 26.825
+          },
+          {
+            "card_name": "Tip the Barkeep",
+            "card_id": "SEA132",
+            "usage_percentage": 22.975
+          },
+          {
+            "card_name": "Call in the Big Guns",
+            "card_id": "SEA120",
+            "usage_percentage": 20.424999999999997
+          },
+          {
+            "card_name": "Seek and Destroy",
+            "card_id": "ELE215",
+            "usage_percentage": 19.5
+          },
+          {
+            "card_name": "Drop the Anchor",
+            "card_id": "SEA100",
+            "usage_percentage": 15.525
+          },
+          {
+            "card_name": "Loan Shark",
+            "card_id": "SEA131",
+            "usage_percentage": 12.3
+          },
+          {
+            "card_name": "Codex of Bloodrot",
+            "card_id": "OUT159",
+            "usage_percentage": 10.025
+          },
+          {
+            "card_name": "Shifting Tides",
+            "card_id": "SEA148",
+            "usage_percentage": 8.0
+          },
+          {
+            "card_name": "Release the Tension",
+            "card_id": "EVR091",
+            "usage_percentage": 7.225
+          },
+          {
+            "card_name": "Call in the Big Guns",
+            "card_id": "SEA122",
+            "usage_percentage": 7.074999999999999
+          },
+          {
+            "card_name": "Lace with Frailty",
+            "card_id": "OUT113",
+            "usage_percentage": 6.35
+          },
+          {
+            "card_name": "Fire in the Hole",
+            "card_id": "SEA101",
+            "usage_percentage": 5.7
+          },
+          {
+            "card_name": "Sift",
+            "card_id": "UPR199",
+            "usage_percentage": 5.675
+          },
+          {
+            "card_name": "Lace with Inertia",
+            "card_id": "OUT114",
+            "usage_percentage": 5.125
+          }
+        ],
+        "attackAction": [
+          {
+            "card_name": "Red Fin Harpoon",
+            "card_id": "SEA090",
+            "usage_percentage": 82.8
+          },
+          {
+            "card_name": "Blue Fin Harpoon",
+            "card_id": "SEA089",
+            "usage_percentage": 82.575
+          },
+          {
+            "card_name": "King Shark Harpoon",
+            "card_id": "SEA086",
+            "usage_percentage": 81.025
+          },
+          {
+            "card_name": "King Kraken Harpoon",
+            "card_id": "SEA085",
+            "usage_percentage": 79.175
+          },
+          {
+            "card_name": "Yellow Fin Harpoon",
+            "card_id": "SEA091",
+            "usage_percentage": 78.9
+          },
+          {
+            "card_name": "Conqueror of the High Seas",
+            "card_id": "SEA130",
+            "usage_percentage": 49.9
+          },
+          {
+            "card_name": "Golden Tipple",
+            "card_id": "AGB021",
+            "usage_percentage": 41.925000000000004
+          },
+          {
+            "card_name": "Drill Shot",
+            "card_id": "DYN158",
+            "usage_percentage": 41.15
+          },
+          {
+            "card_name": "Battering Bolt",
+            "card_id": "EVR088",
+            "usage_percentage": 38.375
+          },
+          {
+            "card_name": "Murderous Rabble",
+            "card_id": "AGB023",
+            "usage_percentage": 37.974999999999994
+          },
+          {
+            "card_name": "Endless Arrow",
+            "card_id": "ARC045",
+            "usage_percentage": 33.925
+          },
+          {
+            "card_name": "Bolt'n' Shot",
+            "card_id": "ELE218",
+            "usage_percentage": 33.425
+          },
+          {
+            "card_name": "Golden Tipple",
+            "card_id": "SEA159",
+            "usage_percentage": 31.125000000000004
+          },
+          {
+            "card_name": "Infecting Shot",
+            "card_id": "OUT120",
+            "usage_percentage": 26.375
+          },
+          {
+            "card_name": "Searing Shot",
+            "card_id": "ARC071",
+            "usage_percentage": 24.85
+          },
+          {
+            "card_name": "Golden Tipple",
+            "card_id": "SEA160",
+            "usage_percentage": 19.725
+          },
+          {
+            "card_name": "Sleep Dart",
+            "card_id": "CRU134",
+            "usage_percentage": 18.2
+          },
+          {
+            "card_name": "Bolt'n' Shot",
+            "card_id": "ELE216",
+            "usage_percentage": 18.175
+          },
+          {
+            "card_name": "Swift Shot",
+            "card_id": "SEA110",
+            "usage_percentage": 17.474999999999998
+          },
+          {
+            "card_name": "Pathing Helix",
+            "card_id": "CRU131",
+            "usage_percentage": 16.650000000000002
+          },
+          {
+            "card_name": "Command and Conquer",
+            "card_id": "ARC159",
+            "usage_percentage": 14.85
+          },
+          {
+            "card_name": "Barbed Barrage",
+            "card_id": "SEA098",
+            "usage_percentage": 14.499999999999998
+          },
+          {
+            "card_name": "Rusty Harpoon",
+            "card_id": "SEA092",
+            "usage_percentage": 14.499999999999998
+          },
+          {
+            "card_name": "Remorseless",
+            "card_id": "CRU123",
+            "usage_percentage": 14.174999999999999
+          },
+          {
+            "card_name": "Bolt'n' Shot",
+            "card_id": "ELE217",
+            "usage_percentage": 12.9
+          },
+          {
+            "card_name": "Widowmaker",
+            "card_id": "OUT135",
+            "usage_percentage": 12.85
+          },
+          {
+            "card_name": "Saltwater Swell",
+            "card_id": "SEA143",
+            "usage_percentage": 11.600000000000001
+          },
+          {
+            "card_name": "Hamstring Shot",
+            "card_id": "ARC062",
+            "usage_percentage": 10.424999999999999
+          },
+          {
+            "card_name": "Falcon Wing",
+            "card_id": "OUT115",
+            "usage_percentage": 10.15
+          },
+          {
+            "card_name": "Dry Powder Shot",
+            "card_id": "SEA106",
+            "usage_percentage": 9.825000000000001
+          },
+          {
+            "card_name": "Enlightened Strike",
+            "card_id": "WTR159",
+            "usage_percentage": 7.825
+          },
+          {
+            "card_name": "Battalion Barque",
+            "card_id": "SEA154",
+            "usage_percentage": 7.8
+          },
+          {
+            "card_name": "Saltwater Swell",
+            "card_id": "SEA141",
+            "usage_percentage": 7.3
+          },
+          {
+            "card_name": "Sic 'Em Shot",
+            "card_id": "ARC072",
+            "usage_percentage": 7.074999999999999
+          },
+          {
+            "card_name": "Infecting Shot",
+            "card_id": "OUT118",
+            "usage_percentage": 7.025
+          },
+          {
+            "card_name": "Mage Hunter Arrow",
+            "card_id": "SUP257",
+            "usage_percentage": 7.002801120448179
+          },
+          {
+            "card_name": "Heat Seeker",
+            "card_id": "DYN153",
+            "usage_percentage": 6.875000000000001
+          },
+          {
+            "card_name": "Drill Shot",
+            "card_id": "DYN156",
+            "usage_percentage": 6.375
+          }
+        ],
+        "defenseReaction": [
+          {
+            "card_name": "Tarpit Trap",
+            "card_id": "OUT108",
+            "usage_percentage": 44.324999999999996
+          },
+          {
+            "card_name": "Take Cover",
+            "card_id": "ARC048",
+            "usage_percentage": 14.45
+          },
+          {
+            "card_name": "Sink Below",
+            "card_id": "WTR215",
+            "usage_percentage": 7.725
+          }
+        ],
+        "block": [
+          {
+            "card_name": "Sunken Treasure",
+            "card_id": "SEA133",
+            "usage_percentage": 71.75
+          },
+          {
+            "card_name": "Return Fire",
+            "card_id": "SEA099",
+            "usage_percentage": 33.85
+          }
+        ],
+        "instant": [
+          {
+            "card_name": "Rain Razors",
+            "card_id": "EVR090",
+            "usage_percentage": 12.35
+          }
+        ],
+        "resource": [
+          {
+            "card_name": "Riches of Trōpal-Dhani",
+            "card_id": "SEA000",
+            "usage_percentage": 31.424999999999997
+          },
+          {
+            "card_name": "Authority of Ataya",
+            "card_id": "SUP000",
+            "usage_percentage": 29.69187675070028
+          },
+          {
+            "card_name": "Eye of Ophidia",
+            "card_id": "ARC000",
+            "usage_percentage": 19.775000000000002
+          }
+        ]
+      }
+    },
+    "pleiades-superstar": {
+      "hero_deck_percentage": 0.01,
+      "total_unique_cards": 62,
+      "sections": {
+        "equipment": [
+          {
+            "card_name": "Gauntlets of Iron Will",
+            "card_id": "HVY053",
+            "usage_percentage": 66.66666666666666
+          },
+          {
+            "card_name": "Arcane Lantern",
+            "card_id": "EVR155",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Bastion of Duty",
+            "card_id": "TCC029",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Crown of Providence",
+            "card_id": "UPR182",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Quickdodge Flexors",
+            "card_id": "HNT215",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Tectonic Plating",
+            "card_id": "WTR041",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Arcanite Skullcap",
+            "card_id": "ARC150",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Boots to the Boards",
+            "card_id": "SUP275",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Fyendal's Spring Tunic",
+            "card_id": "WTR150",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Helm of the Adored",
+            "card_id": "SUP017",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Nullrune Boots",
+            "card_id": "ARC158",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Rampart of the Ram's Head",
+            "card_id": "ELE203",
+            "usage_percentage": 33.33333333333333
+          }
+        ],
+        "weapon": [
+          {
+            "card_name": "Titan's Fist",
+            "card_id": "ELE202",
+            "usage_percentage": 66.66666666666666
+          },
+          {
+            "card_name": "Sledge of Anvilheim",
+            "card_id": "CRU024",
+            "usage_percentage": 66.66666666666666
+          }
+        ],
+        "action": [
+          {
+            "card_name": "Imposing Visage",
+            "card_id": "EVR022",
+            "usage_percentage": 66.66666666666666
+          },
+          {
+            "card_name": "Tear Asunder",
+            "card_id": "ELE205",
+            "usage_percentage": 66.66666666666666
+          },
+          {
+            "card_name": "Buckle",
+            "card_id": "DYN028",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Heroic Pose",
+            "card_id": "SUP057",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Blessing of Patience",
+            "card_id": "DYN033",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Cheers!",
+            "card_id": "SUP055",
+            "usage_percentage": 33.33333333333333
+          }
+        ],
+        "attackAction": [
+          {
+            "card_name": "Cries of Encore",
+            "card_id": "SUP012",
+            "usage_percentage": 66.66666666666666
+          },
+          {
+            "card_name": "Spinal Crush",
+            "card_id": "WTR044",
+            "usage_percentage": 66.66666666666666
+          },
+          {
+            "card_name": "Cranial Crush",
+            "card_id": "WTR045",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Enlightened Strike",
+            "card_id": "WTR159",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Thump",
+            "card_id": "ELE209",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Thunder Quake",
+            "card_id": "EVR026",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Debilitate",
+            "card_id": "WTR068",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Macho Grande",
+            "card_id": "EVR029",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Story Beats",
+            "card_id": "SUP183",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Story Beats",
+            "card_id": "SUP181",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Story Beats",
+            "card_id": "SUP182",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Thump",
+            "card_id": "ELE211",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Chokeslam",
+            "card_id": "CRU037",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Colossal Bearing",
+            "card_id": "TCC034",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Crush the Weak",
+            "card_id": "CRU032",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Cut the Small Talk",
+            "card_id": "SUP174",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "No Tall Tales",
+            "card_id": "SUP170",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Renounce Grandeur",
+            "card_id": "MPG034",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Short Shrift",
+            "card_id": "SUP192",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Uplifting Performance",
+            "card_id": "SUP016",
+            "usage_percentage": 33.33333333333333
+          }
+        ],
+        "attackReaction": [
+          {
+            "card_name": "Pummel",
+            "card_id": "WTR206",
+            "usage_percentage": 33.33333333333333
+          }
+        ],
+        "defenseReaction": [
+          {
+            "card_name": "Sink Below",
+            "card_id": "WTR215",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Staunch Response",
+            "card_id": "WTR051",
+            "usage_percentage": 33.33333333333333
+          }
+        ],
+        "block": [
+          {
+            "card_name": "Turning Point",
+            "card_id": "SUP015",
+            "usage_percentage": 66.66666666666666
+          }
+        ],
+        "instant": [
+          {
+            "card_name": "Act of Glory",
+            "card_id": "SUP197",
+            "usage_percentage": 100
+          },
+          {
+            "card_name": "Edge of Their Seats",
+            "card_id": "SUP201",
+            "usage_percentage": 100
+          },
+          {
+            "card_name": "What Happens Next?",
+            "card_id": "SUP209",
+            "usage_percentage": 100
+          },
+          {
+            "card_name": "Tension in the Air",
+            "card_id": "SUP206",
+            "usage_percentage": 66.66666666666666
+          },
+          {
+            "card_name": "Tension in the Air",
+            "card_id": "SUP205",
+            "usage_percentage": 66.66666666666666
+          },
+          {
+            "card_name": "The Suspense is Killing Me",
+            "card_id": "SUP207",
+            "usage_percentage": 66.66666666666666
+          },
+          {
+            "card_name": "To Be Continued...",
+            "card_id": "SUP208",
+            "usage_percentage": 66.66666666666666
+          },
+          {
+            "card_name": "Edge of Their Seats",
+            "card_id": "SUP203",
+            "usage_percentage": 66.66666666666666
+          },
+          {
+            "card_name": "Tension in the Air",
+            "card_id": "SUP204",
+            "usage_percentage": 66.66666666666666
+          },
+          {
+            "card_name": "Arcane Polarity",
+            "card_id": "ROS231",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Calming Breeze",
+            "card_id": "HNT230",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "In the Palm of Your Hand",
+            "card_id": "SUP171",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Up on a Pedestal",
+            "card_id": "SUP014",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Act of Glory",
+            "card_id": "SUP195",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Hungry for More",
+            "card_id": "SUP175",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Sigil of Solace",
+            "card_id": "WTR173",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Oasis Respite",
+            "card_id": "UPR221",
+            "usage_percentage": 33.33333333333333
+          },
+          {
+            "card_name": "Thespian Charm",
+            "card_id": "SUP013",
+            "usage_percentage": 33.33333333333333
+          }
+        ]
+      }
+    },
+    "valda-brightaxe": {
+      "hero_deck_percentage": 0.01,
+      "total_unique_cards": 141,
+      "sections": {
+        "equipment": [
+          {
+            "card_name": "Earthlore Bounty",
+            "card_id": "EVR020",
+            "usage_percentage": 88.21777966822629
+          },
+          {
+            "card_name": "Crater Fist",
+            "card_id": "CRU025",
+            "usage_percentage": 72.73500638026373
+          },
+          {
+            "card_name": "Steelbraid Buckler",
+            "card_id": "DYN027",
+            "usage_percentage": 61.80974477958237
+          },
+          {
+            "card_name": "Nullrune Boots",
+            "card_id": "ARC158",
+            "usage_percentage": 59.08124202467035
+          },
+          {
+            "card_name": "Civic Steps",
+            "card_id": "TCC033",
+            "usage_percentage": 58.88157894736842
+          },
+          {
+            "card_name": "Nullrune Gloves",
+            "card_id": "ARC157",
+            "usage_percentage": 56.018715440238196
+          },
+          {
+            "card_name": "Arcane Lantern",
+            "card_id": "EVR155",
+            "usage_percentage": 51.16971501488729
+          },
+          {
+            "card_name": "Testament of Valahai",
+            "card_id": "MPG004",
+            "usage_percentage": 46.875
+          },
+          {
+            "card_name": "Gauntlets of Iron Will",
+            "card_id": "HVY053",
+            "usage_percentage": 45.230078563411894
+          },
+          {
+            "card_name": "Nullrune Hood",
+            "card_id": "ARC155",
+            "usage_percentage": 40.706082518077416
+          },
+          {
+            "card_name": "Crown of Providence",
+            "card_id": "UPR182",
+            "usage_percentage": 39.41100043308792
+          },
+          {
+            "card_name": "Quickdodge Flexors",
+            "card_id": "HNT215",
+            "usage_percentage": 33.80281690140845
+          },
+          {
+            "card_name": "Tremorshield Sabatons",
+            "card_id": "HNT247",
+            "usage_percentage": 32.863849765258216
+          },
+          {
+            "card_name": "Mage Master Boots",
+            "card_id": "ARC154",
+            "usage_percentage": 31.093151850276477
+          },
+          {
+            "card_name": "Helm of Isen's Peak",
+            "card_id": "WTR042",
+            "usage_percentage": 25.350914504466182
+          },
+          {
+            "card_name": "Civic Peak",
+            "card_id": "TCC030",
+            "usage_percentage": 23.486842105263158
+          },
+          {
+            "card_name": "Bastion of Duty",
+            "card_id": "TCC029",
+            "usage_percentage": 19.67105263157895
+          },
+          {
+            "card_name": "Balance of Justice",
+            "card_id": "HVY195",
+            "usage_percentage": 17.059483726150393
+          },
+          {
+            "card_name": "Crown of Dominion",
+            "card_id": "DYN234",
+            "usage_percentage": 14.80278422273782
+          },
+          {
+            "card_name": "Tectonic Plating",
+            "card_id": "WTR041",
+            "usage_percentage": 14.759676733304977
+          },
+          {
+            "card_name": "Craterhoof",
+            "card_id": "MPG008",
+            "usage_percentage": 12.5
+          },
+          {
+            "card_name": "Ironrot Legs",
+            "card_id": "WTR158",
+            "usage_percentage": 12.250106337728626
+          },
+          {
+            "card_name": "Arcanite Skullcap",
+            "card_id": "ARC150",
+            "usage_percentage": 11.356869417269246
+          },
+          {
+            "card_name": "Goliath Gauntlet",
+            "card_id": "WTR153",
+            "usage_percentage": 10.888983411314335
+          },
+          {
+            "card_name": "Rampart of the Ram's Head",
+            "card_id": "ELE203",
+            "usage_percentage": 9.145044661846024
+          },
+          {
+            "card_name": "Time Skippers",
+            "card_id": "MON240",
+            "usage_percentage": 9.05997447894513
+          },
+          {
+            "card_name": "Snapdragon Scalers",
+            "card_id": "WTR154",
+            "usage_percentage": 8.847299021692896
+          },
+          {
+            "card_name": "Blade Beckoner Boots",
+            "card_id": "HNT219",
+            "usage_percentage": 6.572769953051644
+          },
+          {
+            "card_name": "Nullrune Robe",
+            "card_id": "ARC156",
+            "usage_percentage": 5.954912803062527
+          }
+        ],
+        "weapon": [
+          {
+            "card_name": "Titan's Fist",
+            "card_id": "ELE202",
+            "usage_percentage": 77.41386643981285
+          },
+          {
+            "card_name": "Anothos",
+            "card_id": "BVO003",
+            "usage_percentage": 42.194810718843044
+          },
+          {
+            "card_name": "High Riser",
+            "card_id": "HVY049",
+            "usage_percentage": 11.784511784511785
+          },
+          {
+            "card_name": "Sledge of Anvilheim",
+            "card_id": "CRU024",
+            "usage_percentage": 8.634623564440663
+          },
+          {
+            "card_name": "Miller's Grindstone",
+            "card_id": "HVY050",
+            "usage_percentage": 8.19304152637486
+          }
+        ],
+        "action": [
+          {
+            "card_name": "Tear Asunder",
+            "card_id": "ELE205",
+            "usage_percentage": 71.92683964270523
+          },
+          {
+            "card_name": "Surface Shaking",
+            "card_id": "SEA251",
+            "usage_percentage": 71.42857142857143
+          },
+          {
+            "card_name": "Promising Terrain",
+            "card_id": "MPG045",
+            "usage_percentage": 59.375
+          },
+          {
+            "card_name": "Sift",
+            "card_id": "UPR199",
+            "usage_percentage": 55.17540060632309
+          },
+          {
+            "card_name": "Tectonic Rift",
+            "card_id": "EVO238",
+            "usage_percentage": 50.88424437299035
+          },
+          {
+            "card_name": "Tectonic Instability",
+            "card_id": "MPG046",
+            "usage_percentage": 50.0
+          },
+          {
+            "card_name": "Sift",
+            "card_id": "UPR198",
+            "usage_percentage": 49.15547856214811
+          },
+          {
+            "card_name": "This Round's on Me",
+            "card_id": "EVR160",
+            "usage_percentage": 43.385793279455555
+          },
+          {
+            "card_name": "Sift",
+            "card_id": "UPR197",
+            "usage_percentage": 35.29666522304027
+          },
+          {
+            "card_name": "Blessing of Deliverance",
+            "card_id": "WTR054",
+            "usage_percentage": 29.604423649510846
+          },
+          {
+            "card_name": "Potion of Luck",
+            "card_id": "EVR187",
+            "usage_percentage": 26.75457252233092
+          },
+          {
+            "card_name": "Roiling Fissure",
+            "card_id": "HNT248",
+            "usage_percentage": 26.291079812206576
+          },
+          {
+            "card_name": "Blessing of Deliverance",
+            "card_id": "WTR056",
+            "usage_percentage": 23.479370480646534
+          },
+          {
+            "card_name": "Leave a Dent",
+            "card_id": "MPG020",
+            "usage_percentage": 21.875
+          },
+          {
+            "card_name": "Seismic Stir",
+            "card_id": "EVR030",
+            "usage_percentage": 21.097405359421522
+          },
+          {
+            "card_name": "Truce",
+            "card_id": "ROS219",
+            "usage_percentage": 20.89041095890411
+          },
+          {
+            "card_name": "Buckle",
+            "card_id": "DYN028",
+            "usage_percentage": 18.979118329466356
+          },
+          {
+            "card_name": "Overswing",
+            "card_id": "MPG091",
+            "usage_percentage": 18.75
+          },
+          {
+            "card_name": "Gorganian Tome",
+            "card_id": "CRU181",
+            "usage_percentage": 17.737133134836238
+          },
+          {
+            "card_name": "Tome of Fyendal",
+            "card_id": "WTR160",
+            "usage_percentage": 17.439387494683114
+          },
+          {
+            "card_name": "Draw a Crowd",
+            "card_id": "MPG044",
+            "usage_percentage": 15.625
+          },
+          {
+            "card_name": "Embolden",
+            "card_id": "ELE208",
+            "usage_percentage": 12.292641429179072
+          },
+          {
+            "card_name": "Cash In",
+            "card_id": "CRU188",
+            "usage_percentage": 12.079965971926839
+          },
+          {
+            "card_name": "Earthlore Empowerment",
+            "card_id": "TCC038",
+            "usage_percentage": 10.328947368421053
+          },
+          {
+            "card_name": "Imposing Visage",
+            "card_id": "EVR022",
+            "usage_percentage": 10.123351765206296
+          },
+          {
+            "card_name": "Pint of Strong and Stout",
+            "card_id": "HVY089",
+            "usage_percentage": 9.652076318742985
+          },
+          {
+            "card_name": "Seismic Shelter",
+            "card_id": "MPG023",
+            "usage_percentage": 9.375
+          },
+          {
+            "card_name": "Visit Anvilheim",
+            "card_id": "MPG021",
+            "usage_percentage": 9.375
+          },
+          {
+            "card_name": "Geyser of Seismic Stirrings",
+            "card_id": "MPG105",
+            "usage_percentage": 9.375
+          },
+          {
+            "card_name": "Plunder Run",
+            "card_id": "ARC170",
+            "usage_percentage": 7.868991918332624
+          },
+          {
+            "card_name": "Blessing of Deliverance",
+            "card_id": "WTR055",
+            "usage_percentage": 7.826456826882177
+          },
+          {
+            "card_name": "Crash Down",
+            "card_id": "TCC037",
+            "usage_percentage": 6.907894736842106
+          },
+          {
+            "card_name": "Stamp Authority",
+            "card_id": "CRU028",
+            "usage_percentage": 6.42279880901744
+          },
+          {
+            "card_name": "Geyser of Seismic Stirrings",
+            "card_id": "MPG103",
+            "usage_percentage": 6.25
+          },
+          {
+            "card_name": "Stacked in Your Favor",
+            "card_id": "HVY070",
+            "usage_percentage": 5.387205387205387
+          },
+          {
+            "card_name": "The Weakest Link",
+            "card_id": "MST192",
+            "usage_percentage": 5.263157894736842
+          }
+        ],
+        "attackAction": [
+          {
+            "card_name": "Spinal Crush",
+            "card_id": "WTR044",
+            "usage_percentage": 85.62313908974905
+          },
+          {
+            "card_name": "Cranial Crush",
+            "card_id": "WTR045",
+            "usage_percentage": 81.92258613356019
+          },
+          {
+            "card_name": "Thunder Quake",
+            "card_id": "EVR026",
+            "usage_percentage": 78.6473840918758
+          },
+          {
+            "card_name": "Put 'Em In Their Place",
+            "card_id": "MPG018",
+            "usage_percentage": 78.125
+          },
+          {
+            "card_name": "Disable",
+            "card_id": "WTR050",
+            "usage_percentage": 77.07358570820927
+          },
+          {
+            "card_name": "Macho Grande",
+            "card_id": "EVR029",
+            "usage_percentage": 71.75669927690345
+          },
+          {
+            "card_name": "Chokeslam",
+            "card_id": "CRU037",
+            "usage_percentage": 62.73925988940876
+          },
+          {
+            "card_name": "Debilitate",
+            "card_id": "WTR068",
+            "usage_percentage": 52.913653764355594
+          },
+          {
+            "card_name": "Buckling Blow",
+            "card_id": "WTR059",
+            "usage_percentage": 43.93874946831136
+          },
+          {
+            "card_name": "Pulverize",
+            "card_id": "EVR021",
+            "usage_percentage": 43.89621437686091
+          },
+          {
+            "card_name": "Chokeslam",
+            "card_id": "CRU035",
+            "usage_percentage": 43.25818800510421
+          },
+          {
+            "card_name": "Righteous Cleansing",
+            "card_id": "CRU027",
+            "usage_percentage": 40.068056146320714
+          },
+          {
+            "card_name": "Headbutt",
+            "card_id": "MPG016",
+            "usage_percentage": 37.5
+          },
+          {
+            "card_name": "Disable",
+            "card_id": "WTR048",
+            "usage_percentage": 35.686941726924715
+          },
+          {
+            "card_name": "Rouse the Ancients",
+            "card_id": "MON247",
+            "usage_percentage": 33.85793279455551
+          },
+          {
+            "card_name": "Thunder Quake",
+            "card_id": "EVR024",
+            "usage_percentage": 32.32666950233943
+          },
+          {
+            "card_name": "Mangle",
+            "card_id": "CRU026",
+            "usage_percentage": 31.220757124627816
+          },
+          {
+            "card_name": "Aftershock",
+            "card_id": "MPG035",
+            "usage_percentage": 28.125
+          },
+          {
+            "card_name": "Crush the Weak",
+            "card_id": "CRU032",
+            "usage_percentage": 27.6478094427903
+          },
+          {
+            "card_name": "Boulder Drop",
+            "card_id": "TCC044",
+            "usage_percentage": 25.32894736842105
+          },
+          {
+            "card_name": "Debilitate",
+            "card_id": "WTR066",
+            "usage_percentage": 22.28838792003403
+          },
+          {
+            "card_name": "Enlightened Strike",
+            "card_id": "WTR159",
+            "usage_percentage": 21.054870267971076
+          },
+          {
+            "card_name": "Crush Confidence",
+            "card_id": "WTR063",
+            "usage_percentage": 20.884729902169287
+          },
+          {
+            "card_name": "Cartilage Crush",
+            "card_id": "WTR060",
+            "usage_percentage": 19.693747341556783
+          },
+          {
+            "card_name": "Disenchantment of the Old Ones",
+            "card_id": "MPG027",
+            "usage_percentage": 18.75
+          },
+          {
+            "card_name": "Smelting of the Old Ones",
+            "card_id": "MPG028",
+            "usage_percentage": 18.75
+          },
+          {
+            "card_name": "Hostile Encroachment",
+            "card_id": "MPG033",
+            "usage_percentage": 18.75
+          },
+          {
+            "card_name": "Grind Them Down",
+            "card_id": "MPG079",
+            "usage_percentage": 15.625
+          },
+          {
+            "card_name": "Aftershock",
+            "card_id": "MPG037",
+            "usage_percentage": 15.625
+          },
+          {
+            "card_name": "Cartilage Crush",
+            "card_id": "WTR062",
+            "usage_percentage": 15.185027647809443
+          },
+          {
+            "card_name": "Coax a Commotion",
+            "card_id": "CRU180",
+            "usage_percentage": 14.71714164185453
+          },
+          {
+            "card_name": "Buckling Blow",
+            "card_id": "WTR057",
+            "usage_percentage": 13.270948532539345
+          },
+          {
+            "card_name": "Zealous Belting",
+            "card_id": "MON293",
+            "usage_percentage": 12.888132709485326
+          },
+          {
+            "card_name": "Blinding of the Old Ones",
+            "card_id": "MPG026",
+            "usage_percentage": 12.5
+          },
+          {
+            "card_name": "Thunk",
+            "card_id": "HVY079",
+            "usage_percentage": 12.008978675645341
+          },
+          {
+            "card_name": "Crush Confidence",
+            "card_id": "WTR065",
+            "usage_percentage": 11.994895789025946
+          },
+          {
+            "card_name": "Crush the Weak",
+            "card_id": "CRU034",
+            "usage_percentage": 11.3143343258188
+          },
+          {
+            "card_name": "Command and Conquer",
+            "card_id": "ARC159",
+            "usage_percentage": 10.08081667375585
+          },
+          {
+            "card_name": "Rubble Raiser",
+            "card_id": "MPG084",
+            "usage_percentage": 9.375
+          },
+          {
+            "card_name": "Fault Line",
+            "card_id": "MPG032",
+            "usage_percentage": 9.375
+          },
+          {
+            "card_name": "Grind Them Down",
+            "card_id": "MPG081",
+            "usage_percentage": 9.375
+          },
+          {
+            "card_name": "Boulder Drop",
+            "card_id": "TCC039",
+            "usage_percentage": 6.776315789473684
+          },
+          {
+            "card_name": "Thunder Quake",
+            "card_id": "EVR025",
+            "usage_percentage": 6.635474266269672
+          },
+          {
+            "card_name": "Break Stature",
+            "card_id": "MPG014",
+            "usage_percentage": 6.25
+          },
+          {
+            "card_name": "Flatten the Field",
+            "card_id": "MPG078",
+            "usage_percentage": 6.25
+          },
+          {
+            "card_name": "Pec Perfect",
+            "card_id": "MPG017",
+            "usage_percentage": 6.25
+          },
+          {
+            "card_name": "Macho Grande",
+            "card_id": "EVR027",
+            "usage_percentage": 6.167588260314759
+          },
+          {
+            "card_name": "Clash of Might",
+            "card_id": "HVY139",
+            "usage_percentage": 5.723905723905724
+          },
+          {
+            "card_name": "Clash of Vigor",
+            "card_id": "HVY179",
+            "usage_percentage": 5.387205387205387
+          },
+          {
+            "card_name": "Concuss",
+            "card_id": "HVY074",
+            "usage_percentage": 5.05050505050505
+          },
+          {
+            "card_name": "Thump",
+            "card_id": "ELE211",
+            "usage_percentage": 5.019140791152701
+          }
+        ],
+        "attackReaction": [
+          {
+            "card_name": "Pummel",
+            "card_id": "WTR206",
+            "usage_percentage": 54.104636324968105
+          },
+          {
+            "card_name": "Pummel",
+            "card_id": "WTR208",
+            "usage_percentage": 20.50191407911527
+          },
+          {
+            "card_name": "Pummel",
+            "card_id": "WTR207",
+            "usage_percentage": 7.230965546575925
+          }
+        ],
+        "defenseReaction": [
+          {
+            "card_name": "Solid Ground",
+            "card_id": "MPG019",
+            "usage_percentage": 50.0
+          },
+          {
+            "card_name": "Sink Below",
+            "card_id": "WTR215",
+            "usage_percentage": 36.62271373883454
+          },
+          {
+            "card_name": "Shelter from the Storm",
+            "card_id": "HNT222",
+            "usage_percentage": 20.657276995305164
+          },
+          {
+            "card_name": "Staunch Response",
+            "card_id": "WTR053",
+            "usage_percentage": 15.993194385367929
+          },
+          {
+            "card_name": "Unmovable",
+            "card_id": "WTR214",
+            "usage_percentage": 12.420246703530413
+          },
+          {
+            "card_name": "Fate Foreseen",
+            "card_id": "ARC200",
+            "usage_percentage": 12.037430880476393
+          }
+        ],
+        "block": [
+          {
+            "card_name": "Crash and Bash",
+            "card_id": "MPG111",
+            "usage_percentage": 6.25
+          },
+          {
+            "card_name": "Test of Strength",
+            "card_id": "HVY239",
+            "usage_percentage": 5.387205387205387
+          }
+        ],
+        "instant": [
+          {
+            "card_name": "Seismic Eruption",
+            "card_id": "MPG024",
+            "usage_percentage": 68.75
+          },
+          {
+            "card_name": "Ley Line of the Old Ones",
+            "card_id": "MPG013",
+            "usage_percentage": 43.75
+          },
+          {
+            "card_name": "Oasis Respite",
+            "card_id": "UPR221",
+            "usage_percentage": 12.862711130359465
+          },
+          {
+            "card_name": "Count Your Blessings",
+            "card_id": "ROS225",
+            "usage_percentage": 10.95890410958904
+          },
+          {
+            "card_name": "Count Your Blessings",
+            "card_id": "ROS223",
+            "usage_percentage": 10.95890410958904
+          },
+          {
+            "card_name": "Count Your Blessings",
+            "card_id": "ROS224",
+            "usage_percentage": 10.95890410958904
+          },
+          {
+            "card_name": "Sigil of Solace",
+            "card_id": "WTR173",
+            "usage_percentage": 10.761378136962994
+          },
+          {
+            "card_name": "Arcane Polarity",
+            "card_id": "ROS231",
+            "usage_percentage": 5.821917808219178
+          }
+        ],
+        "resource": [
+          {
+            "card_name": "Grandeur of Valahai",
+            "card_id": "EVR000",
+            "usage_percentage": 16.24840493407061
+          }
+        ]
+      }
+    },
+    "jarl-vetreiði": {
+      "hero_deck_percentage": 0.01,
+      "total_unique_cards": 120,
+      "sections": {
+        "equipment": [
+          {
+            "card_name": "Stalagmite, Bastion of Isenloft",
+            "card_id": "EVR018",
+            "usage_percentage": 81.06087575649697
+          },
+          {
+            "card_name": "Quickdodge Flexors",
+            "card_id": "HNT215",
+            "usage_percentage": 78.13974387778028
+          },
+          {
+            "card_name": "Nullrune Boots",
+            "card_id": "ARC158",
+            "usage_percentage": 76.9431588940311
+          },
+          {
+            "card_name": "Fyendal's Spring Tunic",
+            "card_id": "WTR150",
+            "usage_percentage": 73.37130651477393
+          },
+          {
+            "card_name": "Crown of Providence",
+            "card_id": "UPR182",
+            "usage_percentage": 57.98030141212769
+          },
+          {
+            "card_name": "Heart of Ice",
+            "card_id": "ELE144",
+            "usage_percentage": 45.5559511095289
+          },
+          {
+            "card_name": "Nullrune Hood",
+            "card_id": "ARC155",
+            "usage_percentage": 44.357422570309716
+          },
+          {
+            "card_name": "Craterhoof",
+            "card_id": "MPG008",
+            "usage_percentage": 25.6198347107438
+          },
+          {
+            "card_name": "Civic Steps",
+            "card_id": "TCC033",
+            "usage_percentage": 25.50136466120802
+          },
+          {
+            "card_name": "Coronet Peak",
+            "card_id": "UPR136",
+            "usage_percentage": 21.22938174913967
+          },
+          {
+            "card_name": "Nullrune Gloves",
+            "card_id": "ARC157",
+            "usage_percentage": 20.992049365135873
+          },
+          {
+            "card_name": "Rampart of the Ram's Head",
+            "card_id": "ELE203",
+            "usage_percentage": 16.00806930105613
+          },
+          {
+            "card_name": "Tectonic Plating",
+            "card_id": "WTR041",
+            "usage_percentage": 14.038210513824612
+          },
+          {
+            "card_name": "Arcane Lantern",
+            "card_id": "EVR155",
+            "usage_percentage": 13.765278272220243
+          },
+          {
+            "card_name": "Ironfist Revelation",
+            "card_id": "SUP168",
+            "usage_percentage": 11.76470588235294
+          },
+          {
+            "card_name": "Well Grounded",
+            "card_id": "ROS030",
+            "usage_percentage": 10.60875756496974
+          },
+          {
+            "card_name": "Steelbraid Buckler",
+            "card_id": "DYN027",
+            "usage_percentage": 8.591432300937463
+          },
+          {
+            "card_name": "Base of the Mountain",
+            "card_id": "MPG113",
+            "usage_percentage": 8.264462809917356
+          },
+          {
+            "card_name": "Barkskin of the Millennium Tree",
+            "card_id": "ROS028",
+            "usage_percentage": 6.965705470511452
+          },
+          {
+            "card_name": "Plume of Evergrowth",
+            "card_id": "ELE116",
+            "usage_percentage": 5.9451762192951225
+          },
+          {
+            "card_name": "Attention Grabbers",
+            "card_id": "SUP274",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "Stand Strong",
+            "card_id": "SUP169",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "Toby Jugs",
+            "card_id": "SUP214",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "Virtuoso Bodice",
+            "card_id": "SUP273",
+            "usage_percentage": 5.88235294117647
+          }
+        ],
+        "weapon": [
+          {
+            "card_name": "Sledge of Anvilheim",
+            "card_id": "CRU024",
+            "usage_percentage": 59.00083066334402
+          },
+          {
+            "card_name": "Titan's Fist",
+            "card_id": "ELE202",
+            "usage_percentage": 56.73430639610775
+          },
+          {
+            "card_name": "Redwood Hammer",
+            "card_id": "TER002",
+            "usage_percentage": 15.307938768244927
+          },
+          {
+            "card_name": "Anothos",
+            "card_id": "BVO003",
+            "usage_percentage": 5.1857125904829715
+          }
+        ],
+        "action": [
+          {
+            "card_name": "Channel Lake Frigid",
+            "card_id": "ELE146",
+            "usage_percentage": 86.69751987658717
+          },
+          {
+            "card_name": "Winter's Bite",
+            "card_id": "ELE171",
+            "usage_percentage": 68.75519164590008
+          },
+          {
+            "card_name": "Tear Asunder",
+            "card_id": "ELE205",
+            "usage_percentage": 61.492820695383884
+          },
+          {
+            "card_name": "Imposing Visage",
+            "card_id": "EVR022",
+            "usage_percentage": 55.66631066809066
+          },
+          {
+            "card_name": "Ice Quake",
+            "card_id": "ELE151",
+            "usage_percentage": 33.68933190933903
+          },
+          {
+            "card_name": "Sow Tomorrow",
+            "card_id": "ELE142",
+            "usage_percentage": 19.176456627506823
+          },
+          {
+            "card_name": "Buckle",
+            "card_id": "DYN028",
+            "usage_percentage": 17.13539812507417
+          },
+          {
+            "card_name": "Polar Blast",
+            "card_id": "ELE168",
+            "usage_percentage": 16.375934496262015
+          },
+          {
+            "card_name": "Roiling Fissure",
+            "card_id": "HNT248",
+            "usage_percentage": 13.098180184228264
+          },
+          {
+            "card_name": "Midas Touch",
+            "card_id": "SEA188",
+            "usage_percentage": 12.297734627831716
+          },
+          {
+            "card_name": "Channel the Tranquil Domain",
+            "card_id": "SUP263",
+            "usage_percentage": 11.76470588235294
+          },
+          {
+            "card_name": "Winter's Bite",
+            "card_id": "ELE169",
+            "usage_percentage": 8.88809778094221
+          },
+          {
+            "card_name": "Arctic Incarceration",
+            "card_id": "UPR144",
+            "usage_percentage": 7.97436810252759
+          },
+          {
+            "card_name": "Surface Shaking",
+            "card_id": "SEA251",
+            "usage_percentage": 7.119741100323624
+          },
+          {
+            "card_name": "Winter's Bite",
+            "card_id": "ELE170",
+            "usage_percentage": 5.968909457695502
+          },
+          {
+            "card_name": "Beat the Same Drum",
+            "card_id": "SUP219",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "Time Flies When You're Having Fun",
+            "card_id": "SUP220",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "Cold Snap",
+            "card_id": "UPR149",
+            "usage_percentage": 5.114512875281832
+          },
+          {
+            "card_name": "Ice Quake",
+            "card_id": "ELE153",
+            "usage_percentage": 5.031446540880504
+          }
+        ],
+        "attackAction": [
+          {
+            "card_name": "Oaken Old",
+            "card_id": "ELE005",
+            "usage_percentage": 90.00830663344014
+          },
+          {
+            "card_name": "Fruits of the Forest",
+            "card_id": "ROS057",
+            "usage_percentage": 70.85558324433369
+          },
+          {
+            "card_name": "Command and Conquer",
+            "card_id": "ARC159",
+            "usage_percentage": 69.77572089711641
+          },
+          {
+            "card_name": "Mangle",
+            "card_id": "CRU026",
+            "usage_percentage": 69.3247893675092
+          },
+          {
+            "card_name": "Autumn's Touch",
+            "card_id": "ELE130",
+            "usage_percentage": 67.48546339147977
+          },
+          {
+            "card_name": "Felling of the Crown",
+            "card_id": "ROS031",
+            "usage_percentage": 55.951109528895216
+          },
+          {
+            "card_name": "Frost Fang",
+            "card_id": "ELE148",
+            "usage_percentage": 47.60887623116174
+          },
+          {
+            "card_name": "Spinal Crush",
+            "card_id": "WTR044",
+            "usage_percentage": 41.817966061469086
+          },
+          {
+            "card_name": "Plow Under",
+            "card_id": "ROS032",
+            "usage_percentage": 34.614928206953834
+          },
+          {
+            "card_name": "Winter's Grasp",
+            "card_id": "ELE162",
+            "usage_percentage": 33.42826628693486
+          },
+          {
+            "card_name": "Glacial Footsteps",
+            "card_id": "ELE018",
+            "usage_percentage": 32.95360151892726
+          },
+          {
+            "card_name": "Enlightened Strike",
+            "card_id": "WTR159",
+            "usage_percentage": 26.118428859617893
+          },
+          {
+            "card_name": "Headbutt",
+            "card_id": "MPG016",
+            "usage_percentage": 23.96694214876033
+          },
+          {
+            "card_name": "Macho Grande",
+            "card_id": "EVR029",
+            "usage_percentage": 17.467663462679482
+          },
+          {
+            "card_name": "Cranial Crush",
+            "card_id": "WTR045",
+            "usage_percentage": 15.84193663225347
+          },
+          {
+            "card_name": "Overcrowded",
+            "card_id": "SUP216",
+            "usage_percentage": 11.76470588235294
+          },
+          {
+            "card_name": "Cutting Retort",
+            "card_id": "SUP215",
+            "usage_percentage": 11.76470588235294
+          },
+          {
+            "card_name": "Thunder Quake",
+            "card_id": "EVR026",
+            "usage_percentage": 11.261421620980183
+          },
+          {
+            "card_name": "Buckling Blow",
+            "card_id": "WTR057",
+            "usage_percentage": 11.178355286578853
+          },
+          {
+            "card_name": "Blow for a Blow",
+            "card_id": "SEA216",
+            "usage_percentage": 9.70873786407767
+          },
+          {
+            "card_name": "Snow Under",
+            "card_id": "ELE022",
+            "usage_percentage": 9.291562833748666
+          },
+          {
+            "card_name": "Icy Encounter",
+            "card_id": "ELE157",
+            "usage_percentage": 8.983030734543728
+          },
+          {
+            "card_name": "Summer's Fall",
+            "card_id": "ROS039",
+            "usage_percentage": 8.354099916933666
+          },
+          {
+            "card_name": "Fault Line",
+            "card_id": "MPG032",
+            "usage_percentage": 7.43801652892562
+          },
+          {
+            "card_name": "Mulch",
+            "card_id": "ELE019",
+            "usage_percentage": 7.04877180491278
+          },
+          {
+            "card_name": "Disable",
+            "card_id": "WTR050",
+            "usage_percentage": 6.609706894505756
+          },
+          {
+            "card_name": "Chokeslam",
+            "card_id": "CRU035",
+            "usage_percentage": 6.4673074641034765
+          },
+          {
+            "card_name": "Cut Off at the Knees",
+            "card_id": "SUP173",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "Kick the Hornet's Nest",
+            "card_id": "SUP217",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "Look Tuff",
+            "card_id": "SUP223",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "No Tall Tales",
+            "card_id": "SUP170",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "Punch Above Your Weight",
+            "card_id": "SUP226",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "Punch Above Your Weight",
+            "card_id": "SUP224",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "Punch Above Your Weight",
+            "card_id": "SUP225",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "Right Behind You",
+            "card_id": "SUP233",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "Right Behind You",
+            "card_id": "SUP234",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "Story Beats",
+            "card_id": "SUP183",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "Story Beats",
+            "card_id": "SUP182",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "Unwavering Resolve",
+            "card_id": "SUP218",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "Glacial Footsteps",
+            "card_id": "ELE016",
+            "usage_percentage": 5.660377358490567
+          },
+          {
+            "card_name": "Rouse the Ancients",
+            "card_id": "MON247",
+            "usage_percentage": 5.423044974486769
+          },
+          {
+            "card_name": "Summer's Fall",
+            "card_id": "ROS041",
+            "usage_percentage": 5.2450456864839206
+          }
+        ],
+        "attackReaction": [
+          {
+            "card_name": "Pummel",
+            "card_id": "WTR206",
+            "usage_percentage": 59.61789486175388
+          }
+        ],
+        "defenseReaction": [
+          {
+            "card_name": "Pulse of Isenloft",
+            "card_id": "ELE114",
+            "usage_percentage": 92.07309837427317
+          },
+          {
+            "card_name": "Sink Below",
+            "card_id": "WTR215",
+            "usage_percentage": 66.51240061706419
+          },
+          {
+            "card_name": "Rootbound Carapace",
+            "card_id": "ROS042",
+            "usage_percentage": 57.54123650172066
+          },
+          {
+            "card_name": "Shelter from the Storm",
+            "card_id": "HNT222",
+            "usage_percentage": 44.86632217479218
+          },
+          {
+            "card_name": "Fate Foreseen",
+            "card_id": "ARC200",
+            "usage_percentage": 14.216209801827459
+          },
+          {
+            "card_name": "Staunch Response",
+            "card_id": "WTR051",
+            "usage_percentage": 8.199833867331199
+          }
+        ],
+        "block": [
+          {
+            "card_name": "Fiddler's Green",
+            "card_id": "AGB013",
+            "usage_percentage": 15.615615615615615
+          },
+          {
+            "card_name": "Canopy Shelter",
+            "card_id": "TER027",
+            "usage_percentage": 11.985285392191765
+          }
+        ],
+        "instant": [
+          {
+            "card_name": "Blizzard",
+            "card_id": "ELE147",
+            "usage_percentage": 42.43503025987896
+          },
+          {
+            "card_name": "Hungry for More",
+            "card_id": "SUP175",
+            "usage_percentage": 23.52941176470588
+          },
+          {
+            "card_name": "The Suspense is Killing Me",
+            "card_id": "SUP207",
+            "usage_percentage": 23.52941176470588
+          },
+          {
+            "card_name": "Seeds of Tomorrow",
+            "card_id": "ROS035",
+            "usage_percentage": 22.368577192357897
+          },
+          {
+            "card_name": "Count Your Blessings",
+            "card_id": "ROS223",
+            "usage_percentage": 21.704046517147265
+          },
+          {
+            "card_name": "Count Your Blessings",
+            "card_id": "ROS224",
+            "usage_percentage": 21.597246944345557
+          },
+          {
+            "card_name": "What Happens Next?",
+            "card_id": "SUP209",
+            "usage_percentage": 17.647058823529413
+          },
+          {
+            "card_name": "Ley Line of the Old Ones",
+            "card_id": "MPG013",
+            "usage_percentage": 16.528925619834713
+          },
+          {
+            "card_name": "Remembrance",
+            "card_id": "WTR163",
+            "usage_percentage": 13.931410941022904
+          },
+          {
+            "card_name": "Edge of Their Seats",
+            "card_id": "SUP201",
+            "usage_percentage": 11.76470588235294
+          },
+          {
+            "card_name": "In the Palm of Your Hand",
+            "card_id": "SUP171",
+            "usage_percentage": 11.76470588235294
+          },
+          {
+            "card_name": "Arcane Compliance",
+            "card_id": "SEA261",
+            "usage_percentage": 10.679611650485436
+          },
+          {
+            "card_name": "Exposed to the Elements",
+            "card_id": "ELE093",
+            "usage_percentage": 8.793164827340691
+          },
+          {
+            "card_name": "Oasis Respite",
+            "card_id": "UPR221",
+            "usage_percentage": 6.2062418416993
+          },
+          {
+            "card_name": "To Be Continued...",
+            "card_id": "SUP208",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "Act of Glory",
+            "card_id": "SUP197",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "Edge of Their Seats",
+            "card_id": "SUP203",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "Tension in the Air",
+            "card_id": "SUP204",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "Dramatic Pause",
+            "card_id": "SUP199",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "Turn Heads",
+            "card_id": "SUP176",
+            "usage_percentage": 5.88235294117647
+          },
+          {
+            "card_name": "Who Blinks First?",
+            "card_id": "SUP177",
+            "usage_percentage": 5.88235294117647
+          }
+        ],
+        "resource": [
+          {
+            "card_name": "Authority of Ataya",
+            "card_id": "SUP000",
+            "usage_percentage": 11.76470588235294
           }
         ]
       }

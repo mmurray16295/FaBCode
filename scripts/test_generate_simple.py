@@ -2,6 +2,7 @@
 Test script to generate one synthetic playmat image using CardSelector.
 """
 
+import os
 import random
 import math
 import json
@@ -183,6 +184,7 @@ def get_zone_sort_key(zone_name):
 
 def save_yolo_labels(label_path, card_placements, card_name_to_class_id, img_width, img_height):
     """Save YOLO format label file with normalized coordinates.
+    Atomic write: creates temp file then renames for parallel safety.
     
     Args:
         label_path: Path to save the .txt label file
@@ -191,25 +193,39 @@ def save_yolo_labels(label_path, card_placements, card_name_to_class_id, img_wid
         img_width: Image width in pixels
         img_height: Image height in pixels
     """
-    with open(label_path, 'w') as f:
-        for placement in card_placements:
-            card_name = placement.get('card_name', '10,000 Year Reunion')  # Default to first card
-            class_id = card_name_to_class_id.get(card_name, 0)  # Default to class 0 if not found
-            
-            # Convert to center x, center y, width, height (normalized 0-1)
-            x_center = (placement['x'] + placement['width'] / 2) / img_width
-            y_center = (placement['y'] + placement['height'] / 2) / img_height
-            norm_width = placement['width'] / img_width
-            norm_height = placement['height'] / img_height
-            
-            # Clamp to [0, 1] range
-            x_center = max(0, min(1, x_center))
-            y_center = max(0, min(1, y_center))
-            norm_width = max(0, min(1, norm_width))
-            norm_height = max(0, min(1, norm_height))
-            
-            # YOLO format: class_id x_center y_center width height
-            f.write(f"{class_id} {x_center:.6f} {y_center:.6f} {norm_width:.6f} {norm_height:.6f}\n")
+    import tempfile
+    
+    # Write to temporary file first
+    temp_fd, temp_path = tempfile.mkstemp(dir=os.path.dirname(label_path), suffix='.tmp')
+    
+    try:
+        with os.fdopen(temp_fd, 'w') as f:
+            for placement in card_placements:
+                card_name = placement.get('card_name', '10,000 Year Reunion')  # Default to first card
+                class_id = card_name_to_class_id.get(card_name, 0)  # Default to class 0 if not found
+                
+                # Convert to center x, center y, width, height (normalized 0-1)
+                x_center = (placement['x'] + placement['width'] / 2) / img_width
+                y_center = (placement['y'] + placement['height'] / 2) / img_height
+                norm_width = placement['width'] / img_width
+                norm_height = placement['height'] / img_height
+                
+                # Clamp to [0, 1] range
+                x_center = max(0, min(1, x_center))
+                y_center = max(0, min(1, y_center))
+                norm_width = max(0, min(1, norm_width))
+                norm_height = max(0, min(1, norm_height))
+                
+                # YOLO format: class_id x_center y_center width height
+                f.write(f"{class_id} {x_center:.6f} {y_center:.6f} {norm_width:.6f} {norm_height:.6f}\n")
+        
+        # Atomic rename - this is guaranteed to be atomic on POSIX systems
+        os.replace(temp_path, label_path)
+    except:
+        # Clean up temp file on error
+        if os.path.exists(temp_path):
+            os.unlink(temp_path)
+        raise
 
 
 def create_data_yaml(output_dir, force_update=False):
@@ -1231,11 +1247,22 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None):
     
     # Initialize CardSelector
     t0 = time.time()
-    card_json_path = Path(r'c:\VS Code\FaB Code\data\card.json')
-    weights_path = Path(r'c:\VS Code\FaB Code\data\card_popularity_weights_by_hero.json')
-    card_dir = Path(r'c:\VS Code\FaB Code\data\images')
-    background_dir = Path(r'c:\VS Code\FaB Code\data\Background Perfecting\images')
-    labels_dir = Path(r'c:\VS Code\FaB Code\data\Background Perfecting\labels')
+    
+    # Auto-detect environment and use appropriate paths
+    import platform
+    if platform.system() == 'Windows':
+        # Windows environment paths
+        base_path = Path(r'c:\VS Code\FaB Code')
+    else:
+        # Linux/RunPod environment paths (relative to script)
+        base_path = Path(__file__).parent.parent  # Go up to FaBCode root
+    
+    # Same structure on both environments
+    card_json_path = base_path / 'data' / 'card.json'
+    weights_path = base_path / 'data' / 'card_popularity_weights_by_hero.json'
+    card_dir = base_path / 'data' / 'images'
+    background_dir = base_path / 'data' / 'Background Perfecting' / 'images'
+    labels_dir = base_path / 'data' / 'Background Perfecting' / 'labels'
     
     selector = CardSelector(str(card_json_path), str(weights_path))
     timings['initialization'] = time.time() - t0
@@ -1431,13 +1458,19 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None):
     zones_by_class_id = {z['class_id']: z for z in zones}
     zones_by_name = {z['zone_name']: z for z in zones}
     
-    # Select two heroes
+    # Select format for this image FIRST (CC 80%, LL 15%, Blitz 5%)
+    from card_selector import select_format
+    format = select_format()
+    format_names = {'cc': 'Classic Constructed', 'll': 'Living Legend', 'blitz': 'Blitz'}
+    print(f"\n2. Format: {format_names[format]}")
+    
+    # Select two heroes based on the selected format
     t0 = time.time()
-    print("\n2. Selecting heroes...")
-    hero1_key, hero1_card, hero1_weights = selector.select_random_hero()
+    print("\n   Selecting heroes...")
+    hero1_key, hero1_card, hero1_weights = selector.select_random_hero(format)
     print(f"   Hero 1: {hero1_card['name']} ({hero1_key})")
     
-    hero2_key, hero2_card, hero2_weights = selector.select_random_hero()
+    hero2_key, hero2_card, hero2_weights = selector.select_random_hero(format)
     print(f"   Hero 2: {hero2_card['name']} ({hero2_key})")
     
     # Find hero images
@@ -1452,12 +1485,6 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None):
         print(f"   ERROR: Could not find hero 2 image!")
         return
     print(f"   Hero 2 image: {hero2_img_path}")
-    
-    # Select format for this image (CC 80%, LL 15%, Blitz 5%)
-    from card_selector import select_format
-    format = select_format()
-    format_names = {'cc': 'Classic Constructed', 'll': 'Living Legend', 'blitz': 'Blitz'}
-    print(f"\n   Format: {format_names[format]}")
     
     # Build card pools for both heroes
     print("\n3. Building card pools...")
@@ -1850,7 +1877,7 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None):
     
     # Save output with proper train/val/test split
     t0 = time.time()
-    base_dir = Path(r'c:\VS Code\FaB Code\data\synthetic')
+    base_dir = base_path / 'data' / 'synthetic'
     
     # Determine split (70% train, 20% val, 10% test)
     split_rand = random.random()
@@ -1867,10 +1894,13 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None):
     images_dir.mkdir(parents=True, exist_ok=True)
     labels_dir.mkdir(parents=True, exist_ok=True)
     
-    # Generate unique filename with timestamp
+    # Generate unique filename with timestamp + process ID + UUID for parallel safety
     from datetime import datetime
+    import uuid
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S_%f')[:-3]  # milliseconds
-    filename = f'playmat_{timestamp}'
+    process_id = os.getpid()
+    unique_id = str(uuid.uuid4())[:8]  # First 8 chars of UUID
+    filename = f'playmat_{timestamp}_p{process_id}_{unique_id}'
     
     # Save image
     output_path = images_dir / f'{filename}.jpg'
