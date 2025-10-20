@@ -13,12 +13,16 @@ import random
 from typing import Dict, List, Set, Optional, Tuple
 from pathlib import Path
 
+# Selection probabilities
+WEIGHTED_SELECTION_PROBABILITY = 0.75  # 75% weighted, 25% unweighted for both heroes and cards
+
 # Classes and talents
 ALL_CLASSES = {'Warrior', 'Brute', 'Guardian', 'Ninja', 'Ranger', 'Assassin', 
                'Wizard', 'Runeblade', 'Mechanologist', 'Merchant', 'Illusionist', 
-               'Shapeshifter', 'Bard', 'Mystic'}
+               'Shapeshifter', 'Bard', 'Mystic', 'Pirate', 'Necromancer', 'Thief', 
+               'Adjudicator'}
 ALL_TALENTS = {'Draconic', 'Elemental', 'Light', 'Shadow', 'Earth', 'Ice', 
-               'Lightning', 'Royal', 'Chi', 'Chaos', 'Arcane'}
+               'Lightning', 'Royal', 'Chi', 'Chaos', 'Arcane', 'Revered', 'Reviled'}
 
 
 def select_format() -> str:
@@ -72,57 +76,99 @@ class CardSelector:
     
     def select_random_hero(self, format: str = None) -> Tuple[str, Dict, Dict]:
         """
-        Select a random hero from weights file.
+        Select a random hero using weighted/unweighted split (75%/25%).
         
         Args:
             format: Optional format to filter by ('cc', 'll', 'blitz'). If None, any legal hero.
+                   - 'blitz': Prefer Young heroes
+                   - 'cc'/'ll': Prefer Adult heroes (non-Young)
         
         Returns:
             (hero_key, hero_card_data, hero_weights)
+            hero_key is the hero identifier (slug from weights or generated from name)
+            hero_weights will be empty dict {} for unweighted heroes
         """
-        # Get all hero keys and try to find legal ones
+        roll = random.random()
+        use_weighted = roll < WEIGHTED_SELECTION_PROBABILITY
+        
+        # Try weighted selection first if chosen
+        if use_weighted:
+            hero_result = self._select_weighted_hero(format)
+            if hero_result:
+                return hero_result
+            # If weighted selection fails (no legal heroes in weights for this format),
+            # fall through to unweighted
+        
+        # Unweighted selection: pick from ALL heroes in card.json
+        return self._select_unweighted_hero(format)
+    
+    def _select_weighted_hero(self, format: str = None) -> Optional[Tuple[str, Dict, Dict]]:
+        """Select from heroes in weights file."""
         hero_keys = list(self.weights_data['heroes'].keys())
         random.shuffle(hero_keys)
         
         for hero_key in hero_keys:
             hero_weights = self.weights_data['heroes'][hero_key]
             
-            # Find matching hero card in card.json
-            # Normalize by removing ALL punctuation and spaces for comparison
-            # This handles cases like "dash-io" vs "Dash I/O", "arakni-5lp3d..." vs "Arakni, 5L!p3d..."
+            # Find matching hero cards in card.json
             hero_key_normalized = hero_key.lower().replace('-', '').replace(' ', '').replace(',', '').replace("'", '').replace('!', '').replace('/', '')
-            hero_card = None
+            matching_heroes = []
             
             for card in self.all_cards:
                 if 'Hero' in card.get('types', []):
-                    # Remove ALL punctuation and spaces from card name too
                     name_normalized = card['name'].lower().replace(' ', '').replace(',', '').replace("'", '').replace('!', '').replace('/', '')
-                    # Only match if the hero_key is IN the card name (not vice versa)
-                    # This ensures "arakni huntsman" matches "Arakni, Huntsman" but not just "Arakni"
-                    if hero_key_normalized in name_normalized:
-                        hero_card = card
-                        break
+                    if hero_key_normalized in name_normalized or name_normalized in hero_key_normalized:
+                        matching_heroes.append(card)
             
-            # Skip if hero card not found
-            if not hero_card:
+            if not matching_heroes:
                 continue
             
-            # If format specified, check if hero is legal for that format
-            if format:
-                if format == 'cc' and not hero_card.get('cc_legal'):
-                    continue
-                elif format == 'll' and not hero_card.get('ll_legal'):
-                    continue
-                elif format == 'blitz' and not hero_card.get('blitz_legal'):
-                    continue
-            else:
-                # No format specified - check if hero is legal in at least one format
-                if not (hero_card.get('cc_legal') or hero_card.get('ll_legal') or hero_card.get('blitz_legal')):
-                    continue
-            
-            return hero_key, hero_card, hero_weights
+            # Filter by format legality and age preference
+            legal_hero = self._filter_heroes_by_format(matching_heroes, format)
+            if legal_hero:
+                return hero_key, legal_hero, hero_weights
+        
+        return None  # No legal weighted heroes found for this format
+    
+    def _select_unweighted_hero(self, format: str = None) -> Tuple[str, Dict, Dict]:
+        """Select from ALL heroes in card.json (not in weights file)."""
+        # Get all hero cards
+        all_heroes = [c for c in self.all_cards if 'Hero' in c.get('types', [])]
+        random.shuffle(all_heroes)
+        
+        for hero_card in all_heroes:
+            legal_hero = self._filter_heroes_by_format([hero_card], format)
+            if legal_hero:
+                # Generate a key from the hero name
+                hero_key = legal_hero['name'].lower().replace(' ', '-').replace(',', '').replace("'", '')
+                # Return with generated key and empty weights
+                return hero_key, legal_hero, {}
         
         raise ValueError(f"Could not find any legal hero for format: {format}")
+    
+    def _filter_heroes_by_format(self, heroes: List[Dict], format: str = None) -> Optional[Dict]:
+        """Filter heroes by format legality and age preference."""
+        if not format:
+            # No format specified - check if any hero is legal in at least one format
+            legal_heroes = [h for h in heroes if 
+                           (h.get('cc_legal') or h.get('ll_legal') or h.get('blitz_legal'))]
+            return legal_heroes[0] if legal_heroes else None
+        
+        # Filter by format legality
+        format_key = f'{format}_legal'
+        legal_heroes = [h for h in heroes if h.get(format_key)]
+        
+        if not legal_heroes:
+            return None
+        
+        # For Blitz: prefer Young heroes, fall back to any legal
+        if format == 'blitz':
+            young_heroes = [h for h in legal_heroes if 'Young' in h.get('types', [])]
+            return young_heroes[0] if young_heroes else legal_heroes[0]
+        # For CC/LL: prefer Adult heroes (non-Young), fall back to any legal
+        else:
+            adult_heroes = [h for h in legal_heroes if 'Young' not in h.get('types', [])]
+            return adult_heroes[0] if adult_heroes else legal_heroes[0]
     
     def get_hero_classes_and_talents(self, hero_card: Dict) -> Tuple[Set[str], Set[str]]:
         """Extract classes and talents from hero card, including Essence bonuses."""
@@ -150,22 +196,14 @@ class CardSelector:
         
         return classes, talents
     
-    def build_card_pools(self, hero_card: Dict, hero_weights: Dict, format: str = 'cc') -> Dict[str, List[Dict]]:
+    def build_card_pools(self, hero_card: Dict, hero_weights: Dict, format: str) -> Dict[str, List[Dict]]:
         """
-        Build card pools for selection:
-        - weighted: Cards from popularity weights
-        - generic: Generic cards not in weights
-        - class_only: Hero's class cards not in weights
-        - talent_only: Hero's talent cards not in weights
-        - both: Hero's class AND talent cards not in weights
+        Build categorized card pools for a given hero.
         
         Args:
-            hero_card: Hero card dict
-            hero_weights: Hero weights dict from popularity file
-            format: Format to filter for ('cc', 'll', or 'blitz')
-        
-        Returns:
-            Dict with card pools
+            hero_card: Hero card data from card.json
+            hero_weights: Hero's popularity weights from weights file (can be empty dict for unweighted heroes)
+            format: Game format ('cc', 'll', 'blitz')
         """
         hero_classes, hero_talents = self.get_hero_classes_and_talents(hero_card)
         
@@ -205,9 +243,21 @@ class CardSelector:
             
             card_types = set(card.get('types', []))
             
-            # Generic cards
-            if 'Generic' in card_types:
+            # Generic cards (including tokens which can appear in any deck)
+            if 'Generic' in card_types or 'Token' in card_types:
                 generic_cards.append(card)
+                continue
+            
+            # Special handling for Companion cards (e.g., "Polly Cranka" has "Puffin" type for hero "Puffin")
+            # Companions match if any of their types matches the hero's name (case-insensitive, first word)
+            if 'Companion' in card_types:
+                hero_name_first_word = hero_card['name'].split(',')[0].split()[0].lower()
+                companion_types_lower = {t.lower() for t in card_types}
+                if hero_name_first_word in companion_types_lower:
+                    # This companion is for this specific hero
+                    class_only_cards.append(card)
+                    continue
+                # Otherwise skip this companion (it's for a different hero)
                 continue
             
             # Check class/talent matching
@@ -285,7 +335,7 @@ class CardSelector:
         """
         roll = random.random()
         
-        if roll < 0.75:  # 75% weighted
+        if roll < WEIGHTED_SELECTION_PROBABILITY:  # 75% weighted
             if card_pools['weighted']:
                 # Use usage_percentage for weighted selection, converted to weights
                 cards = card_pools['weighted']
@@ -369,6 +419,10 @@ class CardSelector:
         # Weapon or Off-Hand zones have conditional rules
         if zone_name in ['Weapon or Off-Hand', 'Weapon or Off-Hand 2']:
             if weapon_slot_state and weapon_slot_state.get('weapon_is_2h'):
+                # Exception: Cards with "Perched" keyword CAN be equipped with 2H weapons
+                perched_cards = [card for card in card_pool if 'Perched' in card.get('card_keywords', [])]
+                if perched_cards:
+                    return perched_cards
                 return []
             
             valid_cards = []

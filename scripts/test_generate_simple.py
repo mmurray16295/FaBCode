@@ -1468,10 +1468,12 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None):
     t0 = time.time()
     print("\n   Selecting heroes...")
     hero1_key, hero1_card, hero1_weights = selector.select_random_hero(format)
-    print(f"   Hero 1: {hero1_card['name']} ({hero1_key})")
+    hero1_source = "weighted" if hero1_weights else "unweighted"
+    print(f"   Hero 1: {hero1_card['name']} ({hero1_source})")
     
     hero2_key, hero2_card, hero2_weights = selector.select_random_hero(format)
-    print(f"   Hero 2: {hero2_card['name']} ({hero2_key})")
+    hero2_source = "weighted" if hero2_weights else "unweighted"
+    print(f"   Hero 2: {hero2_card['name']} ({hero2_source})")
     
     # Find hero images
     hero1_img_path = selector.find_card_image(hero1_card, str(card_dir))

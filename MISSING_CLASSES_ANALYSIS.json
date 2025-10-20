@@ -1,0 +1,7839 @@
+{
+  "summary": {
+    "intended_classes": 2641,
+    "classes_with_data": 2385,
+    "missing_classes": 1117,
+    "coverage_percent": 90.3067020068156
+  },
+  "patterns": {
+    "split_class": [],
+    "dual_talent": [],
+    "no_class": [
+      {
+        "class_id": 4096,
+        "name": "Wave of Reality",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4097,
+        "name": "Waves of Aqua Marine",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2,
+        "name": "A Good Clean Fight",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4098,
+        "name": "Wax Off",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4099,
+        "name": "Wax On",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4102,
+        "name": "Waxing Specter",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2057,
+        "name": "Leave Them Hanging",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4105,
+        "name": "Wayfinder's Crest",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4106,
+        "name": "Weave Earth",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4109,
+        "name": "Weave Ice",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4112,
+        "name": "Weave Lightning",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4115,
+        "name": "Wee Wrecking Ball",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4116,
+        "name": "Well Grounded",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4117,
+        "name": "What Happens Next?",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4118,
+        "name": "Whelming Gustwave",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4121,
+        "name": "Whirling Mist Blossom",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4122,
+        "name": "Whisper of the Oracle",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4125,
+        "name": "Whittle from Bone",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4128,
+        "name": "Who Blinks First?",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4129,
+        "name": "Who's the Tough Guy?",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 35,
+        "name": "Aether Ironweave",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4132,
+        "name": "Wide Blue Yonder",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4133,
+        "name": "Widespread Annihilation",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4134,
+        "name": "Widespread Destruction",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4135,
+        "name": "Widespread Ruin",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4136,
+        "name": "Widow Back Abdomen",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4137,
+        "name": "Widow Claw Tarsus",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4138,
+        "name": "Widow Veil Respirator",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4139,
+        "name": "Widow Web Crawler",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4140,
+        "name": "Widowmaker",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4143,
+        "name": "Wild Ride",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4146,
+        "name": "Will of Arcana",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4147,
+        "name": "Will of the Crowd",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4148,
+        "name": "Wind Chakra",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4151,
+        "name": "Wind Up the Crowd",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4152,
+        "name": "Winds of Eternity",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4153,
+        "name": "Winter's Bite",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 60,
+        "name": "Air of a Comeback",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4156,
+        "name": "Winter's Grasp",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4159,
+        "name": "Winter's Wail",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4160,
+        "name": "Wither",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4163,
+        "name": "Withering Shot",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4166,
+        "name": "Withstand",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4169,
+        "name": "Wounded Bull",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 74,
+        "name": "Amulet of Earth",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4172,
+        "name": "Wounding Blow",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2126,
+        "name": "Lord of Wind",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4175,
+        "name": "Wrath of Retribution",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2128,
+        "name": "Lost in Transit",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2129,
+        "name": "Low Blow",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 82,
+        "name": "Anaphylactic Shock",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2130,
+        "name": "Loyalty Beyond the Grave",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2131,
+        "name": "Lubricate",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 85,
+        "name": "Angelic Attendant",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2132,
+        "name": "Lumina Ascension",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4176,
+        "name": "Wreck Havoc",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4179,
+        "name": "Wrecker Romp",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4182,
+        "name": "Wrecking Ball",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4183,
+        "name": "Writhing Beast Hulk",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4186,
+        "name": "Written in the Stars",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4187,
+        "name": "Yellow Fin Harpoon",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4188,
+        "name": "Yendurai",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4189,
+        "name": "Yinti Yanti",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4192,
+        "name": "Yo Ho Ho!",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4193,
+        "name": "Yoji, Royal Protector",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4194,
+        "name": "Yorick, Weaver of Tales",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4195,
+        "name": "Zap",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 100,
+        "name": "Annihilate the Armed",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4198,
+        "name": "Zap Clappers",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4199,
+        "name": "Zealous Belting",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 105,
+        "name": "Anthem of Spring",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4202,
+        "name": "Zen",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4203,
+        "name": "Zen State",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4204,
+        "name": "Zen, Tamer of Purpose",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4205,
+        "name": "Zephyr Needle",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4206,
+        "name": "Zero to Fifty",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4209,
+        "name": "Zero to Sixty",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4212,
+        "name": "Zipper Hit",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4215,
+        "name": "Zoom In",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 123,
+        "name": "Arc Lightning",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2175,
+        "name": "Mark of the Huntsman",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 133,
+        "name": "Arcane Twining",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2191,
+        "name": "Mask of Wizened Whiskers",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 165,
+        "name": "Asking for Trouble",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2220,
+        "name": "Merciful Retribution",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 200,
+        "name": "Back Stab",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 205,
+        "name": "Backup Protocol: RED",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 212,
+        "name": "Ball Breaker",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2275,
+        "name": "Morlock Hill",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 229,
+        "name": "Bare Fangs",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2284,
+        "name": "Murkmire Grapnel",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2288,
+        "name": "Muscle Mutt",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2290,
+        "name": "Mutiny on the Battalion Barque",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2295,
+        "name": "Nature's Path Pilgrimage",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2306,
+        "name": "Nimble Strike",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 274,
+        "name": "Beaming Blade",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 275,
+        "name": "Beaming Bravado",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 278,
+        "name": "Beast Mode",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2332,
+        "name": "Null Time Zone",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 293,
+        "name": "Benefactor of Bloodworth Goldmane",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2342,
+        "name": "Oasis Respite",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 295,
+        "name": "Bequest the Vast Beyond",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2346,
+        "name": "Oath of Steel",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2354,
+        "name": "Okana Scar Wraps",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2355,
+        "name": "Old Favorite",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2356,
+        "name": "Old Knocker",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2362,
+        "name": "Olympia, Prized Fighter",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 325,
+        "name": "Biting Blade",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2375,
+        "name": "Open the Flood Gates",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 340,
+        "name": "Blacktek Whisperers",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 346,
+        "name": "Blade Flash",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 348,
+        "name": "Blade Runner",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 360,
+        "name": "Blaze, Firemind",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2435,
+        "name": "Pack Hunt",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2452,
+        "name": "Path of Vengeance",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2456,
+        "name": "Pay Day",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2457,
+        "name": "Pay Up",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 411,
+        "name": "Blistering Blade",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 418,
+        "name": "Blood Drop Brocade",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 429,
+        "name": "Blood on Her Hands",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2492,
+        "name": "Phoenix Flame",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 454,
+        "name": "Boast",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2509,
+        "name": "Pierce Reality",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 463,
+        "name": "Boltyn",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2517,
+        "name": "Pink Visor",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2519,
+        "name": "Pitfall Trap",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2522,
+        "name": "Plasma Barrel Shot",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2527,
+        "name": "Pledge Fealty",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2533,
+        "name": "Plow Under",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 521,
+        "name": "Break Tide",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 542,
+        "name": "Brothers of Flame",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 553,
+        "name": "Buccaneer's Bounty",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 574,
+        "name": "Burn Away",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 575,
+        "name": "Burn Bare",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 576,
+        "name": "Burn Rubber",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 578,
+        "name": "Burn Up // Shock",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2627,
+        "name": "Proclaim Vengeance",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 580,
+        "name": "Buzz Bolt",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2628,
+        "name": "Proclamation of Abundance",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2629,
+        "name": "Proclamation of Combat",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2633,
+        "name": "Prognosticate",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2641,
+        "name": "Proto Base Chest",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2642,
+        "name": "Proto Base Head",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2643,
+        "name": "Proto Base Legs",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2644,
+        "name": "Provoke",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2645,
+        "name": "Prowess of Agility",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2646,
+        "name": "Prowl",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2649,
+        "name": "Pry",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2652,
+        "name": "Public Bounty",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2655,
+        "name": "Puffer Jacket",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2656,
+        "name": "Puffin",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2657,
+        "name": "Puffin, Hightail",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2658,
+        "name": "Pulping",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2661,
+        "name": "Pulse of Candlehold",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2662,
+        "name": "Pulse of Isenloft",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2663,
+        "name": "Pulse of Volthaven",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2664,
+        "name": "Pulsewave Harpoon",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2665,
+        "name": "Pulsewave Protocol",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2666,
+        "name": "Pulsing Aether // Life",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2667,
+        "name": "Pulverize",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2668,
+        "name": "Pummel",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 622,
+        "name": "Censor",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2671,
+        "name": "Punch Above Your Weight",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2674,
+        "name": "Punching Gloves",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2675,
+        "name": "Puncture",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 630,
+        "name": "Chane, Bound by Shadow",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2678,
+        "name": "Pursue to the Edge of Oblivion",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2679,
+        "name": "Pursue to the Pits of Despair",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2680,
+        "name": "Pursuit of Knowledge",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2681,
+        "name": "Push Forward",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2684,
+        "name": "Push the Point",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2687,
+        "name": "Put 'Em In Their Place",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2688,
+        "name": "Put in Context",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2689,
+        "name": "Putrid Stirrings",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 642,
+        "name": "Chart a Course",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2692,
+        "name": "Pyroglyphic Protection",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 647,
+        "name": "Cheap Shot",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2695,
+        "name": "Qi Unleashed",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 649,
+        "name": "Cheers!",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2698,
+        "name": "Quantum Processor",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2699,
+        "name": "Quartermaster's Boots",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2700,
+        "name": "Quelling Robe",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2701,
+        "name": "Quelling Sleeves",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2702,
+        "name": "Quelling Slippers",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2703,
+        "name": "Quick Clicks",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2704,
+        "name": "Quickdodge Flexors",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2705,
+        "name": "Quicken",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 658,
+        "name": "Chivalry",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2706,
+        "name": "Quickfire",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2709,
+        "name": "Quicksilver Dagger",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2710,
+        "name": "Quickstep",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2711,
+        "name": "Quiver of Abyssal Depths",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2712,
+        "name": "Quiver of Rustling Leaves",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2713,
+        "name": "Radiant Flow",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2714,
+        "name": "Radiant Forcefield",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2715,
+        "name": "Radiant Raiment",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2716,
+        "name": "Radiant Touch",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2717,
+        "name": "Radiant View",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2718,
+        "name": "Ragamuffin's Hat",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2719,
+        "name": "Rage Specter",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2720,
+        "name": "Raging Onslaught",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 675,
+        "name": "Cindra, Dracai of Retribution",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2723,
+        "name": "Rain Razors",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2724,
+        "name": "Raise an Army",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2725,
+        "name": "Rake Over the Coals",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2726,
+        "name": "Rake the Embers",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2729,
+        "name": "Rally the Coast Guard",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2732,
+        "name": "Rally the Rearguard",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2735,
+        "name": "Rally the Underdog",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2736,
+        "name": "Ram Raider",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2739,
+        "name": "Rampant Growth // Life",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2740,
+        "name": "Rampart of the Ram's Head",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2741,
+        "name": "Random Events Unfold",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2742,
+        "name": "Rapid Fire",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2743,
+        "name": "Rapid Reflex",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2746,
+        "name": "Rapturous Applause",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2749,
+        "name": "Ratchet Up",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2752,
+        "name": "Rattle Bones",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2753,
+        "name": "Ravenous Meataxe",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2754,
+        "name": "Ravenous Rabble",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2757,
+        "name": "Raw Meat",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2758,
+        "name": "Rawhide Rumble",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2761,
+        "name": "Ray of Hope",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2762,
+        "name": "Raydn, Duskbane",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2763,
+        "name": "Razor Reflex",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2766,
+        "name": "Razor's Edge",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2769,
+        "name": "Razzle Dazzle",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2772,
+        "name": "Re-Charge!",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2775,
+        "name": "Read the Glide Path",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 729,
+        "name": "Codex of Inertia",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2778,
+        "name": "Read the Ripples",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2781,
+        "name": "Read the Runes",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2784,
+        "name": "Ready to Roll",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 737,
+        "name": "Cogwerx Base Chest",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2785,
+        "name": "Reality Refractor",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2786,
+        "name": "Reaper's Call",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2789,
+        "name": "Reaping Blade",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2790,
+        "name": "Rebellious Rush",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2793,
+        "name": "Reckless Charge",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2794,
+        "name": "Reckless Stampede",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 747,
+        "name": "Cold Snap",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2795,
+        "name": "Reckless Swing",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2796,
+        "name": "Recoil",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 750,
+        "name": "Cold Wave",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2799,
+        "name": "Red Alert Boots",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2800,
+        "name": "Red Alert Gloves",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2801,
+        "name": "Red Alert Vest",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2802,
+        "name": "Red Alert Visor",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2803,
+        "name": "Red Fin Harpoon",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2804,
+        "name": "Red Hot",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2805,
+        "name": "Red Liner",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2806,
+        "name": "Red in the Ledger",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2807,
+        "name": "Redback Shroud",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2808,
+        "name": "Redspine Manta",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2809,
+        "name": "Reduce to Runechant",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2812,
+        "name": "Redwood Hammer",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2813,
+        "name": "Reek of Corruption",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2816,
+        "name": "Reel In",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2817,
+        "name": "Refraction Bolters",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2818,
+        "name": "Regain Composure",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2819,
+        "name": "Regicide",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2820,
+        "name": "Regrowth // Shock",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2821,
+        "name": "Regurgitating Slog",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2824,
+        "name": "Reincarnate",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2827,
+        "name": "Reinforce Steel",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2830,
+        "name": "Reinforce the Line",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2833,
+        "name": "Rejuvenate",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2836,
+        "name": "Release the Tension",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2839,
+        "name": "Relentless Pursuit",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2840,
+        "name": "Remembrance",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2841,
+        "name": "Remorseless",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2842,
+        "name": "Renounce Grandeur",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2843,
+        "name": "Renounce Violence",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2844,
+        "name": "Requiem for the Damned",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2845,
+        "name": "Resounding Courage",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2848,
+        "name": "Restless Bones",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2851,
+        "name": "Restless Coalescence",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2852,
+        "name": "Retrace the Past",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2853,
+        "name": "Return Fire",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2854,
+        "name": "Rev Up",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 806,
+        "name": "Cosmo, Scroll of Ancestral Tapestry",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 807,
+        "name": "Count Your Blessings",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2857,
+        "name": "Revel in Runeblood",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2858,
+        "name": "Reverberate",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2861,
+        "name": "Revolting Gesture",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2862,
+        "name": "Rewind",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2863,
+        "name": "Reya, the Unyielding",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2864,
+        "name": "Rhinar",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2865,
+        "name": "Rhinar, Reckless Rampage",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2866,
+        "name": "Riches of Tr\u014dpal-Dhani",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2867,
+        "name": "Richter Scale",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 820,
+        "name": "Crane Dance",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2868,
+        "name": "Riddle with Regret",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2869,
+        "name": "Ride the Tailwind",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 823,
+        "name": "Cranial Crush",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 824,
+        "name": "Crankshaft",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2872,
+        "name": "Ridge Rider Shot",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2875,
+        "name": "Rift Bind",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 829,
+        "name": "Crash Down the Gates",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2878,
+        "name": "Rift Skitter",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2881,
+        "name": "Rifted Torment",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2884,
+        "name": "Rifting",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2887,
+        "name": "Riggermortis",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2888,
+        "name": "Right Behind You",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2891,
+        "name": "Righteous Cleansing",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2892,
+        "name": "Riled Up",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2895,
+        "name": "Ring of Roses",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2896,
+        "name": "Rip Through Reality",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2899,
+        "name": "Rip Up Their Virtues",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2900,
+        "name": "Ripple Away",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 853,
+        "name": "Crowd Roars Fight!",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 854,
+        "name": "Crown of Dichotomy",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 855,
+        "name": "Crown of Dominion",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 856,
+        "name": "Crown of Providence",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 857,
+        "name": "Crown of Reflection",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2901,
+        "name": "Riptide",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2902,
+        "name": "Riptide, Lurker of the Deep",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2903,
+        "name": "Rise Above",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2906,
+        "name": "Rise Up",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2907,
+        "name": "Rise from the Ashes",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2910,
+        "name": "Rising Energy",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2913,
+        "name": "Rising Knee Thrust",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2916,
+        "name": "Rising Power",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2919,
+        "name": "Rising Resentment",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2922,
+        "name": "Rising Solartide",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2925,
+        "name": "Rising Speed",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2928,
+        "name": "Rising Sun, Setting Moon",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2929,
+        "name": "Rising Tide",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2930,
+        "name": "Rites of Lightning",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2933,
+        "name": "Rites of Replenishment",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2936,
+        "name": "Roar of the Tiger",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2937,
+        "name": "Rob the Rich",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2940,
+        "name": "Robe of Autumn's Fall",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2941,
+        "name": "Robe of Rapture",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2942,
+        "name": "Rockslide Trap",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2943,
+        "name": "Roiling Fissure",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2944,
+        "name": "Rok",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2945,
+        "name": "Rolling Thunder",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2946,
+        "name": "Romping Club",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2947,
+        "name": "Ronin Renegade",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2950,
+        "name": "Root-Bound Trunks",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2951,
+        "name": "Rootbound Carapace",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2954,
+        "name": "Rosetta Thorn",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 907,
+        "name": "Dash, Database",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2955,
+        "name": "Rotary Ram",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2958,
+        "name": "Rotten Old Buckler",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2959,
+        "name": "Rotten Remains",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2960,
+        "name": "Rotwood Reaper",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2961,
+        "name": "Rough Up",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2964,
+        "name": "Rouse the Ancients",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2965,
+        "name": "Rousing Aether",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2968,
+        "name": "Rout",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2969,
+        "name": "Rowdy Locals",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2970,
+        "name": "Rubble Raiser",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2973,
+        "name": "Ruby Amulet",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2974,
+        "name": "Rugged Roller",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2975,
+        "name": "Rumble Grunting",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2978,
+        "name": "Run Roughshod",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2979,
+        "name": "Run Through",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2980,
+        "name": "Run into Trouble",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2981,
+        "name": "Runaways",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2982,
+        "name": "Rune Flash",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2985,
+        "name": "Runeblood Barrier",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2986,
+        "name": "Runeblood Incantation",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2989,
+        "name": "Runechant",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2990,
+        "name": "Runehold Release",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2991,
+        "name": "Runerager Swarm",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2994,
+        "name": "Runic Reaping",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2997,
+        "name": "Runic Reckoning",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2998,
+        "name": "Runic Reclamation",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2999,
+        "name": "Runner Runner",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3000,
+        "name": "Rushing River",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3003,
+        "name": "Rust Belt",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3004,
+        "name": "Rusted Relic",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3005,
+        "name": "Rusty Harpoon",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3006,
+        "name": "Ruu'di, Gem Keeper",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3007,
+        "name": "Sack the Shifty",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3010,
+        "name": "Sacred Art: Immortal Lunar Shrine",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3011,
+        "name": "Sacred Art: Jade Tiger Domain",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3012,
+        "name": "Sacred Art: Undercurrent Desires",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3013,
+        "name": "Sadistic Scowl",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3014,
+        "name": "Salt the Wound",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3015,
+        "name": "Saltwater Swell",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3018,
+        "name": "Salvage Shot",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 972,
+        "name": "Destructive Deliberation",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3021,
+        "name": "Sanctuary of Aria",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3022,
+        "name": "Sand Cover",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3025,
+        "name": "Sand Sketched Plan",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3026,
+        "name": "Sandscour Greatbow",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3027,
+        "name": "Sap",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3030,
+        "name": "Sapphire Amulet",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3031,
+        "name": "Sash of Sandikai",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3032,
+        "name": "Savage Beatdown",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3033,
+        "name": "Savage Feast",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3036,
+        "name": "Savage Sash",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 989,
+        "name": "Dig Up Dinner",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3037,
+        "name": "Savage Swing",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3040,
+        "name": "Save the Thought",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 994,
+        "name": "Dimenxxional Vortex",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 995,
+        "name": "Disable",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3043,
+        "name": "Saving Grace",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3044,
+        "name": "Savor Bloodshed",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3045,
+        "name": "Sawbones, Dock Hand",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3046,
+        "name": "Scabskin Leathers",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3047,
+        "name": "Scalding Iron",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3048,
+        "name": "Scalding Rain",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3051,
+        "name": "Scale Peeler",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3052,
+        "name": "Scar Tissue",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3055,
+        "name": "Scar for a Scar",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3058,
+        "name": "Scarf for a Scarf",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1011,
+        "name": "Disturb the Peace",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3059,
+        "name": "Scepter of Pain",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3060,
+        "name": "Schism of Chaos",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3061,
+        "name": "Scooba, Salty Sea Dog",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3062,
+        "name": "Scour",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1016,
+        "name": "Dodge",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3063,
+        "name": "Scour the Battlescape",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3066,
+        "name": "Scout the Periphery",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3069,
+        "name": "Scouting Shot",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3070,
+        "name": "Scowling Flesh Bag",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3071,
+        "name": "Scramble Pulse",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3074,
+        "name": "Scrap Compactor",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3077,
+        "name": "Scrap Harvester",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3080,
+        "name": "Scrap Hopper",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3083,
+        "name": "Scrap Prospector",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1037,
+        "name": "Dragons of Legend",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3086,
+        "name": "Scrap Trader",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3087,
+        "name": "Scrub the Deck",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3088,
+        "name": "Scurv, Stowaway",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3089,
+        "name": "Scuttle the Canal",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1043,
+        "name": "Draw Swords",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3092,
+        "name": "Sea Floor Salvage",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3093,
+        "name": "Sea Legs",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3094,
+        "name": "Sealace Sarong",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3095,
+        "name": "Searing Emberblade",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3096,
+        "name": "Searing Gaze",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3097,
+        "name": "Searing Ray",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3100,
+        "name": "Searing Shot",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3103,
+        "name": "Searing Touch",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3104,
+        "name": "Seasoned Saviour",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3105,
+        "name": "Second Strike",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3108,
+        "name": "Second Swing",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3111,
+        "name": "Second Tenet of Chi: Moon",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3112,
+        "name": "Second Tenet of Chi: Tide",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3113,
+        "name": "Second Tenet of Chi: Wind",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3114,
+        "name": "Security Script",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3115,
+        "name": "Sedate",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3118,
+        "name": "Sedation Shot",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3121,
+        "name": "Seduce Secrets",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3122,
+        "name": "Seeds of Agony",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3125,
+        "name": "Seeds of Strength",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1079,
+        "name": "Dumpster Dive",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3127,
+        "name": "Seeds of Tomorrow",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3128,
+        "name": "Seek Enlightenment",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1082,
+        "name": "Dunebreaker Cenipai",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3131,
+        "name": "Seek Horizon",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1085,
+        "name": "Dusk Path Pilgrimage",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3134,
+        "name": "Seek Vengeance",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3136,
+        "name": "Seek and Destroy",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3137,
+        "name": "Seeker's Gilet",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3138,
+        "name": "Seeker's Hood",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3139,
+        "name": "Seeker's Leggings",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3140,
+        "name": "Seeker's Mitts",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3141,
+        "name": "Seeping Shadows",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3144,
+        "name": "Seerstone",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3145,
+        "name": "Seismic Eruption",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3146,
+        "name": "Seismic Shelter",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3147,
+        "name": "Seismic Stir",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3150,
+        "name": "Seismic Surge",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3151,
+        "name": "Sekem, Archangel of Ravages",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3152,
+        "name": "Semblance",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3153,
+        "name": "Send Packing",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3154,
+        "name": "Ser Boltyn, Breaker of Dawn",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3155,
+        "name": "Shaden Death Hydra",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3156,
+        "name": "Shaden Scream",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3159,
+        "name": "Shaden Swing",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3162,
+        "name": "Shadow Puppetry",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3163,
+        "name": "Shadow of Blasmophet",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3164,
+        "name": "Shadow of Ursur",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3165,
+        "name": "Shadowrealm Horror",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3166,
+        "name": "Shake Down",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3167,
+        "name": "Sharp Shooters",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3168,
+        "name": "Sharpen Steel",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3171,
+        "name": "Sharpened Senses",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3172,
+        "name": "Shatter",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3173,
+        "name": "Shelly, Hardened Traveler",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3174,
+        "name": "Shelter from the Storm",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3175,
+        "name": "Sheltered Cove",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3176,
+        "name": "Shield Bash",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3179,
+        "name": "Shield Wall",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3182,
+        "name": "Shift the Tide of Battle",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3183,
+        "name": "Shifting Tides",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3184,
+        "name": "Shifting Winds of the Mystic Beast",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1137,
+        "name": "Eloquent Eulogy",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3185,
+        "name": "Shimmers of Silver",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3186,
+        "name": "Shining Courage",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3187,
+        "name": "Shitty Xmas Present",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3188,
+        "name": "Shiver",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3189,
+        "name": "Shiyana, Diamond Gemini",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3190,
+        "name": "Shock Charmers",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3191,
+        "name": "Shock Frock",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3192,
+        "name": "Shock Striker",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3195,
+        "name": "Shoot Your Mouth Off",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3198,
+        "name": "Short Shrift",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3199,
+        "name": "Short and Sharp",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3202,
+        "name": "Show No Mercy",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3203,
+        "name": "Show Time!",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3204,
+        "name": "Show of Strength",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3205,
+        "name": "Shred",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3208,
+        "name": "Shriek Razors",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3209,
+        "name": "Shrill of Skullform",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3212,
+        "name": "Shroud of Darkness",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3213,
+        "name": "Sic 'Em Shot",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3216,
+        "name": "Sift",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3219,
+        "name": "Sigil of Aether",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3220,
+        "name": "Sigil of Brilliance",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3221,
+        "name": "Sigil of Conductivity",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3222,
+        "name": "Sigil of Cycles",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3223,
+        "name": "Sigil of Deadwood",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3224,
+        "name": "Sigil of Earth",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3225,
+        "name": "Sigil of Forethought",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3226,
+        "name": "Sigil of Fyendal",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3227,
+        "name": "Sigil of Lightning",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3228,
+        "name": "Sigil of Parapets",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3229,
+        "name": "Sigil of Permafrost",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3232,
+        "name": "Sigil of Protection",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3235,
+        "name": "Sigil of Sanctuary",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3236,
+        "name": "Sigil of Shelter",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3238,
+        "name": "Sigil of Solace",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3241,
+        "name": "Sigil of Solitude",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3244,
+        "name": "Sigil of Suffering",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3247,
+        "name": "Sigil of Temporal Manipulation",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3248,
+        "name": "Sigil of the Arknight",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3249,
+        "name": "Signal Jammer",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3250,
+        "name": "Silent Stilettos",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3251,
+        "name": "Silken Form",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3252,
+        "name": "Silken Gi",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3253,
+        "name": "Silver",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3254,
+        "name": "Silver Palms",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3255,
+        "name": "Silver Talons",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3258,
+        "name": "Silver the Tip",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1211,
+        "name": "Envelop in Darkness",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3261,
+        "name": "Silversheen Needle",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3262,
+        "name": "Silverwind Shuriken",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3263,
+        "name": "Singe",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3266,
+        "name": "Singeing Steelblade",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3269,
+        "name": "Singing Steelblade",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3270,
+        "name": "Single Minded Determination",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3273,
+        "name": "Singularity",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3274,
+        "name": "Sink Below",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3277,
+        "name": "Sinker",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3278,
+        "name": "Siren's Call",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3279,
+        "name": "Sirens of Safe Harbor",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1233,
+        "name": "Evergreen",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3282,
+        "name": "Sisters of Fire",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3283,
+        "name": "Sit!",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3284,
+        "name": "Sizzle",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3286,
+        "name": "Sizzling Steel",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3287,
+        "name": "Skittering Sands",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3290,
+        "name": "Skull Crack",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3291,
+        "name": "Skull Crushers",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3292,
+        "name": "Skullbone Crosswrap",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3293,
+        "name": "Skullhorn",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3294,
+        "name": "Sky Fire Lanterns",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3297,
+        "name": "Sky Skimmer",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1251,
+        "name": "Evo Recall",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3300,
+        "name": "Skybody Keikoi",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3301,
+        "name": "Skybound Shot",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3304,
+        "name": "Skycrest Keikoi",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3305,
+        "name": "Skyhold Keikoi",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3306,
+        "name": "Skywalker Keikoi",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1259,
+        "name": "Evo Speedslip",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3307,
+        "name": "Skyward Serenade",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3308,
+        "name": "Skyzyk",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3309,
+        "name": "Slap-Happy",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3310,
+        "name": "Slay",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3311,
+        "name": "Slay the Scholars",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3314,
+        "name": "Sledge of Anvilheim",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3315,
+        "name": "Sleep Dart",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1268,
+        "name": "Evo Zoom Call",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3318,
+        "name": "Slice and Dice",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1272,
+        "name": "Expedition to Azuro Keys",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1273,
+        "name": "Expedition to Blackwater Strait",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3321,
+        "name": "Slither",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1275,
+        "name": "Expedition to Horizon's Mantle",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1276,
+        "name": "Expendable Limbs",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3322,
+        "name": "Slithering Shadowpede",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3323,
+        "name": "Sloggism",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3326,
+        "name": "Smack of Reality",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3327,
+        "name": "Small Problem",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3328,
+        "name": "Smash Instinct",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3331,
+        "name": "Smash Up",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3332,
+        "name": "Smash and Grab",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3333,
+        "name": "Smash with Big Rock",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3334,
+        "name": "Smash with Big Tree",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3337,
+        "name": "Smashback Alehorn",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3338,
+        "name": "Smashing Good Time",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3341,
+        "name": "Smashing Ground",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3342,
+        "name": "Smashing Performance",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3343,
+        "name": "Smelting of the Old Ones",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3344,
+        "name": "Smoke Out",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3345,
+        "name": "Snag",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3346,
+        "name": "Snap Shot",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1300,
+        "name": "Fact-Finding Mission",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3349,
+        "name": "Snapback",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3352,
+        "name": "Snapdragon Scalers",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3353,
+        "name": "Snatch",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3356,
+        "name": "Sneak Attack",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3359,
+        "name": "Snow Under",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1314,
+        "name": "Fatal Engagement",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3362,
+        "name": "Snuff Out",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3363,
+        "name": "Soaring Strike",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1317,
+        "name": "Fate Foreseen",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3366,
+        "name": "Solar Plexus",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3367,
+        "name": "Solid Ground",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3368,
+        "name": "Solitary Companion",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3371,
+        "name": "Sonata Arcanix",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1324,
+        "name": "Fealty",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3372,
+        "name": "Sonata Fantasmia",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1326,
+        "name": "Feign Death",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3373,
+        "name": "Sonata Galaxia",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3374,
+        "name": "Song of Jack-be-Quick",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3375,
+        "name": "Song of Sinew",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3376,
+        "name": "Song of Sweet Nectar",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3377,
+        "name": "Song of Yesteryears",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3378,
+        "name": "Song of the Rosen Matador",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3379,
+        "name": "Song of the Shining Knight",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3380,
+        "name": "Song of the Wandering Mind",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3381,
+        "name": "Sonic Boom",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3382,
+        "name": "Soul Butcher",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3385,
+        "name": "Soul Cleaver",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3388,
+        "name": "Soul Food",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3389,
+        "name": "Soul Harvest",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3390,
+        "name": "Soul Reaping",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3391,
+        "name": "Soul Shackle",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3392,
+        "name": "Soul Shield",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3393,
+        "name": "Soulbead Strike",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1347,
+        "name": "Fight Dirty",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3396,
+        "name": "Soulbond Resolve",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3397,
+        "name": "Sound the Alarm",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3398,
+        "name": "Soup Up",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3401,
+        "name": "Sow Tomorrow",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3404,
+        "name": "Spark Spray",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3407,
+        "name": "Spark of Genius",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3408,
+        "name": "Spears of Surreality",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1362,
+        "name": "Final Act",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3411,
+        "name": "Spectral Manifestations",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3414,
+        "name": "Spectral Procession",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3415,
+        "name": "Spectral Prowler",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3418,
+        "name": "Spectral Rider",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3421,
+        "name": "Spectral Shield",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3422,
+        "name": "Spell Fray Cloak",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3423,
+        "name": "Spell Fray Gloves",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1376,
+        "name": "Fish Fingers",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3424,
+        "name": "Spell Fray Leggings",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3425,
+        "name": "Spell Fray Tiara",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3426,
+        "name": "Spellbane Aegis",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3427,
+        "name": "Spellblade Assault",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3430,
+        "name": "Spellblade Strike",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1385,
+        "name": "Flamecall Awakening",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3433,
+        "name": "Spellbound Creepers",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3434,
+        "name": "Spellfire Cloak",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3435,
+        "name": "Spew Obscenities",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3436,
+        "name": "Spew Shadow",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3439,
+        "name": "Spider's Bite",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3440,
+        "name": "Spike Pit Trap",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3441,
+        "name": "Spike with Bloodrot",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3442,
+        "name": "Spike with Frailty",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3443,
+        "name": "Spike with Inertia",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3444,
+        "name": "Spill Blood",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3445,
+        "name": "Spillover",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3446,
+        "name": "Spinal Crush",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1399,
+        "name": "Fleet Foot Sandals",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1400,
+        "name": "Fletch a Blue Tail",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3447,
+        "name": "Spinning Wheel Kick",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3450,
+        "name": "Spire Sniping",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1403,
+        "name": "Flex",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3453,
+        "name": "Spirit of Christmas",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3454,
+        "name": "Spirit of Eirina",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3455,
+        "name": "Spirit of War",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3456,
+        "name": "Spitfire",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3457,
+        "name": "Splatter Skull",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3458,
+        "name": "Splintering Deadwood",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3461,
+        "name": "Spoiled Skull",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3462,
+        "name": "Spoils of War",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3463,
+        "name": "Spreading Flames",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3464,
+        "name": "Spreading Plague",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3465,
+        "name": "Spring Load",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1419,
+        "name": "Flicker Trick",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3468,
+        "name": "Spring Tidings",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3469,
+        "name": "Spring a Leak",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3472,
+        "name": "Springboard Somersault",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3473,
+        "name": "Sprocket Rocket",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3476,
+        "name": "Spur Locked",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3477,
+        "name": "Squizzy & Floof",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3478,
+        "name": "Stab Wound",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3479,
+        "name": "Stabbing Pain",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3480,
+        "name": "Stacked in Your Favor",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3483,
+        "name": "Stadium Centerpiece",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3484,
+        "name": "Staff of Verdant Shoots",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3485,
+        "name": "Stains of the Redback",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3488,
+        "name": "Stalagmite, Bastion of Isenloft",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3489,
+        "name": "Stamp Authority",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3490,
+        "name": "Stand Ground",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3491,
+        "name": "Stand Strong",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3492,
+        "name": "Standing Order",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3493,
+        "name": "Standing Ovation",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1446,
+        "name": "For the Dracai",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3494,
+        "name": "Star Fall",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3495,
+        "name": "Star Struck",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3496,
+        "name": "Starlight Striders",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3497,
+        "name": "Starting Point",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3498,
+        "name": "Starting Stake",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3499,
+        "name": "Stasis Cell",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3500,
+        "name": "Static Shock",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3502,
+        "name": "Staunch Response",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3505,
+        "name": "Steadfast",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3508,
+        "name": "Steal Victory",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3509,
+        "name": "Steam Canister",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3510,
+        "name": "Steel Street Enforcement",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3511,
+        "name": "Steel Street Hoons",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3512,
+        "name": "Steelblade Shunt",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3515,
+        "name": "Steelblade Supremacy",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3516,
+        "name": "Steelbraid Buckler",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3517,
+        "name": "Sticky Fingers",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3518,
+        "name": "Sting of Sorcery",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3519,
+        "name": "Stir the Aetherwinds",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3522,
+        "name": "Stir the Pot",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3523,
+        "name": "Stir the Wildwood",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1477,
+        "name": "Frost Fang",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3526,
+        "name": "Stoke the Flames",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3527,
+        "name": "Stone Rain",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3528,
+        "name": "Stonewall Confidence",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3531,
+        "name": "Stonewall Gauntlet",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3532,
+        "name": "Stonewall Impasse",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3533,
+        "name": "Stony Woottonhog",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3536,
+        "name": "Storm Striders",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3537,
+        "name": "Storm of Sandikai",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3538,
+        "name": "Story Beats",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3541,
+        "name": "Strategic Planning",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3544,
+        "name": "Strength Rules All",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3545,
+        "name": "Strength of Four Seasons",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1500,
+        "name": "Fulminate",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3548,
+        "name": "Strength of Sequoia",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1502,
+        "name": "Fyendal's Fighting Spirit",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3551,
+        "name": "Stride of Reprisal",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3552,
+        "name": "Strike Gold",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3555,
+        "name": "Stroke of Foresight",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3558,
+        "name": "Strong Stomach for Adversity",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3559,
+        "name": "Strong Wood",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3561,
+        "name": "Strong Yield",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3564,
+        "name": "Strongest Survive",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3567,
+        "name": "Stubby Hammerers",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3568,
+        "name": "Succumb to Temptation",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3569,
+        "name": "Succumb to Winter",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3572,
+        "name": "Summer's Fall",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3575,
+        "name": "Summerwood Shelter",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1529,
+        "name": "Gesture of Goodwill",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3578,
+        "name": "Summit, the Unforgiving",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3579,
+        "name": "Sun Kiss",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3582,
+        "name": "Sunken Treasure",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3583,
+        "name": "Sunkwater Exoshell",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3584,
+        "name": "Sunkwater Lookout",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3585,
+        "name": "Sunkwater Pincers",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3586,
+        "name": "Sunkwater Scalers",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3587,
+        "name": "Supercell",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3588,
+        "name": "Superstar",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3589,
+        "name": "Suraya, Archangel of Erudition",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3590,
+        "name": "Suraya, Archangel of Knowledge",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3591,
+        "name": "Surface Shaking",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3592,
+        "name": "Surgent Aethertide",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3593,
+        "name": "Surgical Extraction",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3594,
+        "name": "Surging Militia",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3597,
+        "name": "Surging Strike",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3600,
+        "name": "Sutcliffe's Research Notes",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3603,
+        "name": "Sutcliffe's Suede Hides",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3604,
+        "name": "Swabbie",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3605,
+        "name": "Swarming Gloomveil",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3606,
+        "name": "Sweeping Blow",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3609,
+        "name": "Swell Tidings",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3610,
+        "name": "Swift Shot",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3611,
+        "name": "Swiftstrike Bracers",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3612,
+        "name": "Swiftwater Sloop",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3615,
+        "name": "Swindler's Grift",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3618,
+        "name": "Swing Big",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1571,
+        "name": "Golden Cog",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3619,
+        "name": "Swing Fist, Think Later",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3622,
+        "name": "Sworn Vengeance",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3625,
+        "name": "Symbiosis Shot",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3626,
+        "name": "System Failure",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3627,
+        "name": "System Reset",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3628,
+        "name": "T-Bone",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3631,
+        "name": "Tag the Target",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3634,
+        "name": "Taipanis, Dracai of Judgement",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3635,
+        "name": "Take Aim",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3638,
+        "name": "Take Cover",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1592,
+        "name": "Goon Beatdown",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3641,
+        "name": "Take Flight",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3644,
+        "name": "Take That!",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3647,
+        "name": "Take Up the Mantle",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3648,
+        "name": "Take a Stab",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3651,
+        "name": "Take it on the Chin",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3652,
+        "name": "Take the Bait",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3653,
+        "name": "Take the Tempo",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3654,
+        "name": "Take the Upper Hand",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3657,
+        "name": "Tales of Adventure",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3658,
+        "name": "Talishar, the Lost Prince",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3659,
+        "name": "Talisman of Balance",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1612,
+        "name": "Gravy Bones, Shipwrecked Looter",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3660,
+        "name": "Talisman of Cremation",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3661,
+        "name": "Talisman of Dousing",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3662,
+        "name": "Talisman of Featherfoot",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3663,
+        "name": "Talisman of Recompense",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1617,
+        "name": "Grimoire of the Haunt",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3664,
+        "name": "Talisman of Tithes",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3665,
+        "name": "Talisman of Warfare",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3666,
+        "name": "Talismanic Lens",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3667,
+        "name": "Talk a Big Game",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3668,
+        "name": "Tame the Beastly Behavior",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3669,
+        "name": "Tarantula Toxin",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3670,
+        "name": "Target Totalizer",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3671,
+        "name": "Tarpit Trap",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3672,
+        "name": "Taylor",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3673,
+        "name": "Tear Asunder",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3674,
+        "name": "Tear Down the Idols",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3675,
+        "name": "Tear Limb from Limb",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3676,
+        "name": "Tear Through the Portal",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3679,
+        "name": "Tearing Shuko",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3680,
+        "name": "Tectonic Crust",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3681,
+        "name": "Tectonic Instability",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3682,
+        "name": "Tectonic Plating",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3683,
+        "name": "Tectonic Rift",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3684,
+        "name": "Teeth of the Cog",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1637,
+        "name": "Hadron Collider",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3687,
+        "name": "Teklo Base Arms",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3688,
+        "name": "Teklo Base Chest",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3689,
+        "name": "Teklo Base Head",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3690,
+        "name": "Teklo Base Legs",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3691,
+        "name": "Teklo Blaster",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3692,
+        "name": "Teklo Core",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3693,
+        "name": "Teklo Foundry Heart",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3694,
+        "name": "Teklo Leveler",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3695,
+        "name": "Teklo Plasma Pistol",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3696,
+        "name": "Teklo Pounder",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3697,
+        "name": "Teklonetic Force Field",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1650,
+        "name": "Hand of Vengeance",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3700,
+        "name": "Teklovossen",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3701,
+        "name": "Teklovossen's Workshop",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3704,
+        "name": "Teklovossen, Esteemed Magnate",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3705,
+        "name": "Teklovossen, the Mechropotent",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3706,
+        "name": "Tempest Aurora",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3709,
+        "name": "Tempest Palm Gustwave",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3710,
+        "name": "Ten Foot Tall and Bulletproof",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3711,
+        "name": "Tenacity",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3712,
+        "name": "Tension in the Air",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3715,
+        "name": "Terminator Tank",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3716,
+        "name": "Terra",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3717,
+        "name": "Territorial Domain",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3718,
+        "name": "Test of Agility",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3719,
+        "name": "Test of Iron Grip",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3720,
+        "name": "Test of Might",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3721,
+        "name": "Test of Strength",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3722,
+        "name": "Test of Vigor",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3723,
+        "name": "Testament of Valahai",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3724,
+        "name": "That All You Got?",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3725,
+        "name": "Thaw",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1678,
+        "name": "Head Stone",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3726,
+        "name": "The Golden Son",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3727,
+        "name": "The Grain that Tips the Scale",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3728,
+        "name": "The Hand that Pulls the Strings",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3729,
+        "name": "The Librarian",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3730,
+        "name": "The Moat Exchange",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3731,
+        "name": "The Old Switcheroo",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3732,
+        "name": "The Suspense is Killing Me",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1686,
+        "name": "Heart of Ice",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1687,
+        "name": "Heart of Vengeance",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1688,
+        "name": "Heart-throb",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1689,
+        "name": "Heartbeat of Candlehold",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1690,
+        "name": "Heartened Cross Strap",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3733,
+        "name": "The Weakest Link",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3734,
+        "name": "Themai",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3735,
+        "name": "Themis, Archangel of Judgment",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3736,
+        "name": "Theryon, Magister of Justice",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3737,
+        "name": "Thespian Charm",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3738,
+        "name": "Thick Hide Hunter",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3739,
+        "name": "Thiev'n Varmints",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3740,
+        "name": "This Round's on Me",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3741,
+        "name": "Thistle Bloom // Life",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3742,
+        "name": "Threadbare Tunic",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3743,
+        "name": "Three Visits",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3744,
+        "name": "Three of a Kind",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3745,
+        "name": "Thrive",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1704,
+        "name": "Heavy Industry Surveillance",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3746,
+        "name": "Throttle",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3749,
+        "name": "Throw Caution to the Wind",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3750,
+        "name": "Throw Dagger",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3751,
+        "name": "Throw Yourself at Them",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3754,
+        "name": "Thrust",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3755,
+        "name": "Thump",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3758,
+        "name": "Thunder Quake",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3761,
+        "name": "Thunk",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3764,
+        "name": "Tiara of Suspense",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3765,
+        "name": "Tick Tock Clock",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3766,
+        "name": "Ticket Puncher",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3767,
+        "name": "Tidal Surge",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3768,
+        "name": "Tide Chakra",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3771,
+        "name": "Tide Flippers",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3772,
+        "name": "Tiger Eye Reflex",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3774,
+        "name": "Tiger Form Incantation",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3777,
+        "name": "Tiger Stripe Shuko",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3778,
+        "name": "Tiger Swipe",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3779,
+        "name": "Tiger Taming Khakkara",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3780,
+        "name": "Tighten the Screws",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3781,
+        "name": "Time Flies When You're Having Fun",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3782,
+        "name": "Time Skippers",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3783,
+        "name": "Timekeeper's Whim",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3786,
+        "name": "Timesnap Potion",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3787,
+        "name": "Timidity Point",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3790,
+        "name": "Tip the Barkeep",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3791,
+        "name": "Tip-Off",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3794,
+        "name": "Tit for Tat",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3795,
+        "name": "Titan's Fist",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3796,
+        "name": "Titanium Bauble",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3797,
+        "name": "To Be Continued...",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3798,
+        "name": "To the Point",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3801,
+        "name": "Toby Jugs",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3802,
+        "name": "Tome of Aeo",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3803,
+        "name": "Tome of Aetherwind",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3804,
+        "name": "Tome of Divinity",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3805,
+        "name": "Tome of Duplicity",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3806,
+        "name": "Tome of Firebrand",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1759,
+        "name": "High Striker",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3807,
+        "name": "Tome of Fyendal",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3808,
+        "name": "Tome of Harvests",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3809,
+        "name": "Tome of Imperial Flame",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3810,
+        "name": "Tome of Torment",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3811,
+        "name": "Tome of the Arknight",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3812,
+        "name": "Tomeltai",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3813,
+        "name": "Tongue Tied",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3814,
+        "name": "Tooth and Claw",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3815,
+        "name": "Tooth of the Dragon",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3816,
+        "name": "Torque Tuned",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3819,
+        "name": "Torrent of Tempo",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3822,
+        "name": "Tough Leather Boots",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3823,
+        "name": "Tough Old Wrench",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3826,
+        "name": "Tough Smashup",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3829,
+        "name": "Toughen Up",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3830,
+        "name": "Toughness",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3831,
+        "name": "Towering Titan",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3834,
+        "name": "Toxic Tips",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1787,
+        "name": "Hood of Red Sand",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1788,
+        "name": "Hood of Second Thoughts",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1789,
+        "name": "Hook",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1790,
+        "name": "Hooves of the Shadowbeast",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3835,
+        "name": "Toxicity",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3838,
+        "name": "Trade In",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3841,
+        "name": "Trailblazing Aether",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3844,
+        "name": "Tranquil Passing",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3847,
+        "name": "Transmogrify",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3850,
+        "name": "Trap and Release",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3853,
+        "name": "Traverse the Universe",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3854,
+        "name": "Treasure Island",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3855,
+        "name": "Tremor of Anticipation",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3856,
+        "name": "Tremor of Resistance",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3857,
+        "name": "Tremor of \u00edArathael",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3860,
+        "name": "Tremorshield Sabatons",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3861,
+        "name": "Trench of Sunken Treasure",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3862,
+        "name": "Tri-shot",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1815,
+        "name": "Hunt a Killer",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3863,
+        "name": "Tribute to Demolition",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3866,
+        "name": "Tribute to the Legions of Doom",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3869,
+        "name": "Tricorn of Saltwater Death",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3870,
+        "name": "Trip the Light Fantastic",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3873,
+        "name": "Tripwire Trap",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3874,
+        "name": "Trot Along",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1827,
+        "name": "Hurricane Technique",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1828,
+        "name": "Hydraulic Press",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3875,
+        "name": "Trounce",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3876,
+        "name": "Truce",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3877,
+        "name": "Truth or Trickery",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3878,
+        "name": "Truths Retold",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3879,
+        "name": "Tuffnut",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3880,
+        "name": "Tuffnut, Bumbling Hulkster",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3881,
+        "name": "Turn Heads",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3882,
+        "name": "Turn Timber",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3885,
+        "name": "Turn the Crowd Grateful",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3888,
+        "name": "Turn the Crowd Hateful",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3891,
+        "name": "Turning Point",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3892,
+        "name": "Twelve Petal K\u0101\u1e63\u0101ya",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1845,
+        "name": "Ice Storm",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3893,
+        "name": "Twin Drive",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3894,
+        "name": "Twin Twisters",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3897,
+        "name": "Twinkle Toes",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3898,
+        "name": "Twinning Blade",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3899,
+        "name": "Twintek Charging Station",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3900,
+        "name": "Twist and Turn",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3903,
+        "name": "Two Sides to the Blade",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3904,
+        "name": "Two Steps Ahead",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1857,
+        "name": "Impenetrable Belief",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3905,
+        "name": "Under Loop",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3908,
+        "name": "Under the Trap-Door",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3909,
+        "name": "Undercover Acquisition",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3910,
+        "name": "Undertow Stilettos",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3911,
+        "name": "Unexpected Backhand",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3914,
+        "name": "Unforgetting Unforgiving",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3915,
+        "name": "Unhallowed Rites",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3918,
+        "name": "Unicycle",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3919,
+        "name": "Unified Decree",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3920,
+        "name": "United We Stand",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3921,
+        "name": "Unmovable",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3924,
+        "name": "Unravel Aggression",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3925,
+        "name": "Unsheathed",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3926,
+        "name": "Untamed",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3929,
+        "name": "Unwavering Resolve",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3930,
+        "name": "Unworldly Bellow",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3933,
+        "name": "Up Sticks and Run",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3936,
+        "name": "Up on a Pedestal",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3937,
+        "name": "Up the Ante",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3938,
+        "name": "Uphold Tradition",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3939,
+        "name": "Uplifting Performance",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3940,
+        "name": "Uprising",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3941,
+        "name": "Urgent Delivery",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3944,
+        "name": "Ursur, the Soul Reaper",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3945,
+        "name": "Uzuri",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3946,
+        "name": "Uzuri, Switchblade",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3947,
+        "name": "V for Valor",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3950,
+        "name": "V of the Vanguard",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3951,
+        "name": "Valda Brightaxe",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3952,
+        "name": "Valda, Seismic Impact",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3953,
+        "name": "Valiant Dynamo",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3954,
+        "name": "Valiant Thrust",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3957,
+        "name": "Vambrace of Determination",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3958,
+        "name": "Vantage Point",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3961,
+        "name": "Vantom Banshee",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1915,
+        "name": "Intimate Inducement",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3964,
+        "name": "Vantom Wraith",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3967,
+        "name": "Vaporize // Shock",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3968,
+        "name": "Veiled Intentions",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3971,
+        "name": "Vela Flash",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3974,
+        "name": "Vengeance Never Rests",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3975,
+        "name": "Vengeful Apparition",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3978,
+        "name": "Venomback Fabric",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3979,
+        "name": "Venomous Bite",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3982,
+        "name": "Verdance",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3983,
+        "name": "Verdance, Thorn of the Rose",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1936,
+        "name": "Invoke Tomeltai",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3984,
+        "name": "Vest of the First Fist",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3985,
+        "name": "Vestige of Sol",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3986,
+        "name": "Vexing Malice",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3989,
+        "name": "Vexing Quillhand",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3990,
+        "name": "Victor Goldmane",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3991,
+        "name": "Victor Goldmane, High and Mighty",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3992,
+        "name": "Victor Goldmane, Match Fixer",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3993,
+        "name": "Victoria, Archangel of Triumph",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3994,
+        "name": "Vigor",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3995,
+        "name": "Vigor Girth",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3996,
+        "name": "Vigor Rush",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1951,
+        "name": "Ironrot Legs",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 1952,
+        "name": "Ironrot Plate",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 3999,
+        "name": "Vigorous Engagement",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4002,
+        "name": "Vigorous Roar",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4003,
+        "name": "Vigorous Smashup",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4006,
+        "name": "Vigorous Windup",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4009,
+        "name": "Vile Inquisition",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4012,
+        "name": "Villainous Pose",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4015,
+        "name": "Vipox",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4016,
+        "name": "Virtuoso Bodice",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4017,
+        "name": "Virulent Touch",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4020,
+        "name": "Viserai",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4021,
+        "name": "Viserai, Rune Blood",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4022,
+        "name": "Visit Anvilheim",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4023,
+        "name": "Visit Goldmane Estate",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4024,
+        "name": "Visit the 'Winner Takes All'",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4025,
+        "name": "Visit the Blacksmith",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4026,
+        "name": "Visit the Boneyard",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4027,
+        "name": "Visit the Floating Dojo",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4028,
+        "name": "Visit the Golden Anvil",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4029,
+        "name": "Visit the Imperial Forge",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4032,
+        "name": "Viziertronic Model i",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4033,
+        "name": "Void Wraith",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4036,
+        "name": "Voltaire, Strike Twice",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4037,
+        "name": "Voltic Bolt",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4040,
+        "name": "Volzar, the Lightning Rod",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4041,
+        "name": "Vow of Vengeance",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4042,
+        "name": "Vynnset",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4043,
+        "name": "Vynnset, Iron Maiden",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4044,
+        "name": "Vynserakai",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4045,
+        "name": "Wage Agility",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4048,
+        "name": "Wage Gold",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4051,
+        "name": "Wage Might",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2005,
+        "name": "Kindle",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4054,
+        "name": "Wage Vigor",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4057,
+        "name": "Wailer Humperdinck",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4058,
+        "name": "Walk the Plank",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4061,
+        "name": "Wall Breaker",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2014,
+        "name": "Knock 'Em Off Their Feet",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2015,
+        "name": "Knucklehead",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4064,
+        "name": "Wall of Meat and Muscle",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2017,
+        "name": "Korshem, Crossroad of Elements",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4065,
+        "name": "Wallop",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4068,
+        "name": "Wander With Purpose",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4069,
+        "name": "Waning Moon",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4070,
+        "name": "Waning Vengeance",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 2023,
+        "name": "Lace with Inertia",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4073,
+        "name": "War Cry of Bellona",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4074,
+        "name": "War Cry of Themis",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4075,
+        "name": "War Machine",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4076,
+        "name": "Warband of Bellona",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4077,
+        "name": "Warmonger's Diplomacy",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4078,
+        "name": "Warmonger's Recital",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4081,
+        "name": "Warpath of Winged Grace",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4082,
+        "name": "Warrior's Valor",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4085,
+        "name": "Wartune Herald",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4088,
+        "name": "Wash Away",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4089,
+        "name": "Washed Up Wave",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4090,
+        "name": "Water Glow Lanterns",
+        "type": "N/A",
+        "talent": "N/A"
+      },
+      {
+        "class_id": 4093,
+        "name": "Water the Seeds",
+        "type": "N/A",
+        "talent": "N/A"
+      }
+    ],
+    "no_talent": [],
+    "generic": [],
+    "token": [],
+    "other": []
+  },
+  "missing_class_ids": [
+    2,
+    35,
+    60,
+    74,
+    82,
+    85,
+    100,
+    105,
+    123,
+    133,
+    165,
+    200,
+    205,
+    212,
+    229,
+    274,
+    275,
+    278,
+    293,
+    295,
+    325,
+    340,
+    346,
+    348,
+    360,
+    411,
+    418,
+    429,
+    454,
+    463,
+    521,
+    542,
+    553,
+    574,
+    575,
+    576,
+    578,
+    580,
+    622,
+    630,
+    642,
+    647,
+    649,
+    658,
+    675,
+    729,
+    737,
+    747,
+    750,
+    806,
+    807,
+    820,
+    823,
+    824,
+    829,
+    853,
+    854,
+    855,
+    856,
+    857,
+    907,
+    972,
+    989,
+    994,
+    995,
+    1011,
+    1016,
+    1037,
+    1043,
+    1079,
+    1082,
+    1085,
+    1137,
+    1211,
+    1233,
+    1251,
+    1259,
+    1268,
+    1272,
+    1273,
+    1275,
+    1276,
+    1300,
+    1314,
+    1317,
+    1324,
+    1326,
+    1347,
+    1362,
+    1376,
+    1385,
+    1399,
+    1400,
+    1403,
+    1419,
+    1446,
+    1477,
+    1500,
+    1502,
+    1529,
+    1571,
+    1592,
+    1612,
+    1617,
+    1637,
+    1650,
+    1678,
+    1686,
+    1687,
+    1688,
+    1689,
+    1690,
+    1704,
+    1759,
+    1787,
+    1788,
+    1789,
+    1790,
+    1815,
+    1827,
+    1828,
+    1845,
+    1857,
+    1915,
+    1936,
+    1951,
+    1952,
+    2005,
+    2014,
+    2015,
+    2017,
+    2023,
+    2057,
+    2126,
+    2128,
+    2129,
+    2130,
+    2131,
+    2132,
+    2175,
+    2191,
+    2220,
+    2275,
+    2284,
+    2288,
+    2290,
+    2295,
+    2306,
+    2332,
+    2342,
+    2346,
+    2354,
+    2355,
+    2356,
+    2362,
+    2375,
+    2435,
+    2452,
+    2456,
+    2457,
+    2492,
+    2509,
+    2517,
+    2519,
+    2522,
+    2527,
+    2533,
+    2627,
+    2628,
+    2629,
+    2633,
+    2641,
+    2642,
+    2643,
+    2644,
+    2645,
+    2646,
+    2649,
+    2652,
+    2655,
+    2656,
+    2657,
+    2658,
+    2661,
+    2662,
+    2663,
+    2664,
+    2665,
+    2666,
+    2667,
+    2668,
+    2671,
+    2674,
+    2675,
+    2678,
+    2679,
+    2680,
+    2681,
+    2684,
+    2687,
+    2688,
+    2689,
+    2692,
+    2695,
+    2698,
+    2699,
+    2700,
+    2701,
+    2702,
+    2703,
+    2704,
+    2705,
+    2706,
+    2709,
+    2710,
+    2711,
+    2712,
+    2713,
+    2714,
+    2715,
+    2716,
+    2717,
+    2718,
+    2719,
+    2720,
+    2723,
+    2724,
+    2725,
+    2726,
+    2729,
+    2732,
+    2735,
+    2736,
+    2739,
+    2740,
+    2741,
+    2742,
+    2743,
+    2746,
+    2749,
+    2752,
+    2753,
+    2754,
+    2757,
+    2758,
+    2761,
+    2762,
+    2763,
+    2766,
+    2769,
+    2772,
+    2775,
+    2778,
+    2781,
+    2784,
+    2785,
+    2786,
+    2789,
+    2790,
+    2793,
+    2794,
+    2795,
+    2796,
+    2799,
+    2800,
+    2801,
+    2802,
+    2803,
+    2804,
+    2805,
+    2806,
+    2807,
+    2808,
+    2809,
+    2812,
+    2813,
+    2816,
+    2817,
+    2818,
+    2819,
+    2820,
+    2821,
+    2824,
+    2827,
+    2830,
+    2833,
+    2836,
+    2839,
+    2840,
+    2841,
+    2842,
+    2843,
+    2844,
+    2845,
+    2848,
+    2851,
+    2852,
+    2853,
+    2854,
+    2857,
+    2858,
+    2861,
+    2862,
+    2863,
+    2864,
+    2865,
+    2866,
+    2867,
+    2868,
+    2869,
+    2872,
+    2875,
+    2878,
+    2881,
+    2884,
+    2887,
+    2888,
+    2891,
+    2892,
+    2895,
+    2896,
+    2899,
+    2900,
+    2901,
+    2902,
+    2903,
+    2906,
+    2907,
+    2910,
+    2913,
+    2916,
+    2919,
+    2922,
+    2925,
+    2928,
+    2929,
+    2930,
+    2933,
+    2936,
+    2937,
+    2940,
+    2941,
+    2942,
+    2943,
+    2944,
+    2945,
+    2946,
+    2947,
+    2950,
+    2951,
+    2954,
+    2955,
+    2958,
+    2959,
+    2960,
+    2961,
+    2964,
+    2965,
+    2968,
+    2969,
+    2970,
+    2973,
+    2974,
+    2975,
+    2978,
+    2979,
+    2980,
+    2981,
+    2982,
+    2985,
+    2986,
+    2989,
+    2990,
+    2991,
+    2994,
+    2997,
+    2998,
+    2999,
+    3000,
+    3003,
+    3004,
+    3005,
+    3006,
+    3007,
+    3010,
+    3011,
+    3012,
+    3013,
+    3014,
+    3015,
+    3018,
+    3021,
+    3022,
+    3025,
+    3026,
+    3027,
+    3030,
+    3031,
+    3032,
+    3033,
+    3036,
+    3037,
+    3040,
+    3043,
+    3044,
+    3045,
+    3046,
+    3047,
+    3048,
+    3051,
+    3052,
+    3055,
+    3058,
+    3059,
+    3060,
+    3061,
+    3062,
+    3063,
+    3066,
+    3069,
+    3070,
+    3071,
+    3074,
+    3077,
+    3080,
+    3083,
+    3086,
+    3087,
+    3088,
+    3089,
+    3092,
+    3093,
+    3094,
+    3095,
+    3096,
+    3097,
+    3100,
+    3103,
+    3104,
+    3105,
+    3108,
+    3111,
+    3112,
+    3113,
+    3114,
+    3115,
+    3118,
+    3121,
+    3122,
+    3125,
+    3127,
+    3128,
+    3131,
+    3134,
+    3136,
+    3137,
+    3138,
+    3139,
+    3140,
+    3141,
+    3144,
+    3145,
+    3146,
+    3147,
+    3150,
+    3151,
+    3152,
+    3153,
+    3154,
+    3155,
+    3156,
+    3159,
+    3162,
+    3163,
+    3164,
+    3165,
+    3166,
+    3167,
+    3168,
+    3171,
+    3172,
+    3173,
+    3174,
+    3175,
+    3176,
+    3179,
+    3182,
+    3183,
+    3184,
+    3185,
+    3186,
+    3187,
+    3188,
+    3189,
+    3190,
+    3191,
+    3192,
+    3195,
+    3198,
+    3199,
+    3202,
+    3203,
+    3204,
+    3205,
+    3208,
+    3209,
+    3212,
+    3213,
+    3216,
+    3219,
+    3220,
+    3221,
+    3222,
+    3223,
+    3224,
+    3225,
+    3226,
+    3227,
+    3228,
+    3229,
+    3232,
+    3235,
+    3236,
+    3238,
+    3241,
+    3244,
+    3247,
+    3248,
+    3249,
+    3250,
+    3251,
+    3252,
+    3253,
+    3254,
+    3255,
+    3258,
+    3261,
+    3262,
+    3263,
+    3266,
+    3269,
+    3270,
+    3273,
+    3274,
+    3277,
+    3278,
+    3279,
+    3282,
+    3283,
+    3284,
+    3286,
+    3287,
+    3290,
+    3291,
+    3292,
+    3293,
+    3294,
+    3297,
+    3300,
+    3301,
+    3304,
+    3305,
+    3306,
+    3307,
+    3308,
+    3309,
+    3310,
+    3311,
+    3314,
+    3315,
+    3318,
+    3321,
+    3322,
+    3323,
+    3326,
+    3327,
+    3328,
+    3331,
+    3332,
+    3333,
+    3334,
+    3337,
+    3338,
+    3341,
+    3342,
+    3343,
+    3344,
+    3345,
+    3346,
+    3349,
+    3352,
+    3353,
+    3356,
+    3359,
+    3362,
+    3363,
+    3366,
+    3367,
+    3368,
+    3371,
+    3372,
+    3373,
+    3374,
+    3375,
+    3376,
+    3377,
+    3378,
+    3379,
+    3380,
+    3381,
+    3382,
+    3385,
+    3388,
+    3389,
+    3390,
+    3391,
+    3392,
+    3393,
+    3396,
+    3397,
+    3398,
+    3401,
+    3404,
+    3407,
+    3408,
+    3411,
+    3414,
+    3415,
+    3418,
+    3421,
+    3422,
+    3423,
+    3424,
+    3425,
+    3426,
+    3427,
+    3430,
+    3433,
+    3434,
+    3435,
+    3436,
+    3439,
+    3440,
+    3441,
+    3442,
+    3443,
+    3444,
+    3445,
+    3446,
+    3447,
+    3450,
+    3453,
+    3454,
+    3455,
+    3456,
+    3457,
+    3458,
+    3461,
+    3462,
+    3463,
+    3464,
+    3465,
+    3468,
+    3469,
+    3472,
+    3473,
+    3476,
+    3477,
+    3478,
+    3479,
+    3480,
+    3483,
+    3484,
+    3485,
+    3488,
+    3489,
+    3490,
+    3491,
+    3492,
+    3493,
+    3494,
+    3495,
+    3496,
+    3497,
+    3498,
+    3499,
+    3500,
+    3502,
+    3505,
+    3508,
+    3509,
+    3510,
+    3511,
+    3512,
+    3515,
+    3516,
+    3517,
+    3518,
+    3519,
+    3522,
+    3523,
+    3526,
+    3527,
+    3528,
+    3531,
+    3532,
+    3533,
+    3536,
+    3537,
+    3538,
+    3541,
+    3544,
+    3545,
+    3548,
+    3551,
+    3552,
+    3555,
+    3558,
+    3559,
+    3561,
+    3564,
+    3567,
+    3568,
+    3569,
+    3572,
+    3575,
+    3578,
+    3579,
+    3582,
+    3583,
+    3584,
+    3585,
+    3586,
+    3587,
+    3588,
+    3589,
+    3590,
+    3591,
+    3592,
+    3593,
+    3594,
+    3597,
+    3600,
+    3603,
+    3604,
+    3605,
+    3606,
+    3609,
+    3610,
+    3611,
+    3612,
+    3615,
+    3618,
+    3619,
+    3622,
+    3625,
+    3626,
+    3627,
+    3628,
+    3631,
+    3634,
+    3635,
+    3638,
+    3641,
+    3644,
+    3647,
+    3648,
+    3651,
+    3652,
+    3653,
+    3654,
+    3657,
+    3658,
+    3659,
+    3660,
+    3661,
+    3662,
+    3663,
+    3664,
+    3665,
+    3666,
+    3667,
+    3668,
+    3669,
+    3670,
+    3671,
+    3672,
+    3673,
+    3674,
+    3675,
+    3676,
+    3679,
+    3680,
+    3681,
+    3682,
+    3683,
+    3684,
+    3687,
+    3688,
+    3689,
+    3690,
+    3691,
+    3692,
+    3693,
+    3694,
+    3695,
+    3696,
+    3697,
+    3700,
+    3701,
+    3704,
+    3705,
+    3706,
+    3709,
+    3710,
+    3711,
+    3712,
+    3715,
+    3716,
+    3717,
+    3718,
+    3719,
+    3720,
+    3721,
+    3722,
+    3723,
+    3724,
+    3725,
+    3726,
+    3727,
+    3728,
+    3729,
+    3730,
+    3731,
+    3732,
+    3733,
+    3734,
+    3735,
+    3736,
+    3737,
+    3738,
+    3739,
+    3740,
+    3741,
+    3742,
+    3743,
+    3744,
+    3745,
+    3746,
+    3749,
+    3750,
+    3751,
+    3754,
+    3755,
+    3758,
+    3761,
+    3764,
+    3765,
+    3766,
+    3767,
+    3768,
+    3771,
+    3772,
+    3774,
+    3777,
+    3778,
+    3779,
+    3780,
+    3781,
+    3782,
+    3783,
+    3786,
+    3787,
+    3790,
+    3791,
+    3794,
+    3795,
+    3796,
+    3797,
+    3798,
+    3801,
+    3802,
+    3803,
+    3804,
+    3805,
+    3806,
+    3807,
+    3808,
+    3809,
+    3810,
+    3811,
+    3812,
+    3813,
+    3814,
+    3815,
+    3816,
+    3819,
+    3822,
+    3823,
+    3826,
+    3829,
+    3830,
+    3831,
+    3834,
+    3835,
+    3838,
+    3841,
+    3844,
+    3847,
+    3850,
+    3853,
+    3854,
+    3855,
+    3856,
+    3857,
+    3860,
+    3861,
+    3862,
+    3863,
+    3866,
+    3869,
+    3870,
+    3873,
+    3874,
+    3875,
+    3876,
+    3877,
+    3878,
+    3879,
+    3880,
+    3881,
+    3882,
+    3885,
+    3888,
+    3891,
+    3892,
+    3893,
+    3894,
+    3897,
+    3898,
+    3899,
+    3900,
+    3903,
+    3904,
+    3905,
+    3908,
+    3909,
+    3910,
+    3911,
+    3914,
+    3915,
+    3918,
+    3919,
+    3920,
+    3921,
+    3924,
+    3925,
+    3926,
+    3929,
+    3930,
+    3933,
+    3936,
+    3937,
+    3938,
+    3939,
+    3940,
+    3941,
+    3944,
+    3945,
+    3946,
+    3947,
+    3950,
+    3951,
+    3952,
+    3953,
+    3954,
+    3957,
+    3958,
+    3961,
+    3964,
+    3967,
+    3968,
+    3971,
+    3974,
+    3975,
+    3978,
+    3979,
+    3982,
+    3983,
+    3984,
+    3985,
+    3986,
+    3989,
+    3990,
+    3991,
+    3992,
+    3993,
+    3994,
+    3995,
+    3996,
+    3999,
+    4002,
+    4003,
+    4006,
+    4009,
+    4012,
+    4015,
+    4016,
+    4017,
+    4020,
+    4021,
+    4022,
+    4023,
+    4024,
+    4025,
+    4026,
+    4027,
+    4028,
+    4029,
+    4032,
+    4033,
+    4036,
+    4037,
+    4040,
+    4041,
+    4042,
+    4043,
+    4044,
+    4045,
+    4048,
+    4051,
+    4054,
+    4057,
+    4058,
+    4061,
+    4064,
+    4065,
+    4068,
+    4069,
+    4070,
+    4073,
+    4074,
+    4075,
+    4076,
+    4077,
+    4078,
+    4081,
+    4082,
+    4085,
+    4088,
+    4089,
+    4090,
+    4093,
+    4096,
+    4097,
+    4098,
+    4099,
+    4102,
+    4105,
+    4106,
+    4109,
+    4112,
+    4115,
+    4116,
+    4117,
+    4118,
+    4121,
+    4122,
+    4125,
+    4128,
+    4129,
+    4132,
+    4133,
+    4134,
+    4135,
+    4136,
+    4137,
+    4138,
+    4139,
+    4140,
+    4143,
+    4146,
+    4147,
+    4148,
+    4151,
+    4152,
+    4153,
+    4156,
+    4159,
+    4160,
+    4163,
+    4166,
+    4169,
+    4172,
+    4175,
+    4176,
+    4179,
+    4182,
+    4183,
+    4186,
+    4187,
+    4188,
+    4189,
+    4192,
+    4193,
+    4194,
+    4195,
+    4198,
+    4199,
+    4202,
+    4203,
+    4204,
+    4205,
+    4206,
+    4209,
+    4212,
+    4215
+  ]
+}
