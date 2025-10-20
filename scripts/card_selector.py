@@ -219,10 +219,10 @@ class CardSelector:
                 continue
             
             # Check if card matches hero
-            # If card has classes, ALL must match hero's classes
-            # If card has talents, ALL must match hero's talents
-            card_classes_match = not card_classes or card_classes.issubset(hero_classes)
-            card_talents_match = not card_talents or card_talents.issubset(hero_talents)
+            # If card has classes, at least ONE must match hero's classes (OR logic for split-class cards)
+            # If card has talents, at least ONE must match hero's talents (OR logic for dual-talent cards)
+            card_classes_match = not card_classes or bool(card_classes & hero_classes)
+            card_talents_match = not card_talents or bool(card_talents & hero_talents)
             
             # Skip card if any class or talent doesn't match
             if not card_classes_match or not card_talents_match:
