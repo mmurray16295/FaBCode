@@ -1,6 +1,17 @@
 # Ignore synthetic data (all variations)
 data/synthetic/
 data/synthetic*/
+data/benchmark_synth*/
+data/synthetic_benchmark/
+
+# Ignore all generated training data
+data/generated/
+data/phase*/
+
+# Ignore current Phase 2 directories (legacy - use data/generated/ for future)
+data/phase2_500classes/
+data/phase2_random/
+data/phase2_random_p*/
 
 # Ignore all training runs except train12
 runs/detect/train*/
@@ -11,17 +22,35 @@ runs/detect/train12/weights/*
 !runs/detect/train12/weights/best.pt
 !runs/detect/train12/weights/last.pt
 
-# Ignore card set folders
-data/images/AAC/
-data/images/APR/
-data/images/WTR/
-data/images/SEA/
-data/images/HVY/
-data/images/CRU/
-data/images/ARC/
+# Ignore all card images and backgrounds
+data/images/
 
-# Ignore YouTube folder but not its subfolders
-data/images/YouTube/
+# Ignore YOLO model weights (download via scripts instead)
+yolo*.pt
+*.pt
+!runs/detect/train12/weights/best.pt
+!runs/detect/train12/weights/last.pt
+
+# Ignore training logs and outputs
+*.log
+logs/
+runs/train/
+
+# Ignore benchmark files
+benchmark_*.py
+benchmark_*.txt
+benchmark_*.log
+
+# Ignore positioning cache
+data/positioning_cache/
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore uncompressed package directories (keep .tar.gz only)
+packages/fab_card_detector_*/
 
 .venv/
 

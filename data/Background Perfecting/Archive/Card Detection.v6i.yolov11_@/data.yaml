@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 25
+names: ['Arms', 'Arms 2', 'Banish', 'Banish 2', 'Card', 'Chest', 'Chest 2', 'Combat Chain 1', 'Combat Chain 2', 'Graveyard', 'Graveyard 2', 'Head', 'Head 2', 'Hero', 'Hero 2', 'Legs', 'Legs 2', 'Pitch', 'Pitch 2', 'Ref', 'Weapon', 'Weapon 2', 'Weapon or Off-Hand', 'Weapon or Off-Hand 2', 'Window']
+
+roboflow:
+  workspace: michael-bocph
+  project: card-detection-jgg36
+  version: 6
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/michael-bocph/card-detection-jgg36/dataset/6

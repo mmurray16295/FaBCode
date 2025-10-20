@@ -1,0 +1,27 @@
+# FaB Card Detector - Python Dependencies
+# This file is for reference only - INSTALL_WINDOWS.bat handles installation
+
+# Core AI/ML
+torch>=2.0.0
+torchvision>=0.15.0
+ultralytics>=8.0.0
+
+# Computer Vision
+opencv-python-headless>=4.8.0
+pillow>=10.0.0
+
+# Screen Capture
+mss>=9.0.0
+
+# Utilities
+numpy>=1.24.0
+pyyaml>=6.0
+requests>=2.31.0
+
+# GUI (built-in with Python)
+# tkinter (included with Python)
+
+# Installation Notes:
+# - INSTALL_WINDOWS.bat uses CPU-only PyTorch for lightweight installation
+# - For GPU support, manually install: pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+# - Total size: ~200MB installed

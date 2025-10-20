@@ -1,3 +1,28 @@
 {
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "scm.defaultViewMode": "tree",
+    "explorer.excludeGitIgnore": true,
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/**": true,
+        "**/__pycache__/**": true,
+        "**/data/phase*/**": true,
+        "**/data/synthetic*/**": true,
+        "**/logs/**": true,
+        "**/runs/**": true
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/__pycache__": true,
+        "**/*.pyc": true
+    },
+    "search.exclude": {
+        "**/data/phase*": true,
+        "**/data/synthetic*": true,
+        "**/logs": true,
+        "**/__pycache__": true,
+        "**/runs": true
+    }
+}
 }

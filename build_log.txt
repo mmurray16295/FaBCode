@@ -1,0 +1,16 @@
+============================================================
+FaB Card Detector - Executable Builder
+============================================================
+
+Project root: /root/FaBCode
+Platform: Linux
+PyInstaller version: 6.16.0
+
+Building executable from: /root/FaBCode/fab_detector_app.py
+
+Running PyInstaller...
+Command: /usr/local/bin/python -m PyInstaller --clean --noconfirm --onefile --windowed --name FaBCardDetector --icon NONE --add-data=data/card.json:data --add-data=data/card_popularity_weights.json:data --add-data=data/classes.yaml:data --hidden-import=ultralytics --hidden-import=cv2 --hidden-import=torch --hidden-import=torchvision --hidden-import=PIL --hidden-import=yaml --hidden-import=mss --hidden-import=tkinter --hidden-import=numpy --collect-submodules=ultralytics --collect-data=ultralytics /root/FaBCode/fab_detector_app.py
+
+❌ Build failed!
+Error: Command '['/usr/local/bin/python', '-m', 'PyInstaller', '--clean', '--noconfirm', '--onefile', '--windowed', '--name', 'FaBCardDetector', '--icon', 'NONE', '--add-data=data/card.json:data', '--add-data=data/card_popularity_weights.json:data', '--add-data=data/classes.yaml:data', '--hidden-import=ultralytics', '--hidden-import=cv2', '--hidden-import=torch', '--hidden-import=torchvision', '--hidden-import=PIL', '--hidden-import=yaml', '--hidden-import=mss', '--hidden-import=tkinter', '--hidden-import=numpy', '--collect-submodules=ultralytics', '--collect-data=ultralytics', '/root/FaBCode/fab_detector_app.py']' returned non-zero exit status 1.
+Output: 
