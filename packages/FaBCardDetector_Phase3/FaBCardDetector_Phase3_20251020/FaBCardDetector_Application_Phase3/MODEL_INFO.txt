@@ -1,0 +1,100 @@
+
+========================================
+FaB Card Detector - Phase 3 Model Info
+========================================
+
+MODEL DETAILS
+=============
+
+Architecture: YOLOv11x (Ultralytics)
+Parameters: 56.9 million
+GFLOPs: 212.5
+Model Size: 345MB (best.pt)
+
+TRAINING DATA
+=============
+
+Total Images: 125,000 synthetic playmat images
+- Training: 87,489 images
+- Validation: 25,050 images  
+- Test: 12,461 images
+
+Image Resolution: 1280x1280 pixels
+Classes: 2,641 unique FaB cards (complete collection)
+Dataset Type: Synthetic playmats with realistic card placement
+
+TRAINING CONFIGURATION
+======================
+
+Batch Size: 4 (memory constraints)
+Workers: 4
+Image Size: 1280x1280
+Optimizer: AdamW
+Learning Rate: 0.001
+Epochs Trained: 30
+Best Checkpoint: Epoch 27
+
+Hardware Used:
+- GPU: NVIDIA GeForce RTX 5090 (31.4GB VRAM)
+- CUDA: 12.8
+- PyTorch: 2.8.0+cu128
+
+Memory Management:
+- PYTORCH_CUDA_ALLOC_CONF: expandable_segments:True
+- Disk Cache: ~662GB (514.6GB train + 147.3GB val)
+
+PERFORMANCE METRICS (Epoch 27 - Best)
+======================================
+
+mAP50-95: 90.5%
+Precision: High
+Recall: High
+
+This checkpoint achieved the best validation performance during
+training and represents stable generalization across the full
+2,641 class dataset.
+
+RECOMMENDED INFERENCE SETTINGS
+==============================
+
+Confidence Threshold: 0.25 (adjustable 0.1-0.9)
+IOU Threshold: 0.45
+Image Size: 640 (default) or 1280 (higher accuracy, slower)
+
+For live detection:
+- Lower confidence (0.20-0.30) for more detections
+- Higher confidence (0.50-0.70) for fewer false positives
+- Adjust IOU (0.40-0.60) to control overlapping detections
+
+KNOWN CONSIDERATIONS
+====================
+
+1. Training showed systematic instability at epochs 5 and 29
+   - Epoch 27 checkpoint selected as most stable
+   - Future training may benefit from adjusted learning rate schedule
+
+2. Model trained on synthetic data
+   - Performance on real playmat photos may vary
+   - Expect excellent performance on similar synthetic images
+   - Real-world testing recommended for your specific use case
+
+3. Large class count (2,641)
+   - Some rare cards may have limited training examples
+   - Common cards expected to have higher accuracy
+   - Consider class-specific confidence thresholds if needed
+
+USAGE NOTES
+===========
+
+This is a complete collection detector covering all 2,641 FaB cards
+as of October 2025. For best results:
+
+- Use good lighting conditions
+- Ensure cards are clearly visible
+- Minimize occlusion between cards
+- Test different confidence thresholds for your specific setup
+
+For support: https://github.com/mmurray16295/FaBCode
+Training Date: October 18-20, 2025
+Package Date: October 20, 2025
+

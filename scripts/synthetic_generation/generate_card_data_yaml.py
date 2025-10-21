@@ -81,4 +81,4 @@ if __name__ == '__main__':
     for name, class_id in example_cards:
         print(f"  {class_id}: {name}")
     
-    print("\n✓ Done! Use card_name_to_class_id.json in test_generate_simple.py")
+    print("\n✓ Done! Use card_name_to_class_id.json in Core_Playmat_Generator.py")

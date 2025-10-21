@@ -203,17 +203,17 @@ with ThreadPoolExecutor(max_workers=4) as executor:
 
 ```powershell
 # Single run with full timing
-python scripts/test_generate_simple.py
+python scripts/synthetic_generation/Core_Playmat_Generator.py
 
 # 10 runs with timing summary
 for ($i=1; $i -le 10; $i++) { 
-    python scripts/test_generate_simple.py 2>&1 | Select-String -Pattern "TIMING BREAKDOWN:|TOTAL" 
+    python scripts/synthetic_generation/Core_Playmat_Generator.py 2>&1 | Select-String -Pattern "TIMING BREAKDOWN:|TOTAL" 
 }
 
 # 100 images for throughput test
 $startTime = Get-Date
 for ($i=1; $i -le 100; $i++) { 
-    python scripts/test_generate_simple.py 2>&1 | Out-Null 
+    python scripts/synthetic_generation/Core_Playmat_Generator.py 2>&1 | Out-Null 
 }
 $duration = (Get-Date) - $startTime
 Write-Host "Total: $($duration.TotalSeconds)s, Avg: $([math]::Round($duration.TotalSeconds/100, 2))s/image"

@@ -4,7 +4,6 @@ Test the fixed hero selection logic to verify Young/Adult matching works correct
 
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent / 'scripts'))
 
 from card_selector import CardSelector
 

@@ -24,7 +24,8 @@ def test_card_selectability():
     selector = CardSelector()
     
     # Load all cards
-    with open('packages/FaBCardDetector_Windows_20251010_124326/data/card.json', 'r') as f:
+    card_json_path = Path(__file__).parent.parent.parent / 'data' / 'card.json'
+    with open(card_json_path, 'r') as f:
         all_cards = json.load(f)
     
     # Load hero weights

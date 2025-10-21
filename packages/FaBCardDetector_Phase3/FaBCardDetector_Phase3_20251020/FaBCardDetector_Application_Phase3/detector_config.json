@@ -1,0 +1,5 @@
+{
+  "model_path": "models/best.pt",
+  "conf_threshold": 0.25,
+  "iou_threshold": 0.45
+}

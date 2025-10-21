@@ -71,7 +71,7 @@ use_hard_case = random.random() < 0.5  # 50% probability
 ## Usage
 Hard case effect is automatically applied during synthetic image generation:
 ```bash
-python scripts/test_generate_simple.py
+python scripts/synthetic_generation/Core_Playmat_Generator.py
 ```
 
 Output shows one of:

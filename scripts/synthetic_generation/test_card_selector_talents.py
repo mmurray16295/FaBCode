@@ -5,7 +5,6 @@ Test the get_hero_classes_and_talents() function to see why it's not working.
 import json
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent / 'scripts'))
 
 from card_selector import CardSelector
 

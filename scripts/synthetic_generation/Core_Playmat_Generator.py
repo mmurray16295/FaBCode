@@ -24,13 +24,44 @@ try:
 except FileNotFoundError:
     print("WARNING: card_name_to_class_id.json not found. Labels will use class ID 0.")
 
-def load_random_background(background_dir):
-    """Load a random background image from the directory."""
+# Global background cycling state (for efficient reuse)
+_background_cycle_state = {'files': None, 'index': 0, 'dir': None}
+
+def load_random_background(background_dir, use_cycling=False):
+    """
+    Load a background image from the directory.
+    
+    Args:
+        background_dir: Directory containing background images
+        use_cycling: If True, cycles through backgrounds (each used ~equally).
+                    If False, uses random selection (default for single image generation)
+    
+    Returns:
+        Tuple of (Image, Path) for the selected background
+    """
     background_files = list(Path(background_dir).glob('*.jpg')) + list(Path(background_dir).glob('*.png'))
     if not background_files:
         raise FileNotFoundError(f"No background images found in {background_dir}")
     
-    bg_path = random.choice(background_files)
+    if use_cycling:
+        # Cycling mode: use each background roughly equally
+        global _background_cycle_state
+        
+        # Initialize or reset if directory changed
+        if (_background_cycle_state['dir'] != background_dir or 
+            _background_cycle_state['files'] is None or
+            _background_cycle_state['index'] >= len(_background_cycle_state['files'])):
+            _background_cycle_state['files'] = background_files.copy()
+            random.shuffle(_background_cycle_state['files'])
+            _background_cycle_state['index'] = 0
+            _background_cycle_state['dir'] = background_dir
+        
+        bg_path = _background_cycle_state['files'][_background_cycle_state['index']]
+        _background_cycle_state['index'] += 1
+    else:
+        # Random mode: pick any background (may reuse more frequently)
+        bg_path = random.choice(background_files)
+    
     print(f"   Using background: {bg_path.name}")
     return Image.open(bg_path), bg_path
 
@@ -94,16 +125,20 @@ def load_label_file(background_path, labels_dir):
     print(f"   Loaded {len(zones)} zones from label file")
     return zones
 
-def yolo_to_pixel_coords(zone, img_width, img_height, apply_jitter=True, jitter_range=25):
+def yolo_to_pixel_coords(zone, img_width, img_height, apply_jitter=False, jitter_range=25):
     """
     Convert YOLO normalized coordinates to pixel coordinates.
+    
+    NOTE: Jitter is now handled at the background generation level using
+    generate_background_variations.py. This eliminates redundant jitter and
+    improves performance. Set apply_jitter=True only for legacy compatibility.
     
     Args:
         zone: Zone dict with normalized coordinates
         img_width: Image width in pixels
         img_height: Image height in pixels
-        apply_jitter: Whether to apply position jitter (default True)
-        jitter_range: Max jitter in pixels (default ±25px)
+        apply_jitter: Whether to apply position jitter (default False - use background variations instead)
+        jitter_range: Max jitter in pixels (default ±25px, only if apply_jitter=True)
         
     Returns:
         Tuple of (x, y, width, height) in pixels
@@ -114,6 +149,7 @@ def yolo_to_pixel_coords(zone, img_width, img_height, apply_jitter=True, jitter_
     height_px = zone['height'] * img_height
     
     # Apply position jitter if enabled and not Window zone
+    # NOTE: This is now deprecated in favor of background variations
     if apply_jitter and zone['zone_name'] != 'Window':
         # Use triangular distribution for natural center-bias
         # triangular(low, high, mode) where mode is the peak
@@ -1237,7 +1273,16 @@ def place_combat_chain_card(card, img_path, zone, chain_name, zone_id, card_plac
         'card_name': card['name']
     }
 
-def main(enable_augmentations=True, draw_bboxes=True, preset_name=None):
+def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_background_cycling=False):
+    """
+    Generate a single synthetic playmat image.
+    
+    Args:
+        enable_augmentations: Apply augmentations (blur, glare, etc.)
+        draw_bboxes: Draw bounding boxes on output image for visual inspection
+        preset_name: Augmentation preset name (e.g., "phase1", "phase2")
+        use_background_cycling: Cycle through backgrounds efficiently (for batch generation)
+    """
     # Initialize timing dictionary
     timings = {}
     script_start = time.time()
@@ -1391,7 +1436,7 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None):
     # Load background and labels
     t0 = time.time()
     print("\n1. Loading background and labels...")
-    playmat, bg_path = load_random_background(str(background_dir))
+    playmat, bg_path = load_random_background(str(background_dir), use_cycling=use_background_cycling)
     zones = load_label_file(bg_path, str(labels_dir))
     
     img_width, img_height = playmat.size

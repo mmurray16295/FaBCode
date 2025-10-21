@@ -12,13 +12,17 @@ import multiprocessing as mp
 from pathlib import Path
 from datetime import datetime
 
+# Add parent directory to path for imports
+sys.path.insert(0, os.path.dirname(__file__))
+from generation_utils import ensure_background_variations, print_background_usage_stats
+
 def generate_batch(args):
     """Generate a batch of images in a separate process"""
     batch_id, num_images, base_seed = args
     
     # Suppress output to reduce clutter
     result = subprocess.run(
-        [sys.executable, "scripts/test_generate_simple.py"],
+        [sys.executable, "scripts/synthetic_generation/Core_Playmat_Generator.py"],
         capture_output=True,
         text=True,
         cwd="/root/FaBCode",
@@ -54,6 +58,15 @@ def parallel_generate(total_images, num_processes, test_mode=False):
         print("\n⚠ TEST MODE: Generating small batch to measure performance")
         total_images = num_processes * 5  # 5 images per process
         print(f"Test batch size: {total_images} images")
+    
+    # Ensure sufficient background variations exist BEFORE spawning workers
+    # This prevents race conditions where multiple workers try to generate backgrounds
+    print("\n" + "=" * 80)
+    print("BACKGROUND MANAGEMENT")
+    print("=" * 80)
+    num_backgrounds = ensure_background_variations(total_images, verbose=True)
+    print_background_usage_stats(total_images, num_backgrounds)
+    print("=" * 80)
     
     start_time = time.time()
     
