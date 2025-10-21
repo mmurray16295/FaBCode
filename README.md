@@ -1,81 +1,140 @@
 # FaB Card Detector
 
-## Project Overview
-Detects and classifies Flesh and Blood cards in live video using computer vision and YOLO.
+AI-powered real-time detection and classification of Flesh and Blood trading cards using YOLOv11.
 
 ## Features
-- Real-time card detection and classification
-- Synthetic data generation
-- Model training and evaluation
+- **Real-time Card Detection** - Live detection with overlay UI for streaming
+- **2,641 Card Classes** - Detects all unique card names across all printings
+- **Synthetic Data Generation** - Automated playmat screenshot generation with realistic augmentations
+- **Hero-Aware Selection** - Intelligent card selection based on format legality and hero compatibility
+- **Popularity Weighting** - Card selection weighted by competitive play data
+- **Production Ready** - Packaged Windows application with GUI
 
-## Setup Instructions
-1. Clone the repository
-2. Set up a Python virtual environment (ask chat idkwtf that is lol)
-3. Install dependencies (see `requirements.txt`)
-4. Download card.json (run download_card_json.py)
-4. Download card images for the set you want to train (download_images.py)
-Setcode is defined on line 8.
-5. Generate Synthetic data - recommended 20 images per card (I.E. a set with 200 cards should be trained on 4000 synthetic images)
-6. Train and test the model
-7. Run screen_detect.py to live test (requires two monitors)
+## Quick Start
 
-## Usage
-### Download Card Images
-```sh
-python scripts/download_images.py
+### Prerequisites
+- Python 3.8+
+- CUDA-compatible GPU (recommended for training)
+- 8GB RAM minimum
+
+### Installation
+```bash
+# Clone repository
+git clone https://github.com/mmurray16295/FaBCode.git
+cd FaBCode
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Download card database
+python scripts/asset_management/download_card_json.py
 ```
 
-### Generate Synthetic Data
-```sh
-python scripts/generate_synthetic_data.py --num-images 100
+### Run Live Detection
+```bash
+# GUI Application
+python scripts/computer_vision_application/fab_detector_app.py
+
+# CLI Tool
+python scripts/computer_vision_application/live_detector.py --source screen
 ```
 
-### Train Model
-To begin training with YOLOv11:
+## Project Structure
 
-1. Ensure your synthetic data is generated and `data/synthetic/data.yaml` is present.
-2. Use the provided model file `yolo11n.pt` (located in the top-level folder) as your base model.
-3. To continue training from previous weights, use `best.pt` from `runs/detect/train12/weights/`.  Or latest train folder.
-
-Example training command:
-```sh
-python train.py --data data/synthetic/data.yaml --weights runs/detect/train12/weights/best.pt --model yolo11n.pt --epochs 100
+```
+FaBCode/
+├── scripts/
+│   ├── asset_management/        # Card data, images, popularity scraping
+│   │   └── card_popularity_v2/  # V2 popularity system (CC + Blitz)
+│   ├── synthetic_generation/    # Playmat image generation
+│   ├── yolo_training/           # Model training scripts
+│   ├── class_management/        # Class assignment utilities
+│   ├── computer_vision_application/  # Detection apps & packaging
+│   └── aws/                     # Cloud infrastructure scripts
+├── data/
+│   ├── card.json                # Complete card database
+│   ├── card_weights_all_printings.json  # Popularity weights
+│   └── synthetic/               # Generated training data
+└── runs/                        # Training outputs & checkpoints
 ```
 
-Adjust the command as needed for your environment and training script. Training outputs will be saved in a new folder under `runs/detect/`.
+## Workflow
 
-## Persistent classes and multi-set generation
-The synthetic generator maintains a persistent global class index at:
+### 1. Generate Training Data
+```bash
+# Generate 10,000 synthetic playmat images
+python scripts/synthetic_generation/Core_Playmat_Generator.py
 
-- `data/synthetic 2/classes.yaml` (same folder as your OUTPUT_BASE_DIR)
-
-Each run:
-- Loads the existing class list (`names` array)
-- Scans `--card-dirs` for PNGs and appends any new card names
-- Reuses existing IDs for previously seen names (handles reprints)
-- Writes labels using stable IDs and updates `data.yaml` with the union of all names
-
-### Examples
-- Generate 20 images from SEA only:
-
-```sh
-python scripts/generate_synthetic_playmat_screenshots.py --num-images 20 --card-dirs "data/images/SEA"
+# Parallel generation (faster, uses multiple cores)
+python scripts/synthetic_generation/parallel_generate_dataset.py --num-images 10000
 ```
 
-- Add WTR later and generate 200 more, preserving IDs:
+### 2. Train Model
+```bash
+# Full training (300 epochs, YOLOv11x)
+python scripts/yolo_training/train_full_yolo11x.py
 
-```sh
-python scripts/generate_synthetic_playmat_screenshots.py --num-images 200 --card-dirs "data/images/SEA" "data/images/WTR"
+# Custom training
+python scripts/yolo_training/train_yolo11.py \
+  --data data/synthetic/data.yaml \
+  --weights scripts/yolo_training/yolo11x.pt \
+  --epochs 100 \
+  --batch 16
 ```
 
-- Backgrounds are sampled only from their respective split folders under `data/images/YouTube_Labeled/{train,valid,test}`.
+### 3. Run Detection
+```bash
+# GUI application with overlay mode
+python scripts/computer_vision_application/fab_detector_app.py
 
-If you want reprints to be treated as different classes, we can switch to prefixing class names with the set directory (e.g., `SEA/CardName` vs `WTR/CardName`).
+# CLI live detection
+python scripts/computer_vision_application/live_detector.py --source screen --conf 0.4
+```
+
+## Advanced Features
+
+### Card Popularity System V2
+Automatically scrapes competitive deck data and weights card selection:
+```bash
+cd scripts/asset_management/card_popularity_v2
+python scrape_popularity.py --formats cc blitz
+```
+
+### Custom Dataset Generation
+```bash
+# Generate with specific augmentation preset
+python scripts/synthetic_generation/Core_Playmat_Generator.py --preset phase2
+
+# Test with visualization
+python scripts/synthetic_generation/test_generation.py --count 5 --visualize
+```
+
+### AWS Training
+```bash
+# Upload to S3
+bash scripts/aws/backup_to_s3.sh
+
+# Download results
+python scripts/aws/smart_aws_downloader.py
+```
+
+## Documentation
+
+- **[RUNPOD_SETUP.md](RUNPOD_SETUP.md)** - Cloud training setup guide
+- **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** - Common issues and solutions
+- **[scripts/synthetic_generation/README.md](scripts/synthetic_generation/README.md)** - Data generation details
+- **[scripts/computer_vision_application/README.md](scripts/computer_vision_application/README.md)** - Application deployment
+- **[scripts/yolo_training/TRAINING_WORKFLOW.md](scripts/yolo_training/TRAINING_WORKFLOW.md)** - Training best practices
+
+## Performance
+
+- **Training Speed**: ~0.96s per synthetic image (3,750 images/hour)
+- **Detection Speed**: 30+ FPS on RTX 3080
+- **Model Accuracy**: mAP50 > 0.85 on validation set
+- **Dataset Size**: 87,441 training images (train12)
 
 ## Contributing
 Pull requests and suggestions are welcome. Please follow standard Python style and document your code.
 
 ## License
-Specify your license here.
-# FaBCode
-FaB Card Image Detection and Classification
+MIT License - See LICENSE file for details

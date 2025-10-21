@@ -2,7 +2,7 @@
 Simplified card selection system for synthetic playmat generation.
 
 Data Flow:
-1. Select hero from card_popularity_weights_by_hero.json
+1. Select hero from card_weights_all_printings.json
 2. Look up hero card data in card.json
 3. Select cards: 75% from weights, 25% non-weighted (8% generic, 8% class, 4% talent, 5% both)
 4. Look up each card's properties in card.json
@@ -26,12 +26,10 @@ ALL_TALENTS = {'Draconic', 'Elemental', 'Light', 'Shadow', 'Earth', 'Ice',
 
 
 def select_format() -> str:
-    """Select a format with weighted probability: CC 80%, LL 15%, Blitz 5%."""
+    """Select a format with weighted probability: CC 85%, Blitz 15%."""
     rand = random.random()
-    if rand < 0.80:
+    if rand < 0.85:
         return 'cc'
-    elif rand < 0.95:  # 0.80 + 0.15
-        return 'll'
     else:
         return 'blitz'
 
@@ -41,7 +39,7 @@ def is_card_legal_for_format(card: Dict, format: str) -> bool:
     
     Args:
         card: Card dict with legality fields
-        format: One of 'cc', 'll', or 'blitz'
+        format: One of 'cc' or 'blitz'
     
     Returns:
         True if card is legal in the format
@@ -54,7 +52,7 @@ class CardSelector:
     """Handles all card selection logic."""
     
     def __init__(self, card_json_path: str = 'data/card.json',
-                 weights_path: str = 'data/card_popularity_weights_by_hero.json'):
+                 weights_path: str = 'data/card_weights_all_printings.json'):
         """Initialize with data files."""
         print("Loading card database...")
         with open(card_json_path, 'r', encoding='utf-8') as f:
@@ -71,17 +69,27 @@ class CardSelector:
             if name not in self.card_lookup:
                 self.card_lookup[name] = card
         
+        # Combine heroes from all formats for backwards compatibility
+        self.heroes_by_format = {}
+        all_heroes = {}
+        for format_code, heroes in self.weights_data.get('formats', {}).items():
+            self.heroes_by_format[format_code] = heroes
+            all_heroes.update(heroes)
+        
+        # Store for legacy access
+        self.weights_data['heroes'] = all_heroes
+        
         print(f"Loaded {len(self.all_cards)} cards, {len(self.card_lookup)} unique names")
-        print(f"Loaded {len(self.weights_data.get('heroes', {}))} heroes with weights")
+        print(f"Loaded {len(all_heroes)} total heroes with weights across all formats")
     
     def select_random_hero(self, format: str = None) -> Tuple[str, Dict, Dict]:
         """
         Select a random hero using weighted/unweighted split (75%/25%).
         
         Args:
-            format: Optional format to filter by ('cc', 'll', 'blitz'). If None, any legal hero.
+            format: Optional format to filter by ('cc' or 'blitz'). If None, any legal hero.
                    - 'blitz': Prefer Young heroes
-                   - 'cc'/'ll': Prefer Adult heroes (non-Young)
+                   - 'cc': Prefer Adult heroes (non-Young)
         
         Returns:
             (hero_key, hero_card_data, hero_weights)
@@ -151,7 +159,7 @@ class CardSelector:
         if not format:
             # No format specified - check if any hero is legal in at least one format
             legal_heroes = [h for h in heroes if 
-                           (h.get('cc_legal') or h.get('ll_legal') or h.get('blitz_legal'))]
+                           (h.get('cc_legal') or h.get('blitz_legal'))]
             return legal_heroes[0] if legal_heroes else None
         
         # Filter by format legality
@@ -165,7 +173,7 @@ class CardSelector:
         if format == 'blitz':
             young_heroes = [h for h in legal_heroes if 'Young' in h.get('types', [])]
             return young_heroes[0] if young_heroes else legal_heroes[0]
-        # For CC/LL: prefer Adult heroes (non-Young), fall back to any legal
+        # For CC: prefer Adult heroes (non-Young), fall back to any legal
         else:
             adult_heroes = [h for h in legal_heroes if 'Young' not in h.get('types', [])]
             return adult_heroes[0] if adult_heroes else legal_heroes[0]

@@ -36,6 +36,9 @@ yolo*.pt
 logs/
 runs/train/
 
+# Ignore large package builds (too big for GitHub)
+packages/
+
 # Ignore benchmark files
 benchmark_*.py
 benchmark_*.txt

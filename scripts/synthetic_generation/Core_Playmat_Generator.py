@@ -416,26 +416,26 @@ def calculate_glare_intensity(card_center_x, card_center_y, light_source_pos, im
     return glare_intensity
 
 
-def apply_occluders_to_playmat(playmat, card_placements, tokens_dir, probability_per_card=0.10, second_occluder_probability=0.01):
+def apply_occluders_to_playmat(playmat, card_placements, occluders_dir, probability_per_card=0.10, second_occluder_probability=0.01):
     """
-    Apply token/dice occluders to cards on the playmat.
+    Apply dice/counter occluders to cards on the playmat.
     
     Args:
         playmat: PIL Image of the playmat with all cards placed
         card_placements: List of card placement dicts with 'x', 'y', 'width', 'height'
-        tokens_dir: Directory containing token images
+        occluders_dir: Directory containing occluder images
         probability_per_card: Probability of applying occluder to each card (default 10%)
         second_occluder_probability: Probability of applying second occluder to a card (default 1%)
         
     Returns:
         PIL Image with occluders applied
     """
-    # Load all available tokens
-    tokens_path = Path(tokens_dir)
-    token_files = list(tokens_path.glob('*.png'))
+    # Load all available occluders
+    occluders_path = Path(occluders_dir)
+    occluder_files = list(occluders_path.glob('*.png'))
     
-    if len(token_files) == 0:
-        print("   No token files found for occluders!")
+    if len(occluder_files) == 0:
+        print("   No occluder files found!")
         return playmat
     
     # Create a copy to work with
@@ -457,26 +457,26 @@ def apply_occluders_to_playmat(playmat, card_placements, tokens_dir, probability
         num_occluders = 2 if random.random() < second_occluder_probability else 1
         
         for i in range(num_occluders):
-            # Select random token
-            token_path = random.choice(token_files)
-            token = Image.open(token_path)
+            # Select random occluder
+            occluder_path = random.choice(occluder_files)
+            occluder = Image.open(occluder_path)
             
-            # Apply augmentations to token (blur and color shift)
+            # Apply augmentations to occluder (blur and color shift)
             # Convert to numpy array for processing
-            token_array = np.array(token)
+            occluder_array = np.array(occluder)
             
             # Apply slight blur (10-30% intensity)
             blur_intensity = random.uniform(0.10, 0.30)
-            kernel_size = max(3, int(token_array.shape[0] * blur_intensity * 0.1))
+            kernel_size = max(3, int(occluder_array.shape[0] * blur_intensity * 0.1))
             if kernel_size % 2 == 0:
                 kernel_size += 1
-            token_array = cv2.GaussianBlur(token_array, (kernel_size, kernel_size), 0)
+            occluder_array = cv2.GaussianBlur(occluder_array, (kernel_size, kernel_size), 0)
             
             # Apply color shift (slight hue/saturation adjustment)
-            if token_array.shape[2] == 4:  # RGBA
+            if occluder_array.shape[2] == 4:  # RGBA
                 # Work with RGB channels only, preserve alpha
-                rgb = token_array[:, :, :3]
-                alpha = token_array[:, :, 3]
+                rgb = occluder_array[:, :, :3]
+                alpha = occluder_array[:, :, 3]
                 
                 # Convert to HSV for color adjustment
                 hsv = cv2.cvtColor(rgb, cv2.COLOR_RGB2HSV).astype(np.float32)
@@ -497,16 +497,16 @@ def apply_occluders_to_playmat(playmat, card_placements, tokens_dir, probability
                 rgb = cv2.cvtColor(hsv.astype(np.uint8), cv2.COLOR_HSV2RGB)
                 
                 # Recombine with alpha
-                token_array = np.dstack([rgb, alpha])
+                occluder_array = np.dstack([rgb, alpha])
             
             # Convert back to PIL Image
-            token = Image.fromarray(token_array)
+            occluder = Image.fromarray(occluder_array)
             
             # Random rotation (0-360 degrees)
             rotation_angle = random.uniform(0, 360)
-            token_rotated = token.rotate(rotation_angle, expand=True, resample=Image.BICUBIC)
+            occluder_rotated = occluder.rotate(rotation_angle, expand=True, resample=Image.BICUBIC)
             
-            token_width, token_height = token_rotated.size
+            occluder_width, occluder_height = occluder_rotated.size
             
             # Position occluder more centered on the card (weighted toward center)
             # Use beta distribution for center bias: most positions near center, fewer at edges
@@ -521,14 +521,14 @@ def apply_occluders_to_playmat(playmat, card_placements, tokens_dir, probability
             max_offset_y = card_height * 0.3
             
             # Calculate absolute position (centered on card, with offset)
-            x = card_x + (card_width - token_width) // 2 + int(rel_x * max_offset_x)
-            y = card_y + (card_height - token_height) // 2 + int(rel_y * max_offset_y)
+            x = card_x + (card_width - occluder_width) // 2 + int(rel_x * max_offset_x)
+            y = card_y + (card_height - occluder_height) // 2 + int(rel_y * max_offset_y)
             
-            # Paste token onto playmat using alpha channel as mask
-            if token_rotated.mode == 'RGBA':
-                result.paste(token_rotated, (x, y), token_rotated)
+            # Paste occluder onto playmat using alpha channel as mask
+            if occluder_rotated.mode == 'RGBA':
+                result.paste(occluder_rotated, (x, y), occluder_rotated)
             else:
-                result.paste(token_rotated, (x, y))
+                result.paste(occluder_rotated, (x, y))
             
             occluders_applied += 1
     
@@ -1304,7 +1304,7 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
     
     # Same structure on both environments
     card_json_path = base_path / 'data' / 'card.json'
-    weights_path = base_path / 'data' / 'card_popularity_weights_by_hero.json'
+    weights_path = base_path / 'data' / 'card_weights_all_printings.json'
     card_dir = base_path / 'data' / 'images'
     background_dir = base_path / 'data' / 'Background Perfecting' / 'images'
     labels_dir = base_path / 'data' / 'Background Perfecting' / 'labels'
@@ -1898,8 +1898,8 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
     t0 = time.time()
     if enable_augmentations:
         print("\n7. Applying occluders to playmat...")
-        tokens_dir = Path(__file__).parent.parent / "data" / "tokens"
-        playmat = apply_occluders_to_playmat(playmat, card_placements, tokens_dir, probability_per_card=0.10, second_occluder_probability=0.01)
+        occluders_dir = Path(__file__).parent.parent / "data" / "occluders"
+        playmat = apply_occluders_to_playmat(playmat, card_placements, occluders_dir, probability_per_card=0.10, second_occluder_probability=0.01)
     
     timings['apply_occluders'] = time.time() - t0
     

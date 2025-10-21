@@ -71,7 +71,7 @@ def extend_class_definitions(dry_run: bool = False):
     """
     # Paths
     root = Path(__file__).parent.parent.parent
-    class_defs_dir = root / 'data' / 'class_definitions'
+    class_defs_dir = Path(__file__).parent
     card_json_path = root / 'data' / 'card.json'
     
     print("=" * 80)

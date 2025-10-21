@@ -55,7 +55,8 @@ def sync_data_yaml(version: int, force: bool = False):
     """
     # Paths
     root = Path(__file__).parent.parent.parent
-    core_path = root / 'data' / 'class_definitions' / f'core_classes_v{version}.yaml'
+    script_dir = Path(__file__).parent
+    core_path = script_dir / f'core_classes_v{version}.yaml'
     working_path = root / 'data' / 'synthetic' / 'data.yaml'
     
     # Validate core version exists
@@ -63,7 +64,7 @@ def sync_data_yaml(version: int, force: bool = False):
         print(f"❌ ERROR: Core version {version} not found!")
         print(f"   Expected: {core_path}")
         print(f"\n   Available versions:")
-        for v_path in (root / 'data' / 'class_definitions').glob('core_classes_v*.yaml'):
+        for v_path in script_dir.glob('core_classes_v*.yaml'):
             print(f"   - {v_path.name}")
         sys.exit(1)
     

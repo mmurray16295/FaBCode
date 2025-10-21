@@ -29,7 +29,7 @@ def test_card_selectability():
         all_cards = json.load(f)
     
     # Load hero weights
-    with open('data/card_popularity_weights_by_hero.json', 'r') as f:
+    with open('data/card_weights_all_printings.json', 'r') as f:
         hero_weights_data = json.load(f)
     
     # Create lookup by name

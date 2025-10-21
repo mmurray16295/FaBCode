@@ -120,7 +120,7 @@ python scripts/synthetic_generation/generate_card_data_yaml.py
 
 The generator requires:
 - `data/card.json` - Card database
-- `data/card_popularity_weights.json` - Card popularity weights
+- `data/card_weights_all_printings.json` - Card popularity weights (V2)
 - `data/synthetic/backgrounds/` - Background playmat images
 - `data/synthetic/backgrounds_labels/` - Zone label files (YOLO format)
 - `data/images/` - Card images organized by set
