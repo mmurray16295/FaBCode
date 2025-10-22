@@ -373,37 +373,52 @@ models/training_smooth/run_001/
 - `box_loss`: Bounding box regression loss (should decrease steadily)
 - `cls_loss`: Classification loss (should decrease steadily)
 
-### 4.3 Resume Training
+### 4.3 Resume or Continue Training
 
-If training is interrupted:
+**Resume from last checkpoint** (if training was interrupted cleanly):
 ```bash
-# Resume smooth selector training
+# Resume smooth selector training - uses last.pt with optimizer state
 python train_yolo.py \
   --data ../../data/synthetic_smooth/data.yaml \
   --model ../../models/training_smooth/run_001/weights/last.pt \
   --resume
-
-# Resume weighted selector training
-python train_yolo.py \
-  --data ../../data/synthetic/data.yaml \
-  --model ../../models/training_weighted/run_001/weights/last.pt \
-  --resume
 ```
+
+**Continue from best checkpoint** (if last.pt corrupted or want to train longer):
+```bash
+# Continue training from best.pt - starts fresh optimizer, keeps weights
+python train_yolo.py \
+  --data ../../data/synthetic_smooth/data.yaml \
+  --model ../../models/training_smooth/run_001/weights/best.pt \
+  --epochs 100 \
+  --batch 16 \
+  --device 0 \
+  --project ../../models/training_smooth \
+  --name run_002
+```
+
+**Note**: `--resume` only works with `last.pt` (contains optimizer state). To continue from `best.pt`, start a new training run without `--resume`.
 
 ---
 
 ## Step 5: Download Trained Model
 
-After training completes:
+After training completes, download both weight files:
 
 ```bash
-# Copy to safe location
-cp models/training_smooth/run_001/weights/best.pt models/phase4_$(date +%Y%m%d).pt
+# Copy best model (highest accuracy - for deployment)
+cp models/training_smooth/run_001/weights/best.pt models/phase4_best_$(date +%Y%m%d).pt
+
+# Copy last checkpoint (for resuming training if needed)
+cp models/training_smooth/run_001/weights/last.pt models/phase4_last_$(date +%Y%m%d).pt
 
 # Download from RunPod using their file browser or CLI
 ```
 
-**Training outputs validation automatically** - check `results.csv` and `results.png` in the training directory.
+**Which file to download:**
+- `best.pt` - **Always download** - Best validation accuracy, use for deployment and continuing training
+- `last.pt` - Optional - Only needed if you want to resume exact training state (includes optimizer)
+- `results.csv` and `results.png` - Recommended - Training metrics and visualizations
 
 **What's next**: Test and deploy using applications in `scripts/computer_vision_application/`.
 
