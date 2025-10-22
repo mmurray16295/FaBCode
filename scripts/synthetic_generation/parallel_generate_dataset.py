@@ -40,7 +40,7 @@ def generate_batch(args):
         'images_generated': num_images if result.returncode == 0 else 0
     }
 
-def parallel_generate(total_images, num_processes, test_mode=False, selector_type='weighted'):
+def parallel_generate(total_images, num_processes, test_mode=False, selector_type='smooth'):
     """
     Generate images in parallel using multiple processes
     
@@ -48,7 +48,7 @@ def parallel_generate(total_images, num_processes, test_mode=False, selector_typ
         total_images: Total number of images to generate
         num_processes: Number of parallel processes to run
         test_mode: If True, only generate a small test batch
-        selector_type: 'weighted' (popularity-based) or 'smooth' (even distribution)
+        selector_type: 'smooth' (even distribution, default) or 'weighted' (popularity-based)
     """
     
     print("=" * 80)
@@ -200,8 +200,8 @@ if __name__ == "__main__":
                        help="Run benchmark to find optimal process count")
     parser.add_argument("--resume", action="store_true",
                        help="Resume from existing images")
-    parser.add_argument("--selector", type=str, choices=['weighted', 'smooth'], default='weighted',
-                       help="Card selector type: 'weighted' (popularity) or 'smooth' (even distribution)")
+    parser.add_argument("--selector", type=str, choices=['weighted', 'smooth'], default='smooth',
+                       help="Card selector type: 'smooth' (even distribution, default) or 'weighted' (popularity)")
     parser.add_argument("--yes", "-y", action="store_true",
                        help="Auto-confirm all prompts (for background execution)")
     

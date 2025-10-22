@@ -32,6 +32,18 @@ This module contains all scripts related to generating synthetic playmat trainin
   - Comprehensive verification checks
   - Command-line configurable (count, augmentations, presets)
 
+- **`test_card_distribution.py`** - Test card selection distributions without image generation (NEW!)
+  - Simulates 25k+ playmats in minutes (~119 playmats/sec)
+  - Validates weighted/smooth selector distributions
+  - Generates detailed statistics and JSON output
+  - 50-100x faster than full generation
+  - See `CARD_DISTRIBUTION_TESTING.md` for full documentation
+
+- **`run_quick_test.py`** - Quick runner for common card distribution test scenarios
+  - Pre-configured scenarios: quick, standard, large, compare
+  - Easy-to-use wrapper around test_card_distribution.py
+  - Run `python run_quick_test.py help` for available scenarios
+
 ### Production Generation
 - **`parallel_generate_dataset.py`** - Parallel generation using multiple processes for large datasets
   - Multi-process parallelization for high-core-count systems

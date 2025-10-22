@@ -30,9 +30,9 @@ ALL_TALENTS = {'Draconic', 'Elemental', 'Light', 'Shadow', 'Earth', 'Ice',
 
 
 def select_format() -> str:
-    """Select a format with weighted probability: CC 85%, Blitz 15%."""
+    """Select a format with weighted probability: CC 70%, Blitz 30%."""
     rand = random.random()
-    if rand < 0.85:
+    if rand < 0.70:
         return 'cc'
     else:
         return 'blitz'
@@ -57,8 +57,16 @@ class SmoothCardSelector:
     
     def __init__(self, card_json_path: str = 'data/card.json',
                  weights_path: str = 'data/card_weights_all_printings.json',
-                 state_file: str = 'smooth_selector_state.json'):
-        """Initialize with data files and load usage state."""
+                 state_file: str = 'smooth_selector_state.json',
+                 enable_state_persistence: bool = True):
+        """Initialize with data files and load usage state.
+        
+        Args:
+            card_json_path: Path to card.json
+            weights_path: Path to weights file (for hero list)
+            state_file: Path to state persistence file
+            enable_state_persistence: If False, disables disk writes (for testing/performance)
+        """
         print("Loading card database...")
         with open(card_json_path, 'r', encoding='utf-8') as f:
             self.all_cards = json.load(f)
@@ -87,6 +95,7 @@ class SmoothCardSelector:
         
         # Load or initialize usage tracking
         self.state_file = state_file
+        self.enable_state_persistence = enable_state_persistence
         self.hero_counts = {}  # {format: {hero_name: count}}
         self.card_counts = {}  # {card_name: count}
         self.load_state()
@@ -107,7 +116,10 @@ class SmoothCardSelector:
             print("No state file found - starting with fresh counts")
     
     def save_state(self):
-        """Save usage counts to JSON file."""
+        """Save usage counts to JSON file (only if persistence enabled)."""
+        if not self.enable_state_persistence:
+            return
+        
         try:
             data = {
                 'hero_counts': self.hero_counts,
@@ -328,7 +340,7 @@ class SmoothCardSelector:
     
     def select_least_used_card(self, candidates: List[Dict]) -> Optional[Dict]:
         """
-        Select randomly from the least-used cards in candidates.
+        Select randomly from the least-used cards in candidates (optimized single-pass).
         "Draw without replacement" - cycles through all cards before repeating.
         
         Args:
@@ -340,20 +352,20 @@ class SmoothCardSelector:
         if not candidates:
             return None
         
-        # Find the minimum usage count among candidates
+        # Single-pass algorithm: find min count and collect least-used cards simultaneously
         min_count = float('inf')
-        for card in candidates:
-            card_name = card['name']
-            count = self.card_counts.get(card_name, 0)
-            if count < min_count:
-                min_count = count
-        
-        # Get all cards with the minimum count (least-used tier)
         least_used_tier = []
+        
         for card in candidates:
             card_name = card['name']
             count = self.card_counts.get(card_name, 0)
-            if count == min_count:
+            
+            if count < min_count:
+                # Found new minimum - reset tier
+                min_count = count
+                least_used_tier = [card]
+            elif count == min_count:
+                # Tied for minimum - add to tier
                 least_used_tier.append(card)
         
         # Randomly select from the least-used tier

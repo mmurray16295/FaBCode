@@ -26,9 +26,9 @@ ALL_TALENTS = {'Draconic', 'Elemental', 'Light', 'Shadow', 'Earth', 'Ice',
 
 
 def select_format() -> str:
-    """Select a format with weighted probability: CC 85%, Blitz 15%."""
+    """Select a format with weighted probability: CC 70%, Blitz 30%."""
     rand = random.random()
-    if rand < 0.85:
+    if rand < 0.70:
         return 'cc'
     else:
         return 'blitz'

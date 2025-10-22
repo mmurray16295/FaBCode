@@ -1651,7 +1651,7 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
     zones_by_class_id = {z['class_id']: z for z in zones}
     zones_by_name = {z['zone_name']: z for z in zones}
     
-    # Select format for this image FIRST (CC 80%, LL 15%, Blitz 5%)
+    # Select format for this image FIRST (CC 70%, Blitz 30%)
     from card_selector import select_format
     format = select_format()
     format_names = {'cc': 'Classic Constructed', 'll': 'Living Legend', 'blitz': 'Blitz'}
@@ -1810,12 +1810,12 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
         valid_cc1_tokens = selector.filter_cards_for_zone(all_hero1_cards, 'Combat Chain 1', None, tokens_only=True)
         valid_cc2_tokens = selector.filter_cards_for_zone(all_hero2_cards, 'Combat Chain 2', None, tokens_only=True)
         
-        # Determine if we should include tokens (5% chance)
-        include_tokens = random.random() < 0.05
+        # Determine if we should include tokens (75% chance)
+        include_tokens = random.random() < 0.75
         num_tokens = 0
         if include_tokens and combat_chain_total > 0:
-            # 1-2 tokens
-            num_tokens = random.randint(1, min(2, combat_chain_total))
+            # 1-3 tokens
+            num_tokens = random.randint(1, min(3, combat_chain_total))
             print(f"   Including {num_tokens} token(s)")
         
         tokens_added = 0
@@ -2234,8 +2234,8 @@ if __name__ == '__main__':
     import argparse
     
     parser = argparse.ArgumentParser(description='Generate synthetic playmat images')
-    parser.add_argument('--selector', type=str, choices=['weighted', 'smooth'], default='weighted',
-                       help='Card selector type: "weighted" (popularity) or "smooth" (even distribution)')
+    parser.add_argument('--selector', type=str, choices=['weighted', 'smooth'], default='smooth',
+                       help='Card selector type: "smooth" (even distribution, default) or "weighted" (popularity)')
     parser.add_argument('--no-augmentations', action='store_true',
                        help='Disable augmentations (for debugging)')
     parser.add_argument('--draw-bboxes', action='store_true',

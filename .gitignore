@@ -59,3 +59,6 @@ packages/fab_card_detector_*/
 
 # Ignore explore_card_json.py utility script
 scripts/explore_card_json.py
+
+# Phase 3 reassembled weights (split parts are tracked)
+models/Phase3/best.pt
