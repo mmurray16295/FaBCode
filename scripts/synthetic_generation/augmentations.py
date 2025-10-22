@@ -11,6 +11,7 @@ from augmentation_config import (
     AugmentationConfig,
     BlurConfig,
     GlareConfig,
+    ShadowConfig,
     ColorAdjustmentConfig,
     SleeveConfig,
     DeckBoxConfig,
@@ -95,9 +96,8 @@ def apply_glare(image: np.ndarray, config: GlareConfig, glare_intensity: float =
             sigma = radius / 2.0
             glare_mask = np.exp(-(dist_from_center**2) / (2 * sigma**2))
             
-            # Apply glare (brighten pixels)
-            for c in range(3):  # Apply to each color channel
-                result[:, :, c] += glare_mask * intensity * 255
+            # Apply glare (brighten pixels) - vectorized across all channels
+            result += glare_mask[:, :, np.newaxis] * intensity * 255
     else:
         # Original random behavior for backwards compatibility
         num_spots = int(glare_intensity * config.num_spots_range[1]) + 1
@@ -120,9 +120,143 @@ def apply_glare(image: np.ndarray, config: GlareConfig, glare_intensity: float =
             sigma = radius / 2.0
             glare_mask = np.exp(-(dist_from_center**2) / (2 * sigma**2))
             
-            # Apply glare (brighten pixels)
-            for c in range(3):  # Apply to each color channel
-                result[:, :, c] += glare_mask * intensity * 255
+            # Apply glare (brighten pixels) - vectorized across all channels
+            result += glare_mask[:, :, np.newaxis] * intensity * 255
+    
+    # Clip values to valid range and convert back to uint8
+    result = np.clip(result, 0, 255).astype(np.uint8)
+    
+    return result
+
+
+def apply_shadow(image: np.ndarray, config: 'ShadowConfig', shadow_intensity: float = None, 
+                 shadow_pattern: list = None, shadow_type: str = None, shadow_direction: str = None) -> np.ndarray:
+    """
+    Apply shadow/darkness effects to simulate poor lighting conditions, shadows, and dark environments.
+    
+    Args:
+        image: Input image (BGR format from OpenCV)
+        config: ShadowConfig with intensity and pattern settings
+        shadow_intensity: Fixed shadow intensity (0.0-1.0). If None, no shadow is applied.
+                         0.0 = no shadow, 1.0 = completely black
+        shadow_pattern: List of dicts with 'x_ratio', 'y_ratio', 'radius_ratio' for consistent shadow positions
+        shadow_type: Type of shadow ('spot', 'gradient', 'vignette', 'uniform'). If None, randomly chosen.
+        
+    Returns:
+        Image with shadow effects applied (or original if shadow_intensity is None)
+    """
+    if not config.enabled or shadow_intensity is None or shadow_intensity == 0.0:
+        return image
+    
+    # Create a copy to work with
+    result = image.copy().astype(np.float32)
+    h, w = result.shape[:2]
+    
+    # Choose shadow type if not provided
+    if shadow_type is None:
+        shadow_type = random.choice(config.shadow_types)
+    
+    if shadow_type == 'spot':
+        # Localized shadow spots (similar to glare but darkening)
+        if shadow_pattern is not None:
+            # Apply consistent shadow pattern
+            for spot in shadow_pattern:
+                center_x = int(spot['x_ratio'] * w)
+                center_y = int(spot['y_ratio'] * h)
+                radius = int(spot['radius_ratio'] * min(w, h))
+                
+                # Use the card's specific shadow intensity
+                intensity = shadow_intensity
+                
+                # Create shadow mask (Gaussian distribution)
+                y_grid, x_grid = np.ogrid[:h, :w]
+                dist_from_center = np.sqrt((x_grid - center_x)**2 + (y_grid - center_y)**2)
+                
+                # Gaussian falloff
+                sigma = radius / 2.0
+                shadow_mask = np.exp(-(dist_from_center**2) / (2 * sigma**2))
+                
+                # Apply shadow (darken pixels) - vectorized across all channels
+                result *= (1.0 - shadow_mask[:, :, np.newaxis] * intensity)
+        else:
+            # Random shadow spots
+            num_spots = int(shadow_intensity * config.num_spots_range[1]) + 1
+            num_spots = min(num_spots, config.num_spots_range[1])
+            
+            for _ in range(num_spots):
+                # Random position for shadow spot
+                center_x = random.randint(0, w - 1)
+                center_y = random.randint(0, h - 1)
+                
+                # Radius scales with shadow_intensity
+                radius = int(config.radius_range[0] + shadow_intensity * 
+                           (config.radius_range[1] - config.radius_range[0]))
+                
+                # Create shadow mask (Gaussian distribution)
+                y_grid, x_grid = np.ogrid[:h, :w]
+                dist_from_center = np.sqrt((x_grid - center_x)**2 + (y_grid - center_y)**2)
+                
+                # Gaussian falloff
+                sigma = radius / 2.0
+                shadow_mask = np.exp(-(dist_from_center**2) / (2 * sigma**2))
+                
+                # Apply shadow (darken pixels) - vectorized across all channels
+                result *= (1.0 - shadow_mask[:, :, np.newaxis] * shadow_intensity)
+    
+    elif shadow_type == 'gradient':
+        # Directional shadow based on shadow source position (consistent across all cards)
+        # Direction is determined from shadow source quadrant, passed as shadow_direction parameter
+        direction = shadow_direction if shadow_direction else random.choice(['top-left', 'top-right', 'bottom-left', 'bottom-right'])
+        
+        if direction == 'top-left':
+            # Shadow strongest at top-left, fades toward bottom-right
+            gradient_x = np.linspace(shadow_intensity, 0, w)
+            gradient_y = np.linspace(shadow_intensity, 0, h).reshape(-1, 1)
+            shadow_mask = np.sqrt(np.tile(gradient_x, (h, 1))**2 + np.tile(gradient_y, (1, w))**2) / np.sqrt(2)
+            shadow_mask = np.clip(shadow_mask, 0, shadow_intensity)
+        elif direction == 'top-right':
+            # Shadow strongest at top-right, fades toward bottom-left
+            gradient_x = np.linspace(0, shadow_intensity, w)
+            gradient_y = np.linspace(shadow_intensity, 0, h).reshape(-1, 1)
+            shadow_mask = np.sqrt(np.tile(gradient_x, (h, 1))**2 + np.tile(gradient_y, (1, w))**2) / np.sqrt(2)
+            shadow_mask = np.clip(shadow_mask, 0, shadow_intensity)
+        elif direction == 'bottom-left':
+            # Shadow strongest at bottom-left, fades toward top-right
+            gradient_x = np.linspace(shadow_intensity, 0, w)
+            gradient_y = np.linspace(0, shadow_intensity, h).reshape(-1, 1)
+            shadow_mask = np.sqrt(np.tile(gradient_x, (h, 1))**2 + np.tile(gradient_y, (1, w))**2) / np.sqrt(2)
+            shadow_mask = np.clip(shadow_mask, 0, shadow_intensity)
+        else:  # bottom-right
+            # Shadow strongest at bottom-right, fades toward top-left
+            gradient_x = np.linspace(0, shadow_intensity, w)
+            gradient_y = np.linspace(0, shadow_intensity, h).reshape(-1, 1)
+            shadow_mask = np.sqrt(np.tile(gradient_x, (h, 1))**2 + np.tile(gradient_y, (1, w))**2) / np.sqrt(2)
+            shadow_mask = np.clip(shadow_mask, 0, shadow_intensity)
+        
+        # Apply gradient shadow - vectorized across all channels
+        result *= (1.0 - shadow_mask[:, :, np.newaxis])
+    
+    elif shadow_type == 'vignette':
+        # Edge darkening (vignette effect)
+        # Create distance from center
+        center_x, center_y = w / 2, h / 2
+        y_grid, x_grid = np.ogrid[:h, :w]
+        
+        # Normalized distance from center (0 at center, 1 at corners)
+        dist_from_center = np.sqrt(((x_grid - center_x) / (w / 2))**2 + 
+                                   ((y_grid - center_y) / (h / 2))**2)
+        
+        # Create vignette mask (darker at edges)
+        # Use quadratic falloff for smooth transition
+        vignette_mask = np.clip(dist_from_center ** 2, 0, 1) * shadow_intensity
+        
+        # Apply vignette - vectorized across all channels
+        result *= (1.0 - vignette_mask[:, :, np.newaxis])
+    
+    else:  # uniform
+        # Uniform darkening across entire card
+        darkening_factor = 1.0 - shadow_intensity
+        result *= darkening_factor
     
     # Clip values to valid range and convert back to uint8
     result = np.clip(result, 0, 255).astype(np.uint8)
@@ -253,12 +387,12 @@ def apply_color_strip_degradation(image: np.ndarray, strip_height_ratio: float =
         noise = np.random.normal(0, 15, circle_degraded.shape).astype(np.float32)
         circle_degraded = np.clip(circle_degraded.astype(np.float32) + noise, 0, 255).astype(np.uint8)
     
-    # Blend the degraded circular region back using the mask
-    for c in range(3):  # For each color channel
-        result[y_min:y_max, x_min:x_max, c] = (
-            circle_degraded[:, :, c] * circle_mask +
-            result[y_min:y_max, x_min:x_max, c] * (1 - circle_mask)
-        ).astype(np.uint8)
+    # Blend the degraded circular region back using the mask - vectorized across all channels
+    circle_mask_3d = circle_mask[:, :, np.newaxis]
+    result[y_min:y_max, x_min:x_max] = (
+        circle_degraded * circle_mask_3d +
+        result[y_min:y_max, x_min:x_max] * (1 - circle_mask_3d)
+    ).astype(np.uint8)
     
     return result
     

@@ -18,11 +18,16 @@ from generation_utils import ensure_background_variations, print_background_usag
 
 def generate_batch(args):
     """Generate a batch of images in a separate process"""
-    batch_id, num_images, base_seed = args
+    batch_id, num_images, base_seed, selector_type = args
+    
+    # Build command with selector type
+    cmd = [sys.executable, "scripts/synthetic_generation/Core_Playmat_Generator.py"]
+    if selector_type:
+        cmd.extend(["--selector", selector_type])
     
     # Suppress output to reduce clutter
     result = subprocess.run(
-        [sys.executable, "scripts/synthetic_generation/Core_Playmat_Generator.py"],
+        cmd,
         capture_output=True,
         text=True,
         cwd="/root/FaBCode",
@@ -35,7 +40,7 @@ def generate_batch(args):
         'images_generated': num_images if result.returncode == 0 else 0
     }
 
-def parallel_generate(total_images, num_processes, test_mode=False):
+def parallel_generate(total_images, num_processes, test_mode=False, selector_type='weighted'):
     """
     Generate images in parallel using multiple processes
     
@@ -43,6 +48,7 @@ def parallel_generate(total_images, num_processes, test_mode=False):
         total_images: Total number of images to generate
         num_processes: Number of parallel processes to run
         test_mode: If True, only generate a small test batch
+        selector_type: 'weighted' (popularity-based) or 'smooth' (even distribution)
     """
     
     print("=" * 80)
@@ -72,7 +78,7 @@ def parallel_generate(total_images, num_processes, test_mode=False):
     
     # Create work batches - each process generates 1 image at a time
     # This allows us to saturate all CPUs
-    work_items = [(i, 1, i * 12345) for i in range(total_images)]
+    work_items = [(i, 1, i * 12345, selector_type) for i in range(total_images)]
     
     print(f"\nStarting generation with {num_processes} parallel processes...")
     print("Progress updates every 100 images...")
@@ -194,6 +200,8 @@ if __name__ == "__main__":
                        help="Run benchmark to find optimal process count")
     parser.add_argument("--resume", action="store_true",
                        help="Resume from existing images")
+    parser.add_argument("--selector", type=str, choices=['weighted', 'smooth'], default='weighted',
+                       help="Card selector type: 'weighted' (popularity) or 'smooth' (even distribution)")
     parser.add_argument("--yes", "-y", action="store_true",
                        help="Auto-confirm all prompts (for background execution)")
     
@@ -238,6 +246,7 @@ if __name__ == "__main__":
     
     # Benchmark if requested
     if args.benchmark:
+        print(f"\nUsing selector: {args.selector.upper()}")
         optimal_procs = benchmark_parallelization()
         
         if not args.yes:
@@ -262,16 +271,17 @@ if __name__ == "__main__":
     if args.images >= 10000 and not args.yes:
         est_time = args.images / (args.processes * 0.5) / 3600  # Conservative estimate: 0.5 img/s per process
         response = input(f"\nGenerate {args.images:,} images with {args.processes} processes? "
+                        f"(Selector: {args.selector.upper()}) "
                         f"(est. {est_time:.1f} hours)\n(yes/no): ").strip().lower()
         if response not in ['yes', 'y']:
             print("Cancelled.")
             sys.exit(0)
     elif args.images >= 10000:
         est_time = args.images / (args.processes * 0.5) / 3600
-        print(f"\nAuto-starting generation: {args.images:,} images with {args.processes} processes (est. {est_time:.1f} hours)")
+        print(f"\nAuto-starting generation: {args.images:,} images with {args.processes} processes (Selector: {args.selector.upper()}) (est. {est_time:.1f} hours)")
     
     # Generate!
-    total_time, rate = parallel_generate(args.images, args.processes)
+    total_time, rate = parallel_generate(args.images, args.processes, selector_type=args.selector)
     
     # Final summary
     final_counts, final_total = count_existing_images()

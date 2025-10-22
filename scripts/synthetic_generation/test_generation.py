@@ -7,8 +7,22 @@ import sys
 import time
 import argparse
 from pathlib import Path
-from Core_Playmat_Generator import main as generate_image
 from generation_utils import ensure_background_variations, print_background_usage_stats
+
+def generate_image(enable_augmentations=True, draw_bboxes=False, preset_name=None, use_background_cycling=False, target_images=1, selector_type='weighted'):
+    """
+    Wrapper to call Core_Playmat_Generator.main() with specified parameters.
+    Separates the generation logic from test orchestration.
+    """
+    from Core_Playmat_Generator import main as generate_playmat
+    generate_playmat(
+        enable_augmentations=enable_augmentations,
+        draw_bboxes=draw_bboxes,
+        preset_name=preset_name,
+        use_background_cycling=use_background_cycling,
+        target_images=target_images,
+        selector_type=selector_type
+    )
 
 def verify_output(base_dir, expected_count=None):
     """
@@ -85,12 +99,16 @@ def verify_output(base_dir, expected_count=None):
     yaml_path = synthetic_dir / 'data.yaml'
     if yaml_path.exists():
         print(f"\n✓ data.yaml exists: {yaml_path}")
-        with open(yaml_path, 'r') as f:
+        with open(yaml_path, 'r', encoding='utf-8') as f:
             yaml_content = f.read()
         
-        # Count classes in yaml
+        # Count classes in yaml (format: "  - Card Name" or "  0: Card Name")
         import re
-        class_matches = re.findall(r'^\s+\d+:', yaml_content, re.MULTILINE)
+        # Try Python list format first (  - Card Name)
+        class_matches = re.findall(r'^\s+-\s+.+$', yaml_content, re.MULTILINE)
+        if not class_matches:
+            # Try dictionary format (  0: Card Name)
+            class_matches = re.findall(r'^\s+\d+:\s*.+$', yaml_content, re.MULTILINE)
         num_classes = len(class_matches)
         print(f"  Classes defined: {num_classes}")
         
@@ -135,10 +153,22 @@ Examples:
                         help='Run full verification checks after generation')
     parser.add_argument('--preset', type=str, default=None,
                         help='Augmentation preset name (e.g., "phase1", "phase2")')
+    parser.add_argument('--selector', type=str, choices=['weighted', 'smooth'], default='weighted',
+                        help='Card selector type: "weighted" (popularity-based) or "smooth" (even distribution)')
+    parser.add_argument('--reset-smooth', action='store_true',
+                        help='Reset smooth selector state (clear all usage counts)')
     parser.add_argument('--ensure-backgrounds', action='store_true',
                         help='Check and generate background variations if needed (auto-enabled for count >= 10)')
     
     args = parser.parse_args()
+    
+    # Handle reset-smooth flag
+    if args.reset_smooth:
+        from card_selector_smooth import SmoothCardSelector
+        selector = SmoothCardSelector()
+        selector.reset_state()
+        print("✓ Smooth selector state has been reset")
+        return
     
     # Configuration
     count = args.count
@@ -146,6 +176,7 @@ Examples:
     draw_bboxes = args.visualize
     verify = args.verify
     preset_name = args.preset
+    selector_type = args.selector
     ensure_backgrounds = args.ensure_backgrounds or count >= 10  # Auto-enable for larger batches
     
     # Print configuration
@@ -154,6 +185,7 @@ Examples:
     print("=" * 80)
     print(f"\nConfiguration:")
     print(f"  Images to generate: {count}")
+    print(f"  Card selector: {selector_type.upper()}")
     print(f"  Augmentations: {'ENABLED' if enable_augmentations else 'DISABLED'}")
     print(f"  Visualization (bboxes): {'ENABLED' if draw_bboxes else 'DISABLED'}")
     print(f"  Verification: {'ENABLED' if verify else 'DISABLED'}")
@@ -183,7 +215,9 @@ Examples:
                 enable_augmentations=enable_augmentations,
                 draw_bboxes=draw_bboxes,
                 preset_name=preset_name,
-                use_background_cycling=(count > 1)  # Use cycling for multi-image generation
+                use_background_cycling=(count > 1),  # Use cycling for multi-image generation
+                target_images=count,
+                selector_type=selector_type
             )
             success_count += 1
             print(f"✓ Success ({success_count}/{i+1})")
@@ -217,12 +251,13 @@ Examples:
     
     # Run verification if requested or if count >= 10
     if verify or count >= 10:
-        # Determine base directory
+        # Determine base directory based on selector type
         import platform
+        subdir = 'synthetic_smooth' if selector_type == 'smooth' else 'synthetic'
         if platform.system() == 'Windows':
-            base_dir = Path(r'c:\VS Code\FaB Code\data\synthetic')
+            base_dir = Path(rf'c:\VS Code\FaB Code\data\{subdir}')
         else:
-            base_dir = Path(__file__).parent.parent.parent / 'data' / 'synthetic'
+            base_dir = Path(__file__).parent.parent.parent / 'data' / subdir
         
         verification_passed = verify_output(base_dir, expected_count=success_count)
         

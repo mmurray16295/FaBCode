@@ -12,8 +12,10 @@ from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 import cv2
 from card_selector import CardSelector
+from card_selector_smooth import SmoothCardSelector
 from augmentations import apply_blur, apply_glare
 from augmentation_config import get_config
+from windowed_mode import should_apply_windowed_mode, apply_windowed_mode
 
 # Load card name to class ID mapping for YOLO labels
 CARD_NAME_TO_CLASS_ID = {}
@@ -416,6 +418,28 @@ def calculate_glare_intensity(card_center_x, card_center_y, light_source_pos, im
     return glare_intensity
 
 
+def calculate_shadow_intensity(aug_config):
+    """
+    Calculate shadow intensity from configured range.
+    Returns a random intensity value or None if shadows are disabled.
+    
+    Args:
+        aug_config: AugmentationConfig instance with shadow settings
+        
+    Returns:
+        Shadow intensity (0.0-0.20), or None if shadows not enabled/applied
+    """
+    if aug_config is None or not aug_config.shadow.enabled:
+        return None
+    
+    # Check if this card should get shadows (based on probability set during pattern generation)
+    # This is determined globally - if shadow_pattern or shadow_type was set, apply shadows
+    # Individual intensity still varies per card within the configured range
+    shadow_intensity = random.uniform(*aug_config.shadow.intensity_range)
+    
+    return shadow_intensity
+
+
 def apply_occluders_to_playmat(playmat, card_placements, occluders_dir, probability_per_card=0.10, second_occluder_probability=0.01):
     """
     Apply dice/counter occluders to cards on the playmat.
@@ -711,7 +735,7 @@ def apply_hard_case(card_img, include_artifacts=True):
     return Image.fromarray(case_array, 'RGBA')
 
 
-def apply_card_augmentations(card_img, augmentation_config, blur_intensity=None, glare_intensity=None, glare_pattern=None, color_params=None, sleeve_color=None, card_types=None, use_hard_case=False, hard_case_artifacts=True):
+def apply_card_augmentations(card_img, augmentation_config, blur_intensity=None, glare_intensity=None, glare_pattern=None, shadow_intensity=None, shadow_pattern=None, shadow_type=None, color_params=None, sleeve_color=None, card_types=None, use_hard_case=False, hard_case_artifacts=True):
     """
     Apply all augmentations to a card image.
     Converts PIL → NumPy → apply augmentations → PIL
@@ -722,6 +746,9 @@ def apply_card_augmentations(card_img, augmentation_config, blur_intensity=None,
         blur_intensity: Fixed blur intensity for this image (0.0-1.0)
         glare_intensity: Fixed glare intensity for this card (0.0-1.0)
         glare_pattern: List of dicts with glare spot positions (x_ratio, y_ratio, radius_ratio)
+        shadow_intensity: Fixed shadow intensity for this card (0.0-1.0)
+        shadow_pattern: List of dicts with shadow spot positions (x_ratio, y_ratio, radius_ratio)
+        shadow_type: Type of shadow ('spot', 'gradient', 'vignette', 'uniform')
         color_params: Dict with color adjustment parameters (brightness, contrast, saturation, hue_shift)
         sleeve_color: Tuple (R, G, B) for sleeve color. If None, no sleeve is applied.
         card_types: List of card types to determine if color strip degradation should be applied
@@ -812,9 +839,14 @@ def apply_card_augmentations(card_img, augmentation_config, blur_intensity=None,
     card_array = card_array * (1.0 - mask_intensity) + greyish_yellow * mask_intensity
     card_array = np.clip(card_array, 0, 255).astype(np.uint8)
     
-    # Apply all augmentations (blur, glare, color adjustments)
+    # Apply all augmentations (blur, glare, shadow, color adjustments)
     card_array = apply_blur(card_array, augmentation_config.blur, blur_intensity)
     card_array = apply_glare(card_array, augmentation_config.glare, glare_intensity, glare_pattern)
+    
+    # Apply shadow AFTER glare so shadows can affect bright areas too
+    from augmentations import apply_shadow
+    card_array = apply_shadow(card_array, augmentation_config.shadow, shadow_intensity, shadow_pattern, shadow_type)
+    
     if color_params is not None:
         from augmentations import apply_color_adjustment
         card_array = apply_color_adjustment(card_array, augmentation_config.color, **color_params)
@@ -895,10 +927,16 @@ def apply_window_color_transformation(playmat: Image.Image, window_zone: dict) -
     
     elif transformation_type == 'brightness':
         # Extreme brightness (dark storm to bright sunny day)
-        bright_mult = random.choice([
-            random.uniform(0.3, 0.6),   # Very dark
-            random.uniform(1.4, 2.2)    # Very bright
-        ])
+        # Lower probability of extreme brightness: 70% moderate, 30% extreme
+        if random.random() < 0.70:
+            # Moderate brightness variation
+            bright_mult = random.uniform(0.6, 1.4)
+        else:
+            # Extreme brightness (capped at 1.75× to avoid washout)
+            bright_mult = random.choice([
+                random.uniform(0.3, 0.5),   # Very dark
+                random.uniform(1.5, 1.75)   # Very bright (capped at 1.75×)
+            ])
         window_hsv[:, :, 2] = np.clip(window_hsv[:, :, 2] * bright_mult, 0, 255)
         print(f"   Window transformation: Brightness {bright_mult:.2f}×")
     
@@ -926,7 +964,7 @@ def apply_window_color_transformation(playmat: Image.Image, window_zone: dict) -
         # Combine multiple effects for really varied lighting
         hue_shift = random.uniform(-60, 60)
         sat_mult = random.uniform(0.4, 2.0)
-        bright_mult = random.uniform(0.5, 1.8)
+        bright_mult = random.uniform(0.5, 1.75)  # Capped at 1.75× to match brightness limit
         
         window_hsv[:, :, 0] = (window_hsv[:, :, 0] + hue_shift) % 180
         window_hsv[:, :, 1] = np.clip(window_hsv[:, :, 1] * sat_mult, 0, 255)
@@ -1142,13 +1180,19 @@ def place_card_on_playmat(playmat, card_img, x, y, rotation=0, scale=1.0):
     final_width = card_resized.width
     final_height = card_resized.height
     
-    # Paste with alpha channel
+    # Adjust coordinates if playmat is cropped (stencil mode)
+    if hasattr(playmat, '_crop_bounds'):
+        x_offset, y_offset = playmat._crop_bounds[0], playmat._crop_bounds[1]
+        x = x - x_offset
+        y = y - y_offset
+    
+    # Paste with alpha channel (will be clipped automatically if outside cropped bounds)
     playmat.paste(card_resized, (x, y), card_resized)
     
     return final_width, final_height
 
 def place_hero_card(hero_img_path, hero_zone, hero_card, image_cache, playmat, 
-                    aug_config, blur_intensity, glare_pattern, color_params, 
+                    aug_config, blur_intensity, glare_pattern, shadow_pattern, shadow_type, color_params, 
                     sleeve_color, light_source_pos, img_width, img_height, uniform_scale_factor=1.0, hard_case_artifacts=True):
     """Helper function to place hero card with augmentations and rotation (OPTIMIZATION: eliminates code duplication)."""
     x, y, zone_w, zone_h = yolo_to_pixel_coords(hero_zone, img_width, img_height)
@@ -1158,9 +1202,10 @@ def place_hero_card(hero_img_path, hero_zone, hero_card, image_cache, playmat,
         card_center_x = hero_zone['center_x'] * img_width
         card_center_y = hero_zone['center_y'] * img_height
         glare_intensity = calculate_glare_intensity(card_center_x, card_center_y, light_source_pos, img_width, img_height)
+        shadow_intensity = calculate_shadow_intensity(aug_config) if shadow_type is not None else None
         # Heroes have 50% chance of getting hard case (per card decision)
         use_hard_case = random.random() < 0.5
-        hero_img = apply_card_augmentations(hero_img, aug_config, blur_intensity, glare_intensity, glare_pattern, color_params, sleeve_color, card_types=['Hero'], use_hard_case=use_hard_case, hard_case_artifacts=hard_case_artifacts)
+        hero_img = apply_card_augmentations(hero_img, aug_config, blur_intensity, glare_intensity, glare_pattern, shadow_intensity, shadow_pattern, shadow_type, color_params, sleeve_color, card_types=['Hero'], use_hard_case=use_hard_case, hard_case_artifacts=hard_case_artifacts)
     
     # Apply base rotation based on X position
     target_width = 140
@@ -1174,7 +1219,18 @@ def place_hero_card(hero_img_path, hero_zone, hero_card, image_cache, playmat,
     # Calculate scale for target size (after rotation: height->width, width->height)
     # Apply uniform scale factor to maintain consistent size across all cards in image
     scale = min(target_width / hero_img.height, target_height / hero_img.width) * uniform_scale_factor
-    rotation = base_rotation + random.uniform(-3, 3)
+    
+    # Add random rotation variance (±6°)
+    rotation = base_rotation + random.uniform(-6, 6)
+    
+    # 6% chance to add additional rotation (2% each for 90°, 180°, 270°) to simulate tapped/flipped cards
+    rand_val = random.random()
+    if rand_val < 0.02:
+        rotation += 90
+    elif rand_val < 0.04:
+        rotation += 180
+    elif rand_val < 0.06:
+        rotation += 270
     
     width, height = place_card_on_playmat(playmat, hero_img, x, y, rotation=rotation, scale=scale)
     return {
@@ -1185,7 +1241,7 @@ def place_hero_card(hero_img_path, hero_zone, hero_card, image_cache, playmat,
     }
 
 def place_standard_card(card, img_path, zone, image_cache, playmat, aug_config, 
-                       blur_intensity, glare_pattern, color_params, sleeve_color, 
+                       blur_intensity, glare_pattern, shadow_pattern, shadow_type, color_params, sleeve_color, 
                        light_source_pos, img_width, img_height, uniform_scale_factor=1.0, hard_case_artifacts=True):
     """Helper function to place standard zone card with augmentations and rotation (OPTIMIZATION: eliminates code duplication)."""
     x, y, zone_w, zone_h = yolo_to_pixel_coords(zone, img_width, img_height)
@@ -1195,6 +1251,7 @@ def place_standard_card(card, img_path, zone, image_cache, playmat, aug_config,
         card_center_x = zone['center_x'] * img_width
         card_center_y = zone['center_y'] * img_height
         glare_intensity = calculate_glare_intensity(card_center_x, card_center_y, light_source_pos, img_width, img_height)
+        shadow_intensity = calculate_shadow_intensity(aug_config) if shadow_type is not None else None
         
         # Check if this card type is eligible for hard case (Equipment, Weapon, or Off-Hand)
         card_types = card.get('types', [])
@@ -1203,7 +1260,7 @@ def place_standard_card(card, img_path, zone, image_cache, playmat, aug_config,
         # Each eligible card has 50% chance of getting hard case (per card decision)
         should_use_hard_case = is_eligible and (random.random() < 0.5)
         
-        card_img = apply_card_augmentations(card_img, aug_config, blur_intensity, glare_intensity, glare_pattern, color_params, sleeve_color, card_types=card_types, use_hard_case=should_use_hard_case, hard_case_artifacts=hard_case_artifacts)
+        card_img = apply_card_augmentations(card_img, aug_config, blur_intensity, glare_intensity, glare_pattern, shadow_intensity, shadow_pattern, shadow_type, color_params, sleeve_color, card_types=card_types, use_hard_case=should_use_hard_case, hard_case_artifacts=hard_case_artifacts)
     
     # Standard zones: target 140x100px after rotation
     target_width = 140
@@ -1219,8 +1276,17 @@ def place_standard_card(card, img_path, zone, image_cache, playmat, aug_config,
     # Apply uniform scale factor to maintain consistent size across all cards in image
     scale = min(target_width / card_img.height, target_height / card_img.width) * uniform_scale_factor
     
-    # Add small random rotation on top of base rotation
-    rotation = base_rotation + random.uniform(-3, 3)
+    # Add random rotation variance (±6°)
+    rotation = base_rotation + random.uniform(-6, 6)
+    
+    # 6% chance to add additional rotation (2% each for 90°, 180°, 270°) to simulate tapped/flipped cards
+    rand_val = random.random()
+    if rand_val < 0.02:
+        rotation += 90
+    elif rand_val < 0.04:
+        rotation += 180
+    elif rand_val < 0.06:
+        rotation += 270
     card_width, card_height = place_card_on_playmat(playmat, card_img, x, y, rotation=rotation, scale=scale)
     
     return {
@@ -1231,7 +1297,7 @@ def place_standard_card(card, img_path, zone, image_cache, playmat, aug_config,
     }
 
 def place_combat_chain_card(card, img_path, zone, chain_name, zone_id, card_placements, 
-                            image_cache, aug_config, blur_intensity, glare_pattern, 
+                            image_cache, aug_config, blur_intensity, glare_pattern, shadow_pattern, shadow_type, 
                             color_params, sleeve_color, light_source_pos, img_width, img_height, playmat, uniform_scale_factor=1.0, hard_case_artifacts=True):
     """Helper function to place combat chain card with rotation and overlap detection (OPTIMIZATION: eliminates code duplication)."""
     card_img_original = image_cache[str(img_path)]  # OPTIMIZATION: use cached image
@@ -1247,7 +1313,7 @@ def place_combat_chain_card(card, img_path, zone, chain_name, zone_id, card_plac
     
     # Find valid position
     position = find_valid_position_in_zone(zone, max_dim, max_dim, card_placements,
-                                           img_width, img_height, max_overlap_pct=50, max_attempts=50)
+                                           img_width, img_height, max_overlap_pct=65, max_attempts=50)
     
     if not position:
         return None
@@ -1259,7 +1325,8 @@ def place_combat_chain_card(card, img_path, zone, chain_name, zone_id, card_plac
         card_center_x = x + max_dim / 2
         card_center_y = y + max_dim / 2
         glare_intensity = calculate_glare_intensity(card_center_x, card_center_y, light_source_pos, img_width, img_height)
-        card_img = apply_card_augmentations(card_img_original, aug_config, blur_intensity, glare_intensity, glare_pattern, color_params, sleeve_color, card_types=card.get('types', []), use_hard_case=False, hard_case_artifacts=hard_case_artifacts)
+        shadow_intensity = calculate_shadow_intensity(aug_config) if shadow_type is not None else None
+        card_img = apply_card_augmentations(card_img_original, aug_config, blur_intensity, glare_intensity, glare_pattern, shadow_intensity, shadow_pattern, shadow_type, color_params, sleeve_color, card_types=card.get('types', []), use_hard_case=False, hard_case_artifacts=hard_case_artifacts)
     else:
         card_img = card_img_original
     
@@ -1273,7 +1340,7 @@ def place_combat_chain_card(card, img_path, zone, chain_name, zone_id, card_plac
         'card_name': card['name']
     }
 
-def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_background_cycling=False):
+def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_background_cycling=False, target_images=1, selector_type='weighted'):
     """
     Generate a single synthetic playmat image.
     
@@ -1282,6 +1349,8 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
         draw_bboxes: Draw bounding boxes on output image for visual inspection
         preset_name: Augmentation preset name (e.g., "phase1", "phase2")
         use_background_cycling: Cycle through backgrounds efficiently (for batch generation)
+        target_images: Total number of images to generate (for calculating background needs)
+        selector_type: 'weighted' (default) or 'smooth' for even distribution
     """
     # Initialize timing dictionary
     timings = {}
@@ -1305,17 +1374,47 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
     # Same structure on both environments
     card_json_path = base_path / 'data' / 'card.json'
     weights_path = base_path / 'data' / 'card_weights_all_printings.json'
-    card_dir = base_path / 'data' / 'images'
-    background_dir = base_path / 'data' / 'Background Perfecting' / 'images'
-    labels_dir = base_path / 'data' / 'Background Perfecting' / 'labels'
     
-    selector = CardSelector(str(card_json_path), str(weights_path))
+    # Determine output directory based on selector type
+    output_subdir = 'synthetic_smooth' if selector_type == 'smooth' else 'synthetic'
+    card_dir = base_path / 'data' / 'images'
+    # Backgrounds are shared between both selectors (same playmat templates)
+    background_dir = base_path / 'data' / 'synthetic' / 'backgrounds' / 'images'
+    labels_dir = base_path / 'data' / 'synthetic' / 'backgrounds' / 'labels'
+    
+    # Auto-generate backgrounds if they don't exist (1:1 ratio with target images)
+    existing_backgrounds = len(list(background_dir.glob('*.png'))) if background_dir.exists() else 0
+    required_backgrounds = max(10, target_images)  # At least 10, otherwise 1:1 with target
+    
+    if existing_backgrounds < required_backgrounds:
+        needed = required_backgrounds - existing_backgrounds
+        print("\n" + "="*60)
+        print(f"Need {needed} background variations (have {existing_backgrounds}, need {required_backgrounds})")
+        print("="*60)
+        import subprocess
+        import sys
+        gen_script = base_path / 'scripts' / 'synthetic_generation' / 'generate_background_variations.py'
+        subprocess.run([sys.executable, str(gen_script), '--num-variations', str(needed)], check=True)
+        print("="*60)
+        print("Background generation complete!")
+        print("="*60 + "\n")
+    
+    # Initialize the appropriate selector
+    if selector_type == 'smooth':
+        selector = SmoothCardSelector(str(card_json_path), str(weights_path))
+        print("Using SMOOTH selector (even distribution)")
+    else:
+        selector = CardSelector(str(card_json_path), str(weights_path))
+        print("Using WEIGHTED selector (popularity-based)")
+    
     timings['initialization'] = time.time() - t0
     
     # Load augmentation config (optionally from preset)
     aug_config = get_config() if enable_augmentations else None
     blur_intensity = None
     glare_pattern = None
+    shadow_pattern = None
+    shadow_type = None
     color_params = None
     sleeve_color = None
     preset = None
@@ -1357,6 +1456,8 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
                     # Very wide range: 20-160% of card size for large washout coverage with moderate intensity
                     'radius_ratio': random.uniform(0.20, 1.60)
                 })
+        
+        # Shadow generation moved to after background loading (needs image dimensions)
         
         # Generate color adjustment parameters once for entire image (consistent across all cards)
         if aug_config.color.enabled:
@@ -1499,6 +1600,53 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
     
     timings['light_source_setup'] = time.time() - t0
     
+    # Generate shadow parameters (independent from light source, needs image dimensions)
+    shadow_pos = None
+    shadow_base_intensity = None
+    shadow_direction = None
+    image_diagonal = (img_width**2 + img_height**2) ** 0.5  # For distance normalization
+    if enable_augmentations and aug_config.shadow.enabled and random.random() < aug_config.shadow.probability:
+        # Choose shadow type for this image
+        shadow_type = random.choice(aug_config.shadow.shadow_types)
+        print(f"   Shadow type: {shadow_type}")
+        
+        # Generate shadow source position (independent from light source)
+        shadow_x = random.randint(0, img_width - 1)
+        shadow_y = random.randint(0, img_height - 1)
+        shadow_pos = (shadow_x, shadow_y)
+        
+        # Generate base intensity for shadows (0.0-0.80 range)
+        shadow_base_intensity = random.uniform(*aug_config.shadow.intensity_range)
+        
+        # Determine shadow direction from position quadrant (for gradient shadows)
+        center_x = img_width / 2
+        center_y = img_height / 2
+        if shadow_x < center_x and shadow_y < center_y:
+            shadow_direction = 'top-left'
+        elif shadow_x >= center_x and shadow_y < center_y:
+            shadow_direction = 'top-right'
+        elif shadow_x < center_x and shadow_y >= center_y:
+            shadow_direction = 'bottom-left'
+        else:
+            shadow_direction = 'bottom-right'
+        
+        print(f"   Shadow source at: ({shadow_x}, {shadow_y}), base intensity: {shadow_base_intensity:.2f}, direction: {shadow_direction}")
+        
+        # For 'spot' type, generate consistent shadow positions
+        if shadow_type == 'spot':
+            num_spots = random.randint(*aug_config.shadow.num_spots_range)
+            print(f"   Shadow pattern: {num_spots} spot(s) at consistent relative positions")
+            
+            shadow_pattern = []
+            for _ in range(num_spots):
+                shadow_pattern.append({
+                    'x_ratio': random.random(),  # 0.0-1.0, scales to card width
+                    'y_ratio': random.random(),  # 0.0-1.0, scales to card height
+                    # Shadow radius range: 12-40% of card size
+                    'radius_ratio': random.uniform(0.12, 0.40)
+                })
+        # For other shadow types (gradient, vignette, uniform), pattern is handled per-card
+    
     # Create zone lookup dictionaries for O(1) access
     zones_by_class_id = {z['class_id']: z for z in zones}
     zones_by_name = {z['zone_name']: z for z in zones}
@@ -1640,10 +1788,10 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
     
     timings['hero_card_selection'] = time.time() - t0
 
-    # Select combat chain cards (0-15 total, split between both combat chains)
+    # Select combat chain cards (4-15 total, split between both combat chains)
     t0 = time.time()
     print("\n   Selecting combat chain cards...")
-    combat_chain_total = random.randint(0, 15)
+    combat_chain_total = random.randint(4, 15)
     print(f"   Total combat chain cards: {combat_chain_total}")
     
     # Find combat chain zones using lookup dict
@@ -1769,6 +1917,44 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
     print("\n6. Placing cards in zones...")
     card_placements = []
     
+    # Create a stencil layer: crop playmat to window bounds before placing cards
+    # This prevents cards from being drawn outside the window area
+    window_zone = None
+    for zone in zones:
+        if zone['zone_name'] == 'Window':
+            window_zone = zone
+            break
+    
+    original_playmat = None
+    if window_zone:
+        # Calculate window bounding box
+        center_x = int(window_zone['center_x'] * img_width)
+        center_y = int(window_zone['center_y'] * img_height)
+        w = int(window_zone['width'] * img_width)
+        h = int(window_zone['height'] * img_height)
+        
+        x_min = max(0, center_x - w // 2)
+        x_max = min(img_width, center_x + w // 2)
+        y_min = max(0, center_y - h // 2)
+        y_max = min(img_height, center_y + h // 2)
+        
+        # Save the original playmat (with outside-window area already replaced)
+        original_playmat = playmat.copy()
+        
+        # Create a temporary playmat with only the window area
+        # Crop to window bounds
+        window_area = playmat.crop((x_min, y_min, x_max, y_max))
+        
+        # Create a new blank image
+        playmat = window_area
+        
+        # Store the crop coordinates for later restoration
+        playmat._crop_bounds = (x_min, y_min, x_max, y_max)
+        playmat._original_size = (img_width, img_height)
+        playmat._original_playmat = original_playmat
+        
+        print(f"   Stencil applied: cards will only render within window bounds ({x_min}, {y_min}) to ({x_max}, {y_max})")
+    
     if zones:
         # Find hero zones using lookup dict (class_id 13 for Hero, 14 for Hero 2)
         hero1_zone = zones_by_class_id.get(13)
@@ -1777,14 +1963,14 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
         # Place Hero 1 (OPTIMIZATION: using helper function)
         if hero1_zone:
             placement = place_hero_card(hero1_img_path, hero1_zone, hero1_card, image_cache, playmat,
-                                       aug_config, blur_intensity, glare_pattern, color_params, 
+                                       aug_config, blur_intensity, glare_pattern, shadow_pattern, shadow_type, color_params, 
                                        sleeve_color, light_source_pos, img_width, img_height, uniform_scale_factor, hard_case_artifacts)
             card_placements.append(placement)
         
         # Place Hero 2 (OPTIMIZATION: using helper function)
         if hero2_zone:
             placement = place_hero_card(hero2_img_path, hero2_zone, hero2_card, image_cache, playmat,
-                                       aug_config, blur_intensity, glare_pattern, color_params, 
+                                       aug_config, blur_intensity, glare_pattern, shadow_pattern, shadow_type, color_params, 
                                        sleeve_color, light_source_pos, img_width, img_height, uniform_scale_factor, hard_case_artifacts)
             card_placements.append(placement)
         
@@ -1797,7 +1983,7 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
         # Place Hero 1 cards (OPTIMIZATION: using helper function)
         for (card, img_path), zone in zip(hero1_card_images, hero1_zones_used):
             placement = place_standard_card(card, img_path, zone, image_cache, playmat, aug_config,
-                                          blur_intensity, glare_pattern, color_params, sleeve_color,
+                                          blur_intensity, glare_pattern, shadow_pattern, shadow_type, color_params, sleeve_color,
                                           light_source_pos, img_width, img_height, uniform_scale_factor, hard_case_artifacts)
             card_placements.append(placement)
         
@@ -1805,7 +1991,7 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
         for (card, img_path), zone in zip(hero2_card_images, hero2_zones_used):
             print(f"   DEBUG: Placing {card['name']} (types: {card.get('types', [])}) in zone {zone['zone_name']}")
             placement = place_standard_card(card, img_path, zone, image_cache, playmat, aug_config,
-                                          blur_intensity, glare_pattern, color_params, sleeve_color,
+                                          blur_intensity, glare_pattern, shadow_pattern, shadow_type, color_params, sleeve_color,
                                           light_source_pos, img_width, img_height, uniform_scale_factor, hard_case_artifacts)
             card_placements.append(placement)
         
@@ -1815,7 +2001,7 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
             for card, img_path in combat_chain1_card_images:
                 placement = place_combat_chain_card(card, img_path, combat_chain1_zone, "Combat Chain 1", 7,
                                                    card_placements, image_cache, aug_config, blur_intensity,
-                                                   glare_pattern, color_params, sleeve_color, light_source_pos,
+                                                   glare_pattern, shadow_pattern, shadow_type, color_params, sleeve_color, light_source_pos,
                                                    img_width, img_height, playmat, uniform_scale_factor, hard_case_artifacts)
                 if placement:
                     card_placements.append(placement)
@@ -1828,7 +2014,7 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
             for card, img_path in combat_chain2_card_images:
                 placement = place_combat_chain_card(card, img_path, combat_chain2_zone, "Combat Chain 2", 8,
                                                    card_placements, image_cache, aug_config, blur_intensity,
-                                                   glare_pattern, color_params, sleeve_color, light_source_pos,
+                                                   glare_pattern, shadow_pattern, shadow_type, color_params, sleeve_color, light_source_pos,
                                                    img_width, img_height, playmat, uniform_scale_factor, hard_case_artifacts)
                 if placement:
                     card_placements.append(placement)
@@ -1841,18 +2027,22 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
         hero1_img = image_cache[str(hero1_img_path)]
         if aug_config is not None:
             glare_intensity = calculate_glare_intensity(50, 50, light_source_pos, img_width, img_height)
+            # Grid fallback doesn't support shadows (zone-based layout only)
+            shadow_intensity = None
             # Heroes have 50% chance of getting hard case (per card decision)
             use_hard_case_hero1 = random.random() < 0.5
-            hero1_img = apply_card_augmentations(hero1_img, aug_config, blur_intensity, glare_intensity, glare_pattern, color_params, sleeve_color, card_types=['Hero'], use_hard_case=use_hard_case_hero1, hard_case_artifacts=hard_case_artifacts)
+            hero1_img = apply_card_augmentations(hero1_img, aug_config, blur_intensity, glare_intensity, glare_pattern, shadow_intensity, shadow_pattern, shadow_type, None, color_params, sleeve_color, card_types=['Hero'], use_hard_case=use_hard_case_hero1, hard_case_artifacts=hard_case_artifacts)
         hero1_width, hero1_height = place_card_on_playmat(playmat, hero1_img, x=50, y=50, scale=0.6 * uniform_scale_factor)
         card_placements.append({'x': 50, 'y': 50, 'width': hero1_width, 'height': hero1_height, 'label': f"Hero 1: {hero1_card['name']}", 'zone_name': 'Hero', 'card_name': hero1_card['name']})
         
         hero2_img = image_cache[str(hero2_img_path)]
         if aug_config is not None:
             glare_intensity = calculate_glare_intensity(50, 500, light_source_pos, img_width, img_height)
+            # Grid fallback doesn't support shadows (zone-based layout only)
+            shadow_intensity = None
             # Heroes have 50% chance of getting hard case (per card decision)
             use_hard_case_hero2 = random.random() < 0.5
-            hero2_img = apply_card_augmentations(hero2_img, aug_config, blur_intensity, glare_intensity, glare_pattern, color_params, sleeve_color, card_types=['Hero'], use_hard_case=use_hard_case_hero2, hard_case_artifacts=hard_case_artifacts)
+            hero2_img = apply_card_augmentations(hero2_img, aug_config, blur_intensity, glare_intensity, glare_pattern, shadow_intensity, shadow_pattern, shadow_type, None, color_params, sleeve_color, card_types=['Hero'], use_hard_case=use_hard_case_hero2, hard_case_artifacts=hard_case_artifacts)
         hero2_width, hero2_height = place_card_on_playmat(playmat, hero2_img, x=50, y=500, scale=0.6 * uniform_scale_factor)
         card_placements.append({'x': 50, 'y': 500, 'width': hero2_width, 'height': hero2_height, 'label': f"Hero 2: {hero2_card['name']}", 'zone_name': 'Hero 2', 'card_name': hero2_card['name']})
         
@@ -1887,12 +2077,26 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
                 
                 # Calculate glare based on position (for fallback grid layout)
                 glare_intensity = calculate_glare_intensity(x, y, light_source_pos, img_width, img_height)
-                card_img = apply_card_augmentations(card_img, aug_config, blur_intensity, glare_intensity, glare_pattern, color_params, sleeve_color, card_types=card_types, use_hard_case=should_use_hard_case, hard_case_artifacts=hard_case_artifacts)
+                # Grid fallback doesn't support shadows (zone-based layout only)
+                shadow_intensity = None
+                card_img = apply_card_augmentations(card_img, aug_config, blur_intensity, glare_intensity, glare_pattern, shadow_intensity, shadow_pattern, shadow_type, None, color_params, sleeve_color, card_types=card_types, use_hard_case=should_use_hard_case, hard_case_artifacts=hard_case_artifacts)
             
             card_width, card_height = place_card_on_playmat(playmat, card_img, x, y, rotation=rotation, scale=card_scale * uniform_scale_factor)
             card_placements.append({'x': x, 'y': y, 'width': card_width, 'height': card_height, 'label': card['name'], 'zone_name': 'Card', 'card_name': card['name']})
     
     timings['place_cards'] = time.time() - t0
+    
+    # Remove stencil: restore full playmat with cards pasted only in window area
+    if hasattr(playmat, '_crop_bounds'):
+        x_min, y_min, x_max, y_max = playmat._crop_bounds
+        original_size = playmat._original_size
+        original_playmat = playmat._original_playmat
+        
+        # Paste the cropped window (with cards) back onto the original playmat
+        original_playmat.paste(playmat, (x_min, y_min))
+        playmat = original_playmat
+        
+        print(f"   Stencil removed: full playmat restored")
     
     # Apply occluders to playmat (after all cards placed, before bounding boxes)
     t0 = time.time()
@@ -1922,9 +2126,54 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
     
     timings['draw_bboxes'] = time.time() - t0
     
+    # Apply windowed mode simulation (15% of the time)
+    t0 = time.time()
+    if should_apply_windowed_mode(probability=0.15):
+        print("\n9. Applying windowed mode simulation...")
+        # Convert card_placements to YOLO format labels for transformation
+        yolo_labels = []
+        for placement in card_placements:
+            card_name = placement.get('card_name', placement.get('label', 'Unknown'))
+            class_id = CARD_NAME_TO_CLASS_ID.get(card_name, 0)
+            
+            # Convert to YOLO normalized format
+            center_x = (placement['x'] + placement['width'] / 2) / img_width
+            center_y = (placement['y'] + placement['height'] / 2) / img_height
+            width = placement['width'] / img_width
+            height = placement['height'] / img_height
+            
+            yolo_labels.append([class_id, center_x, center_y, width, height])
+        
+        # Apply windowed mode transformation
+        playmat, yolo_labels = apply_windowed_mode(
+            playmat, yolo_labels, img_width, img_height,
+            scale_range=(0.45, 0.75), white_bias=0.65
+        )
+        
+        # Update card_placements with transformed coordinates
+        for i, placement in enumerate(card_placements):
+            if i < len(yolo_labels):
+                label = yolo_labels[i]
+                # Convert back from YOLO normalized to pixel coordinates
+                center_x = label[1] * img_width
+                center_y = label[2] * img_height
+                width = label[3] * img_width
+                height = label[4] * img_height
+                
+                placement['x'] = int(center_x - width / 2)
+                placement['y'] = int(center_y - height / 2)
+                placement['width'] = int(width)
+                placement['height'] = int(height)
+        
+        print(f"   Window scaled and placed on noisy background")
+    else:
+        print("\n9. Skipping windowed mode (fullscreen)")
+    
+    timings['windowed_mode'] = time.time() - t0
+    
     # Save output with proper train/val/test split
     t0 = time.time()
-    base_dir = base_path / 'data' / 'synthetic'
+    base_dir = base_path / 'data' / output_subdir
     
     # Determine split (70% train, 20% val, 10% test)
     split_rand = random.random()
@@ -1952,7 +2201,7 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
     # Save image
     output_path = images_dir / f'{filename}.jpg'
     playmat.save(output_path, quality=95)
-    print(f"\n9. Saved image to: {output_path}")
+    print(f"\n10. Saved image to: {output_path}")
     
     # Save YOLO labels using card name mapping
     label_path = labels_dir / f'{filename}.txt'
@@ -1982,6 +2231,22 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
     print("SUCCESS! Playmat generated with labels.")
 
 if __name__ == '__main__':
-    # For testing: disable bbox drawing to see cards more clearly
-    main(enable_augmentations=True, draw_bboxes=False)
+    import argparse
+    
+    parser = argparse.ArgumentParser(description='Generate synthetic playmat images')
+    parser.add_argument('--selector', type=str, choices=['weighted', 'smooth'], default='weighted',
+                       help='Card selector type: "weighted" (popularity) or "smooth" (even distribution)')
+    parser.add_argument('--no-augmentations', action='store_true',
+                       help='Disable augmentations (for debugging)')
+    parser.add_argument('--draw-bboxes', action='store_true',
+                       help='Draw bounding boxes on output images')
+    
+    args = parser.parse_args()
+    
+    # For single-image generation (when called as script)
+    main(
+        enable_augmentations=not args.no_augmentations,
+        draw_bboxes=args.draw_bboxes,
+        selector_type=args.selector
+    )
 

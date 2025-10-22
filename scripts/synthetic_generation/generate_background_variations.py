@@ -18,10 +18,18 @@ from pathlib import Path
 import shutil
 
 # ===================== CONFIGURATION =====================
-BASE_IMAGE_PATH = 'data/Background Perfecting/images/AI-Edit-High-Res-3_png.rf.b44b3276cacd96d33871b994aaf0e459.jpg'
-BASE_LABEL_PATH = 'data/Background Perfecting/labels/AI-Edit-High-Res-3_png.rf.b44b3276cacd96d33871b994aaf0e459.txt'
-BASE_DATA_YAML = 'data/Background Perfecting/data.yaml'
-OUTPUT_DIR = 'data/Background Perfecting/test'
+# Auto-detect base path for Windows/Linux compatibility
+import platform
+if platform.system() == 'Windows':
+    BASE_PATH = Path(r'c:\VS Code\FaB Code')
+else:
+    # Linux/RunPod - assume script is in scripts/synthetic_generation/
+    BASE_PATH = Path(__file__).parent.parent.parent
+
+BASE_IMAGE_PATH = BASE_PATH / 'data' / 'Background Perfecting' / 'images' / 'AI-Edit-High-Res-3_png.rf.b44b3276cacd96d33871b994aaf0e459.jpg'
+BASE_LABEL_PATH = BASE_PATH / 'data' / 'Background Perfecting' / 'labels' / 'AI-Edit-High-Res-3_png.rf.b44b3276cacd96d33871b994aaf0e459.txt'
+BASE_DATA_YAML = BASE_PATH / 'data' / 'Background Perfecting' / 'data.yaml'
+OUTPUT_DIR = BASE_PATH / 'data' / 'synthetic' / 'backgrounds'
 
 # Variation parameters
 ROTATION_MAX_DEGREES = 45  # +/- max rotation (bell curve) - NOT USED (YOLO uses axis-aligned boxes)
@@ -295,29 +303,29 @@ def main():
     print()
     
     # Load data.yaml to get image dimensions
-    data_yaml = load_data_yaml(BASE_DATA_YAML)
+    data_yaml = load_data_yaml(str(BASE_DATA_YAML))
     
     # Get image dimensions from the base image
-    base_image = Image.open(BASE_IMAGE_PATH)
+    base_image = Image.open(str(BASE_IMAGE_PATH))
     img_width, img_height = base_image.size
     print(f"Base image dimensions: {img_width}x{img_height}")
     
     # Load base label file
-    with open(BASE_LABEL_PATH, 'r') as f:
+    with open(str(BASE_LABEL_PATH), 'r') as f:
         base_label_lines = f.readlines()
     
     print(f"Base label contains {len(base_label_lines)} zone annotations")
     
     # Create output directories
-    output_images_dir = os.path.join(OUTPUT_DIR, 'images')
-    output_labels_dir = os.path.join(OUTPUT_DIR, 'labels')
-    os.makedirs(output_images_dir, exist_ok=True)
-    os.makedirs(output_labels_dir, exist_ok=True)
+    output_images_dir = OUTPUT_DIR / 'images'
+    output_labels_dir = OUTPUT_DIR / 'labels'
+    output_images_dir.mkdir(parents=True, exist_ok=True)
+    output_labels_dir.mkdir(parents=True, exist_ok=True)
     
     # Create visualization directory if needed
     if args.visualize:
-        output_viz_dir = os.path.join(OUTPUT_DIR, 'visualizations')
-        os.makedirs(output_viz_dir, exist_ok=True)
+        output_viz_dir = OUTPUT_DIR / 'visualizations'
+        output_viz_dir.mkdir(parents=True, exist_ok=True)
         print(f"Visualization enabled: will generate {args.visualize_count} samples")
         print()
     
@@ -333,22 +341,22 @@ def main():
         )
         
         # Copy base image (we're not actually modifying the image, just the labels)
-        output_image_path = os.path.join(output_images_dir, f'bg_{i:06d}.png')
-        shutil.copy(BASE_IMAGE_PATH, output_image_path)
+        output_image_path = output_images_dir / f'bg_{i:06d}.png'
+        shutil.copy(str(BASE_IMAGE_PATH), str(output_image_path))
         
         # Write jostled label file
-        output_label_path = os.path.join(output_labels_dir, f'bg_{i:06d}.txt')
-        with open(output_label_path, 'w') as f:
+        output_label_path = output_labels_dir / f'bg_{i:06d}.txt'
+        with open(str(output_label_path), 'w') as f:
             f.writelines(jostled_labels)
         
         # Generate visualization if requested
         if args.visualize and i < args.visualize_count:
-            output_viz_path = os.path.join(output_viz_dir, f'bg_{i:06d}_viz.png')
-            visualize_labels(output_image_path, jostled_labels, output_viz_path, data_yaml['names'])
+            output_viz_path = output_viz_dir / f'bg_{i:06d}_viz.png'
+            visualize_labels(str(output_image_path), jostled_labels, str(output_viz_path), data_yaml['names'])
     
     # Copy data.yaml to output directory
-    output_data_yaml = os.path.join(OUTPUT_DIR, 'data.yaml')
-    shutil.copy(BASE_DATA_YAML, output_data_yaml)
+    output_data_yaml = OUTPUT_DIR / 'data.yaml'
+    shutil.copy(str(BASE_DATA_YAML), str(output_data_yaml))
     
     print(f"\n{'='*60}")
     print(f"Generation complete!")

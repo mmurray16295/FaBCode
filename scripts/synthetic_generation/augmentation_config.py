@@ -29,6 +29,18 @@ class GlareConfig:
 
 
 @dataclass
+class ShadowConfig:
+    """Configuration for shadow/darkness effects"""
+    enabled: bool = True
+    probability: float = 0.50  # 50% of images get shadows
+    intensity_range: Tuple[float, float] = (0.0, 0.80)  # 0-80% darkness (0.0 = no shadow, 1.0 = completely black)
+    radius_range: Tuple[int, int] = (120, 400)  # Shadow region radius in pixels
+    num_spots_range: Tuple[int, int] = (1, 2)  # Number of shadow spots
+    # Shadow types: 'spot' (localized), 'gradient' (directional), 'vignette' (edges), 'uniform' (overall dimming)
+    shadow_types: Tuple[str, ...] = ('spot', 'gradient', 'vignette', 'uniform')
+
+
+@dataclass
 class ColorAdjustmentConfig:
     """Configuration for color/brightness/contrast adjustments"""
     enabled: bool = True
@@ -114,6 +126,7 @@ class AugmentationConfig:
     """Master configuration for all augmentations"""
     blur: BlurConfig = None
     glare: GlareConfig = None
+    shadow: ShadowConfig = None
     color: ColorAdjustmentConfig = None
     sleeves: SleeveConfig = None
     deck_boxes: DeckBoxConfig = None
@@ -130,6 +143,8 @@ class AugmentationConfig:
             self.blur = BlurConfig()
         if self.glare is None:
             self.glare = GlareConfig()
+        if self.shadow is None:
+            self.shadow = ShadowConfig()
         if self.color is None:
             self.color = ColorAdjustmentConfig()
         if self.sleeves is None:
@@ -161,6 +176,7 @@ def create_light_config() -> AugmentationConfig:
     config = AugmentationConfig()
     config.blur.probability = 0.1
     config.glare.probability = 0.1
+    config.shadow.probability = 0.1
     config.color.probability = 0.2
     config.sleeves.probability = 0.3
     config.deck_boxes.probability = 0.05
@@ -175,6 +191,7 @@ def create_heavy_config() -> AugmentationConfig:
     config = AugmentationConfig()
     config.blur.probability = 0.5
     config.glare.probability = 0.4
+    config.shadow.probability = 0.5
     config.color.probability = 0.7
     config.sleeves.probability = 0.8
     config.deck_boxes.probability = 0.25

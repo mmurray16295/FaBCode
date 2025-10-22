@@ -27,9 +27,9 @@ def count_background_variations(background_dir):
     return len(jpg_files) + len(png_files)
 
 
-def ensure_background_variations(target_images, background_dir='data/Background Perfecting/images', verbose=True):
+def ensure_background_variations(target_images, background_dir='data/synthetic/backgrounds/images', verbose=True):
     """
-    Ensure sufficient background variations exist (50% of target images).
+    Ensure sufficient background variations exist (1:1 ratio with target images).
     Generates additional backgrounds if needed using generate_background_variations.py.
     
     This function is called by both test_generation.py and parallel_generate_dataset.py
@@ -43,13 +43,13 @@ def ensure_background_variations(target_images, background_dir='data/Background 
     Returns:
         Number of background variations available
     """
-    required_backgrounds = target_images // 2
+    required_backgrounds = target_images  # 1:1 ratio
     existing_backgrounds = count_background_variations(background_dir)
     
     if verbose:
         print(f"\nBackground Variation Check:")
         print(f"  Target images: {target_images:,}")
-        print(f"  Required backgrounds (50%): {required_backgrounds:,}")
+        print(f"  Required backgrounds (1:1): {required_backgrounds:,}")
         print(f"  Existing backgrounds: {existing_backgrounds:,}")
     
     if existing_backgrounds >= required_backgrounds:
