@@ -35,8 +35,8 @@ from collections import defaultdict
 import threading
 
 # ===================== CONFIGURATION =====================
-CARD_JSON_PATH = '../data/card.json'
-OUTPUT_DIR = '../data/images'  # Organize by set within this directory
+CARD_JSON_PATH = '../../data/card.json'
+OUTPUT_DIR = '../../data/images'  # Organize by set within this directory
 MAX_DIMENSION = 250  # Max width or height for downscaled images
 DEFAULT_MAX_WORKERS = 15  # Match to rate limit for efficiency
 REQUEST_TIMEOUT = 30

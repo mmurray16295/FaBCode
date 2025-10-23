@@ -23,6 +23,44 @@ This guide covers the complete RunPod training workflow for any training phase. 
 
 ## Step 1: Initial Setup
 
+### 1.0 Check Pod Specifications
+
+**CRITICAL**: RunPod instances are partitioned. **Always refer to RunPod UI "Pod Details"** for accurate resource limits.
+
+**Why internal checks can be misleading**:
+- `df -h /workspace` shows the **entire shared storage pool**, not your volume quota
+- `nproc` shows **host CPU count**, not your vCPU allocation
+- `free -h` shows **host memory**, not your pod limit
+- Only GPU specs and container disk are reliably detectable internally
+
+**Detectable internally**:
+```bash
+# Memory limit (accurate from cgroup)
+cat /sys/fs/cgroup/memory/memory.limit_in_bytes 2>/dev/null | numfmt --to=iec-i
+
+# Container disk (accurate)
+df -h / | grep overlay
+
+# GPU (accurate)
+nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
+```
+
+**Must check in RunPod UI** (not reliably detectable):
+- **vCPU allocation** (UI shows actual cores, cgroup may differ)
+- **Volume Storage quota** (UI shows your limit, df shows shared pool total)
+
+**Example pod specs** (always verify in RunPod UI):
+- **GPU**: RTX 5090 1x (32GB VRAM)
+- **vCPU**: 16 cores
+- **Memory**: 141 GB
+- **Container Disk**: 30 GB (temporary, for OS/deps only)
+- **Volume Storage**: 600 GB at /workspace (persistent, for data/models)
+
+**Important**: 
+- Use `/workspace` for ALL data, models, and outputs (persistent volume with quota)
+- Container disk is temporary and limited - only for dependencies
+- Set worker processes based on vCPU count from RunPod UI, not `nproc`
+
 ### 1.1 Clone Repository
 ```bash
 git clone https://github.com/mmurray16295/FaBCode.git
@@ -95,7 +133,7 @@ FaBCode/
 │   ├── synthetic_generation/               # Image generation scripts
 │   ├── yolo_training/                      # Training scripts
 │   └── asset_management/                   # Download utilities
-└── yolo11n.pt                              # Base YOLO11 nano weights
+└── yolo11x.pt                              # Base YOLO11x weights (optional)
 ```
 
 ---
@@ -336,7 +374,7 @@ python train_yolo.py \
 ```
 
 **Training parameters**:
-- `--model`: Use `../../models/Phase3/best.pt` for transfer learning (faster, better results) or `yolo11n.pt` for from-scratch training
+- `--model`: Use `../../models/Phase3/best.pt` for transfer learning (faster, better results) or `yolo11x.pt` for from-scratch training
 - `--epochs`: 50 for transfer learning, 100+ for from-scratch
 - `--batch 16`: Batch size (adjust for GPU memory)
 - `--imgsz 640`: Input image size (640x640)
