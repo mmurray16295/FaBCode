@@ -27,10 +27,10 @@ def count_background_variations(background_dir):
     return len(jpg_files) + len(png_files)
 
 
-def ensure_background_variations(target_images, background_dir='data/synthetic/backgrounds/images', verbose=True):
+def ensure_background_variations(target_images, background_dir='data/synthetic/backgrounds/images', verbose=True, batch_size=1000):
     """
     Ensure sufficient background variations exist (1:1 ratio with target images).
-    Generates additional backgrounds if needed using generate_background_variations.py.
+    Generates backgrounds in batches to avoid OOM during generation.
     
     This function is called by both test_generation.py and parallel_generate_dataset.py
     to ensure consistent behavior across all generation modes.
@@ -39,6 +39,7 @@ def ensure_background_variations(target_images, background_dir='data/synthetic/b
         target_images: Total number of images to generate
         background_dir: Directory containing background variations
         verbose: Print progress messages
+        batch_size: Generate backgrounds in batches of this size (default 1000)
     
     Returns:
         Number of background variations available
@@ -61,8 +62,8 @@ def ensure_background_variations(target_images, background_dir='data/synthetic/b
     needed = required_backgrounds - existing_backgrounds
     if verbose:
         print(f"  ⚠ Need {needed:,} more background variations")
-        print(f"\nGenerating background variations...")
-        print(f"  (This is a one-time cost for this batch size)")
+        print(f"\nGenerating background variations in batches of {batch_size:,}...")
+        print(f"  (Batched generation to avoid OOM)")
     
     try:
         # Determine script location (works from any caller location)
@@ -75,26 +76,27 @@ def ensure_background_variations(target_images, background_dir='data/synthetic/b
                 print(f"  Continuing with {existing_backgrounds:,} backgrounds...")
             return existing_backgrounds
         
-        # Call generate_background_variations.py
+        # Generate all at once (it's fast - just copying files and jittering labels)
+        if verbose:
+            print(f"  Generating {needed:,} backgrounds...")
+        
         result = subprocess.run([
             sys.executable, 
             str(bg_gen_script),
             '--num-variations', str(needed)
-        ], capture_output=True, text=True, timeout=600)
+        ], capture_output=True, text=True, timeout=1200)
         
-        if result.returncode == 0:
-            new_count = count_background_variations(background_dir)
+        if result.returncode != 0:
             if verbose:
-                print(f"  ✓ Generated {needed:,} background variations")
-                print(f"  Total backgrounds available: {new_count:,}")
-            return new_count
-        else:
-            if verbose:
-                print(f"  ✗ Background generation failed")
-                if result.stderr:
-                    print(f"  Error: {result.stderr[:200]}")
-                print(f"  Continuing with {existing_backgrounds:,} backgrounds...")
-            return existing_backgrounds
+                print(f"  ✗ Background generation failed: {result.stderr[:200]}")
+        
+        total_generated = needed if result.returncode == 0 else 0
+        
+        new_count = count_background_variations(background_dir)
+        if verbose:
+            print(f"  ✓ Generated {total_generated:,} background variations")
+            print(f"  Total backgrounds available: {new_count:,}")
+        return new_count
             
     except subprocess.TimeoutExpired:
         if verbose:

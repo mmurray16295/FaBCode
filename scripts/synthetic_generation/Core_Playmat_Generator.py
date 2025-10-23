@@ -1312,8 +1312,11 @@ def place_combat_chain_card(card, img_path, zone, chain_name, zone_id, card_plac
     max_dim = int(math.sqrt(scaled_width**2 + scaled_height**2))
     
     # Find valid position
+    # Training mode: 65% max overlap (challenging)
+    # Validation mode: 45% max overlap (realistic)
+    max_overlap = 45 if args.validation_mode else 65
     position = find_valid_position_in_zone(zone, max_dim, max_dim, card_placements,
-                                           img_width, img_height, max_overlap_pct=65, max_attempts=50)
+                                           img_width, img_height, max_overlap_pct=max_overlap, max_attempts=50)
     
     if not position:
         return None
@@ -1340,7 +1343,7 @@ def place_combat_chain_card(card, img_path, zone, chain_name, zone_id, card_plac
         'card_name': card['name']
     }
 
-def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_background_cycling=False, target_images=1, selector_type='weighted'):
+def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_background_cycling=False, target_images=1, selector_type='weighted', args=None):
     """
     Generate a single synthetic playmat image.
     
@@ -1351,6 +1354,7 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
         use_background_cycling: Cycle through backgrounds efficiently (for batch generation)
         target_images: Total number of images to generate (for calculating background needs)
         selector_type: 'weighted' (default) or 'smooth' for even distribution
+        args: Command line arguments (for accessing split parameter)
     """
     # Initialize timing dictionary
     timings = {}
@@ -1369,7 +1373,10 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
         base_path = Path(r'c:\VS Code\FaB Code')
     else:
         # Linux/RunPod environment paths (relative to script)
-        base_path = Path(__file__).parent.parent  # Go up to FaBCode root
+        # Script is at scripts/synthetic_generation/Core_Playmat_Generator.py
+        # So we need .parent.parent to get to FaBCode root
+        script_path = Path(__file__).resolve()
+        base_path = script_path.parent.parent.parent  # Go up to FaBCode root
     
     # Same structure on both environments
     card_json_path = base_path / 'data' / 'card.json'
@@ -1410,7 +1417,15 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
     timings['initialization'] = time.time() - t0
     
     # Load augmentation config (optionally from preset)
-    aug_config = get_config() if enable_augmentations else None
+    # Use realistic validation config if validation_mode is active
+    if enable_augmentations:
+        if args.validation_mode:
+            from augmentation_config import create_realistic_validation_config
+            aug_config = create_realistic_validation_config()
+        else:
+            aug_config = get_config()
+    else:
+        aug_config = None
     blur_intensity = None
     glare_pattern = None
     shadow_pattern = None
@@ -1495,19 +1510,21 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
                     print(f"   Color adjustment: brightness={color_params['brightness']:.2f}, contrast={color_params['contrast']:.2f}, saturation={color_params['saturation']:.2f}, hue_shift={color_params['hue_shift']}°")
         
         # Generate sleeve color once for entire image (consistent across all cards)
-        # Common sleeve colors: black, white, blue, red, green, purple, clear (None)
-        sleeve_colors = [
-            None,  # No sleeve (50% chance when selected)
-            (0, 0, 0),  # Black
-            (255, 255, 255),  # White
-            (50, 50, 200),  # Blue
-            (200, 50, 50),  # Red
-            (50, 150, 50),  # Green
-            (150, 50, 150),  # Purple
-            (200, 150, 50),  # Gold
-            (100, 100, 100),  # Grey
-        ]
-        sleeve_color = random.choice(sleeve_colors)
+        # Use aug_config.sleeves.probability to decide if sleeves are used
+        sleeve_color = None
+        if random.random() < aug_config.sleeves.probability:
+            # Common sleeve colors (excluding None - that's handled by probability)
+            sleeve_colors = [
+                (0, 0, 0),  # Black
+                (255, 255, 255),  # White
+                (50, 50, 200),  # Blue
+                (200, 50, 50),  # Red
+                (50, 150, 50),  # Green
+                (150, 50, 150),  # Purple
+                (200, 150, 50),  # Gold
+                (100, 100, 100),  # Grey
+            ]
+            sleeve_color = random.choice(sleeve_colors)
         
         if sleeve_color is not None:
             print(f"   Sleeve color: RGB{sleeve_color}")
@@ -1521,8 +1538,10 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
         print(f"   Uniform card scale: {uniform_scale_factor:.3f}× ({(uniform_scale_factor - 1.0) * 100:+.1f}%)")
         
         # Decide whether to include hard case artifacts (challenging splotching effect)
-        # 50% chance for realistic cases, 50% chance for artifact-heavy cases (extra challenge)
-        hard_case_artifacts = random.random() < 0.5
+        # Training mode: 50% chance for artifact-heavy cases (extra challenge)
+        # Validation mode: 0% chance (realistic only)
+        artifact_probability = 0.0 if args.validation_mode else 0.5
+        hard_case_artifacts = random.random() < artifact_probability
         if hard_case_artifacts:
             print(f"   Hard case mode: With artifacts (challenging training data)")
         else:
@@ -2175,14 +2194,9 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
     t0 = time.time()
     base_dir = base_path / 'data' / output_subdir
     
-    # Determine split (70% train, 20% val, 10% test)
-    split_rand = random.random()
-    if split_rand < 0.70:
-        split = 'train'
-    elif split_rand < 0.90:
-        split = 'valid'
-    else:
-        split = 'test'
+    # Determine split from command line argument (default: train)
+    # Can be overridden with --split argument
+    split = args.split if hasattr(args, 'split') else 'train'
     
     # Create directories
     images_dir = base_dir / split / 'images'
@@ -2236,6 +2250,10 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate synthetic playmat images')
     parser.add_argument('--selector', type=str, choices=['weighted', 'smooth'], default='smooth',
                        help='Card selector type: "smooth" (even distribution, default) or "weighted" (popularity)')
+    parser.add_argument('--validation_mode', action='store_true',
+                       help='Use realistic validation settings (0%% artifacts, 45%% overlap, reduced glare/shadows). Default is hard training settings (50%% artifacts, 65%% overlap).')
+    parser.add_argument('--split', type=str, choices=['train', 'valid', 'test'], default='train',
+                       help='Which split to save image to: train, valid, or test (default: train)')
     parser.add_argument('--no-augmentations', action='store_true',
                        help='Disable augmentations (for debugging)')
     parser.add_argument('--draw-bboxes', action='store_true',
@@ -2247,6 +2265,7 @@ if __name__ == '__main__':
     main(
         enable_augmentations=not args.no_augmentations,
         draw_bboxes=args.draw_bboxes,
-        selector_type=args.selector
+        selector_type=args.selector,
+        args=args  # Pass full args for split access
     )
 

@@ -76,7 +76,7 @@ class ColorAdjustmentConfig:
 class SleeveConfig:
     """Configuration for card sleeve effects"""
     enabled: bool = True
-    probability: float = 0.6  # 60% of cards have sleeves
+    probability: float = 0.89  # 89% of images have sleeves (8/9 ratio from original logic)
     glare_probability: float = 0.4  # 40% of sleeved cards have glare
     reflection_intensity: Tuple[float, float] = (0.1, 0.3)
     color_tint_probability: float = 0.3  # 30% have colored sleeves
@@ -212,4 +212,57 @@ def create_no_augmentation_config() -> AugmentationConfig:
     config.occluders.enabled = False
     config.jitter.enabled = False
     config.bbox_jitter.enabled = False
+    return config
+
+
+def create_realistic_validation_config() -> AugmentationConfig:
+    """
+    Create a realistic validation configuration (moderate difficulty).
+    
+    Designed for validation sets that provide good feedback on real-world performance
+    without the extreme adversarial conditions of hard training data.
+    
+    Key differences from DEFAULT_CONFIG:
+    - Reduced blur intensity (30% max vs 50% max)
+    - High glare probability (70% - almost all games have some glare) but much lower intensity (max 0.14 vs 0.7)
+    - Lighter shadows (0-20% intensity vs 0-80%)
+    - 100% sleeves (all competitive games use sleeves)
+    - Reduced sleeve glare (30% vs 40%)
+    - Deck boxes kept at 15% (hard cases in realistic frequency)
+    - Occluders kept at 25% (dice, counters common in real games)
+    - Standard jitter and bbox adjustments maintained
+    - Color adjustments kept moderate (already reduced by 35% from original)
+    """
+    config = AugmentationConfig()
+    
+    # Blur: Reduce max intensity from 50% to 30%
+    config.blur.probability_range = (0.15, 0.30)
+    
+    # Glare: High probability (70%) but much reduced intensity (10x less max)
+    config.glare.probability = 0.70  # Almost every game has some glare from lighting
+    config.glare.intensity_range = (0.1, 0.2)  # Max reduced from 0.7 to 0.2 (3.5x less)
+    
+    # Shadow: Reduce max intensity to 20%
+    config.shadow.probability = 0.35
+    config.shadow.intensity_range = (0.0, 0.20)  # Max 20% vs 80%
+    
+    # Color: Keep moderate (already well-tuned)
+    config.color.probability = 0.5
+    
+    # Sleeves: Keep default (~60% probability)
+    # Sleeve glare: Reduced from 40% to 30%
+    config.sleeves.glare_probability = 0.30
+    
+    # Deck boxes: Keep at 15% (hard cases are realistic)
+    config.deck_boxes.probability = 0.15
+    
+    # Occluders: Keep at 25% (dice/counters are common)
+    config.occluders.probability = 0.25
+    
+    # Jitter: Keep standard for natural card placement variation
+    config.jitter.probability = 0.8
+    
+    # Bbox jitter: Keep standard for robustness
+    config.bbox_jitter.probability = 0.5
+    
     return config

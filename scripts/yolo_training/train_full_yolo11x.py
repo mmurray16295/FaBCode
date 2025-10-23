@@ -23,7 +23,7 @@ def main():
     
     # Configuration
     data_yaml = '/workspace/FaBCode/data/synthetic/data.yaml'
-    model_path = '/workspace/FaBCode/yolo11x.pt'
+    model_path = '/workspace/FaBCode/best_phase3.pt'  # Best weights from epoch 27
     cache_dir = '/workspace/FaBCode/cache/dataset_cache'
     project_dir = '/workspace/FaBCode/runs/full_training'
     run_name = f'yolo11x_2641classes_{datetime.now().strftime("%Y%m%d_%H%M%S")}'
@@ -59,11 +59,11 @@ def main():
             data=data_yaml,
             
             # Training duration
-            epochs=300,
-            patience=50,
+            epochs=150,
+            patience=20,
             
             # Batch and image settings
-            batch=24,  # Optimized for 32GB VRAM
+            batch=4,  # Reduced for 32GB VRAM with 1280 images
             imgsz=1280,  # Full resolution
             
             # Hardware
@@ -71,7 +71,7 @@ def main():
             workers=12,  # Increased for better data loading
             
             # Caching - CRITICAL for performance
-            cache='disk',  # Cache to disk, not RAM (109GB pod limit)
+            cache='disk',  # Cache to disk (RAM caching uses ~586GB!)
             
             # Checkpointing and validation
             save=True,
@@ -86,7 +86,7 @@ def main():
             
             # Optimization
             optimizer='AdamW',
-            lr0=0.001,
+            lr0=0.0001,  # Lower LR for fine-tuning from epoch 27 weights
             lrf=0.01,
             momentum=0.937,
             weight_decay=0.0005,
