@@ -62,3 +62,9 @@ scripts/explore_card_json.py
 
 # Phase 3 reassembled weights (split parts are tracked)
 models/Phase3/best.pt
+
+# Ignore AWS credentials
+scripts/aws/aws_credentials.txt
+
+# Ignore full training runs
+runs/full_training/
