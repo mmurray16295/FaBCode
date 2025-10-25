@@ -40,9 +40,9 @@ def create_phase4_package():
     shutil.copy2(source_dir / "fab_detector_app.py", temp_package_dir / "fab_detector_app.py")
     print(f"  ✅ fab_detector_app.py")
     
-    # Copy model weights (use the actual 344MB model being tested)
+    # Copy model weights (344MB Phase 3 model from training)
     print("\n📦 Copying model weights...")
-    model_src = source_dir / "models" / "best.pt"
+    model_src = project_root / "runs" / "detect" / "training_20k_synthetic_epoch50" / "weights" / "best.pt"
     (temp_package_dir / "models").mkdir(exist_ok=True)
     if model_src.exists():
         shutil.copy2(model_src, temp_package_dir / "models" / "best.pt")
@@ -55,7 +55,7 @@ def create_phase4_package():
     print("\n📦 Copying data files...")
     data_files = [
         "data/card.json",
-        "data/card_name_to_class_id.json"
+        "data/heroes_card.json"
     ]
     
     (temp_package_dir / "data").mkdir(exist_ok=True)
