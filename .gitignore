@@ -66,5 +66,13 @@ models/Phase3/best.pt
 # Ignore AWS credentials
 scripts/aws/aws_credentials.txt
 
-# Ignore full training runs
-runs/full_training/
+# Full training runs - keep metrics, ignore large files
+runs/full_training/*/weights/
+runs/full_training/*/train/
+runs/full_training/*/val/
+# Allow metrics and config files (CSV, PNG, YAML are small)
+!runs/full_training/*/results.csv
+!runs/full_training/*/results.png
+!runs/full_training/*/args.yaml
+!runs/full_training/*/*.png
+!runs/full_training/*/*.csv

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Full YOLOv11x Training - Optimized for 125K images (87K train, 25K val, 13K test)
-Target: 300 epochs over ~8-10 days
+Full YOLOv11x Training - 45K Synthetic Dataset (40K train, 5K validation)
+Target: 100 epochs, patience 20, lr0=0.00005
 """
 
 import torch
@@ -23,7 +23,7 @@ def main():
     
     # Configuration
     data_yaml = '/workspace/FaBCode/data/synthetic/data.yaml'
-    model_path = '/workspace/FaBCode/best_phase3.pt'  # Best weights from epoch 27
+    model_path = '/workspace/FaBCode/runs/full_training/yolo11x_2641classes_20251023_024057/weights/best.pt'  # Best weights from epoch 50 (mAP50=0.901)
     cache_dir = '/workspace/FaBCode/cache/dataset_cache'
     project_dir = '/workspace/FaBCode/runs/full_training'
     run_name = f'yolo11x_2641classes_{datetime.now().strftime("%Y%m%d_%H%M%S")}'
@@ -33,9 +33,11 @@ def main():
     print(f"  Model: {model_path}")
     print(f"  Cache: {cache_dir}")
     print(f"  Output: {project_dir}/{run_name}")
-    print(f"  Epochs: 300")
-    print(f"  Batch Size: 24")
+    print(f"  Epochs: 100")
+    print(f"  Patience: 20")
+    print(f"  Batch Size: 4")
     print(f"  Image Size: 1280")
+    print(f"  Learning Rate: 0.00005 (halved from 0.0001)")
     print(f"  Workers: 12")
     print("="*80 + "\n")
     
@@ -59,11 +61,11 @@ def main():
             data=data_yaml,
             
             # Training duration
-            epochs=150,
+            epochs=100,
             patience=20,
             
             # Batch and image settings
-            batch=4,  # Reduced for 32GB VRAM with 1280 images
+            batch=4,  # Optimal for 32GB VRAM with 1280 images
             imgsz=1280,  # Full resolution
             
             # Hardware
@@ -71,12 +73,12 @@ def main():
             workers=12,  # Increased for better data loading
             
             # Caching - CRITICAL for performance
-            cache='disk',  # Cache to disk (RAM caching uses ~586GB!)
+            cache='disk',  # Cache to disk (RAM caching would use too much RAM)
             
             # Checkpointing and validation
             save=True,
             save_period=10,  # Save checkpoint every 10 epochs
-            val=True,  # Run validation
+            val=True,  # Run validation on 5K validation set
             plots=True,  # Generate plots for monitoring
             
             # Output
@@ -86,7 +88,7 @@ def main():
             
             # Optimization
             optimizer='AdamW',
-            lr0=0.0001,  # Lower LR for fine-tuning from epoch 27 weights
+            lr0=0.00005,  # Halved from 0.0001 for fine-tuning
             lrf=0.01,
             momentum=0.937,
             weight_decay=0.0005,
