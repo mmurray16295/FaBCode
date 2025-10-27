@@ -440,8 +440,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Arakni, Huntsman": {
         "deck_count": 11540,
@@ -1036,8 +1035,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Arakni, Marionette": {
         "deck_count": 9915,
@@ -1438,8 +1436,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Aurora, Shooting Star": {
         "deck_count": 10669,
@@ -1763,8 +1760,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Azalea, Ace in the Hole": {
         "deck_count": 15219,
@@ -2272,8 +2268,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Betsy, Skin in the Game": {
         "deck_count": 5695,
@@ -3002,7 +2997,7 @@
           ],
           "resource": [
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 27.19665271966527
             },
@@ -3018,8 +3013,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Bravo, Showstopper": {
         "deck_count": 14290,
@@ -3624,8 +3618,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Bravo, Star of the Show": {
         "deck_count": 491,
@@ -4150,8 +4143,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Briar, Warden of Thorns": {
         "deck_count": 4339,
@@ -4770,8 +4762,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Chane, Bound by Shadow": {
         "deck_count": 810,
@@ -5360,8 +5351,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Cindra, Dracai of Retribution": {
         "deck_count": 12463,
@@ -5749,8 +5739,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Dash I/O": {
         "deck_count": 17237,
@@ -6174,8 +6163,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Dash, Inventor Extraordinaire": {
         "deck_count": 12524,
@@ -6850,8 +6838,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Dorinthea Ironsong": {
         "deck_count": 21379,
@@ -7406,8 +7393,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Dromai, Ash Artist": {
         "deck_count": 13723,
@@ -7926,8 +7912,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Enigma, Ledger of Ancestry": {
         "deck_count": 13505,
@@ -8457,14 +8442,13 @@
           ],
           "resource": [
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 9.523809523809524
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Fai, Rising Rebellion": {
         "deck_count": 16413,
@@ -9037,8 +9021,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Fang, Dracai of Blades": {
         "deck_count": 10438,
@@ -9491,8 +9474,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Florian, Rotwood Harbinger": {
         "deck_count": 11666,
@@ -9998,8 +9980,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Gravy Bones, Shipwrecked Looter": {
         "deck_count": 8261,
@@ -10369,14 +10350,13 @@
               "usage_percentage": 35.50417624984868
             },
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 19.088595321779177
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Ira, Scarlet Revenger": {
         "deck_count": 10103,
@@ -10989,8 +10969,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Iyslander, Stormbind": {
         "deck_count": 4950,
@@ -11423,10 +11402,9 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
-      "Jarl Vetreiði": {
+      "Jarl Vetrei\u00f0i": {
         "deck_count": 8464,
         "total_unique_cards": 99,
         "sections": {
@@ -11944,8 +11922,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Kano, Dracai of Aether": {
         "deck_count": 11548,
@@ -12167,7 +12144,7 @@
               "usage_percentage": 32.97769156159069
             },
             {
-              "card_name": "Potion of Déjà Vu",
+              "card_name": "Potion of D\u00e9j\u00e0 Vu",
               "card_id": "EVR185",
               "usage_percentage": 31.675233034236435
             },
@@ -12401,8 +12378,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Kassai of the Golden Sand": {
         "deck_count": 11392,
@@ -12784,7 +12760,7 @@
           ],
           "resource": [
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 85.58558558558559
             },
@@ -12805,8 +12781,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Katsu, the Wanderer": {
         "deck_count": 18252,
@@ -13464,8 +13439,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Kayo, Armed and Dangerous": {
         "deck_count": 14068,
@@ -13941,8 +13915,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Kayo, Underhanded Cheat": {
         "deck_count": 776,
@@ -14325,8 +14298,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Levia, Shadowborn Abomination": {
         "deck_count": 15443,
@@ -14809,8 +14781,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Lexi, Livewire": {
         "deck_count": 9090,
@@ -15353,8 +15324,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Lyath Goldmane, Vile Savant": {
         "deck_count": 527,
@@ -15787,8 +15757,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Marlynn, Treasure Hunter": {
         "deck_count": 4125,
@@ -16245,7 +16214,7 @@
           ],
           "resource": [
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 31.903030303030306
             },
@@ -16261,8 +16230,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Maxx 'The Hype' Nitro": {
         "deck_count": 8881,
@@ -16796,8 +16764,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Nuu, Alluring Desire": {
         "deck_count": 15033,
@@ -17350,8 +17317,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Oldhim, Grandfather of Eternity": {
         "deck_count": 4186,
@@ -17896,8 +17862,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Olympia, Prized Fighter": {
         "deck_count": 7639,
@@ -18541,7 +18506,7 @@
           ],
           "resource": [
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 25.992779783393498
             },
@@ -18557,8 +18522,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Oscilio, Constella Intelligence": {
         "deck_count": 8051,
@@ -18964,8 +18928,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Pleiades, Superstar": {
         "deck_count": 12,
@@ -19708,8 +19671,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Prism, Awakener of Sol": {
         "deck_count": 15826,
@@ -20144,7 +20106,7 @@
               "usage_percentage": 45.68431694679641
             },
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 29.02946273830156
             },
@@ -20155,8 +20117,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Prism, Sculptor of Arc Light": {
         "deck_count": 1579,
@@ -20526,7 +20487,7 @@
           ],
           "resource": [
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 40.0
             },
@@ -20537,8 +20498,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Puffin, Hightail": {
         "deck_count": 761,
@@ -20975,7 +20935,7 @@
           ],
           "resource": [
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 22.470433639947437
             },
@@ -20986,8 +20946,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Rhinar, Reckless Rampage": {
         "deck_count": 16949,
@@ -21615,8 +21574,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Riptide, Lurker of the Deep": {
         "deck_count": 14043,
@@ -22201,8 +22159,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Ser Boltyn, Breaker of Dawn": {
         "deck_count": 15088,
@@ -22765,8 +22722,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Teklovossen, Esteemed Magnate": {
         "deck_count": 9822,
@@ -23322,8 +23278,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Tuffnut, Bumbling Hulkster": {
         "deck_count": 446,
@@ -23754,8 +23709,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Uzuri, Switchblade": {
         "deck_count": 14069,
@@ -24420,8 +24374,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Valda, Seismic Impact": {
         "deck_count": 136,
@@ -25099,8 +25052,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Verdance, Thorn of the Rose": {
         "deck_count": 11127,
@@ -25598,8 +25550,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Victor Goldmane, High and Mighty": {
         "deck_count": 12712,
@@ -26088,14 +26039,13 @@
           ],
           "resource": [
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 81.58273381294964
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Viserai, Rune Blood": {
         "deck_count": 16389,
@@ -26635,8 +26585,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Vynnset, Iron Maiden": {
         "deck_count": 15847,
@@ -27059,8 +27008,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       },
       "Zen, Tamer of Purpose": {
         "deck_count": 14383,
@@ -27073,7 +27021,7 @@
               "usage_percentage": 92.93610512410486
             },
             {
-              "card_name": "Twelve Petal Kāṣāya",
+              "card_name": "Twelve Petal K\u0101\u1e63\u0101ya",
               "card_id": "MST048",
               "usage_percentage": 92.2964610999096
             },
@@ -27633,8 +27581,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": false
+        "data_source": "scraped"
       }
     },
     "blitz": {
@@ -28446,8 +28393,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Arakni, Solitary Confinement": {
         "deck_count": 6387,
@@ -29180,8 +29126,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Arakni, Web of Deceit": {
         "deck_count": 236,
@@ -29667,8 +29612,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Aurora": {
         "deck_count": 2867,
@@ -30184,8 +30128,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Azalea": {
         "deck_count": 4861,
@@ -30823,8 +30766,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Benji, the Piercing Wind": {
         "deck_count": 5316,
@@ -31592,8 +31534,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Betsy": {
         "deck_count": 2331,
@@ -32297,14 +32238,13 @@
           ],
           "resource": [
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 9.090909090909092
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Blaze, Firemind": {
         "deck_count": 2697,
@@ -32767,8 +32707,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Boltyn": {
         "deck_count": 3660,
@@ -33453,8 +33392,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Bravo": {
         "deck_count": 4901,
@@ -34125,8 +34063,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Brevant, Civic Protector": {
         "deck_count": 46,
@@ -34759,8 +34696,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Briar": {
         "deck_count": 3782,
@@ -35489,8 +35425,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Chane": {
         "deck_count": 3327,
@@ -36151,8 +36086,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Cindra": {
         "deck_count": 1506,
@@ -36660,8 +36594,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Dash": {
         "deck_count": 5649,
@@ -37178,8 +37111,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Dash, Database": {
         "deck_count": 3572,
@@ -37661,8 +37593,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Data Doll MKII": {
         "deck_count": 3020,
@@ -38137,8 +38068,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Dorinthea": {
         "deck_count": 6772,
@@ -38863,8 +38793,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Dorinthea, Quicksilver Prodigy": {
         "deck_count": 2211,
@@ -39339,8 +39268,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Dromai": {
         "deck_count": 5215,
@@ -39851,8 +39779,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Emperor, Dracai of Aesir": {
         "deck_count": 3499,
@@ -40510,8 +40437,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Enigma": {
         "deck_count": 3668,
@@ -41113,14 +41039,13 @@
           ],
           "resource": [
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 13.043478260869565
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Enigma, New Moon": {
         "deck_count": 47,
@@ -41635,8 +41560,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Fai": {
         "deck_count": 4611,
@@ -42252,8 +42176,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Fang": {
         "deck_count": 1427,
@@ -42829,8 +42752,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Florian": {
         "deck_count": 2058,
@@ -43436,8 +43358,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Genis Wotchuneed": {
         "deck_count": 434,
@@ -44361,7 +44282,7 @@
           ],
           "resource": [
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 16.666666666666664
             },
@@ -44372,8 +44293,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Gravy Bones": {
         "deck_count": 316,
@@ -44777,8 +44697,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Ira, Crimson Haze": {
         "deck_count": 3274,
@@ -45571,8 +45490,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Iyslander": {
         "deck_count": 1603,
@@ -46033,8 +45951,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Kano": {
         "deck_count": 2753,
@@ -46391,7 +46308,7 @@
               "usage_percentage": 33.236363636363635
             },
             {
-              "card_name": "Potion of Déjà Vu",
+              "card_name": "Potion of D\u00e9j\u00e0 Vu",
               "card_id": "EVR185",
               "usage_percentage": 31.979127841967948
             },
@@ -46650,8 +46567,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Kassai": {
         "deck_count": 2324,
@@ -47195,14 +47111,13 @@
           ],
           "resource": [
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 41.02564102564102
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Kassai, Cintari Sellsword": {
         "deck_count": 2984,
@@ -47707,8 +47622,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Katsu": {
         "deck_count": 3615,
@@ -48476,8 +48390,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Kavdaen, Trader of Skins": {
         "deck_count": 446,
@@ -49367,8 +49280,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Kayo": {
         "deck_count": 4001,
@@ -49947,8 +49859,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Kayo, Berserker Runt": {
         "deck_count": 2615,
@@ -50821,8 +50732,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Levia": {
         "deck_count": 4557,
@@ -51425,8 +51335,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Lexi": {
         "deck_count": 5518,
@@ -52222,8 +52131,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Lyath Goldmane": {
         "deck_count": 28,
@@ -52769,8 +52677,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Marlynn": {
         "deck_count": 281,
@@ -53337,7 +53244,7 @@
           ],
           "resource": [
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 12.099644128113878
             },
@@ -53353,8 +53260,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Maxx Nitro": {
         "deck_count": 2724,
@@ -54038,8 +53944,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Melody, Sing-along": {
         "deck_count": 1117,
@@ -54863,7 +54768,7 @@
           ],
           "resource": [
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 46.15384615384615
             },
@@ -54884,8 +54789,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Nuu": {
         "deck_count": 2889,
@@ -55558,8 +55462,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Oldhim": {
         "deck_count": 2207,
@@ -56317,8 +56220,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Olympia": {
         "deck_count": 2364,
@@ -57087,7 +56989,7 @@
           ],
           "resource": [
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 15.0
             },
@@ -57098,8 +57000,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Oscilio": {
         "deck_count": 1533,
@@ -57590,8 +57491,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Pleiades": {
         "deck_count": 1,
@@ -57738,8 +57638,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Prism": {
         "deck_count": 4609,
@@ -58355,7 +58254,7 @@
           ],
           "resource": [
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 7.894736842105263
             },
@@ -58366,8 +58265,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Prism, Advent of Thrones": {
         "deck_count": 2603,
@@ -58802,14 +58700,13 @@
               "usage_percentage": 17.287744909719553
             },
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 6.25
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Professor Teklovossen": {
         "deck_count": 1163,
@@ -59355,8 +59252,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Puffin": {
         "deck_count": 68,
@@ -59815,14 +59711,13 @@
           ],
           "resource": [
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 5.88235294117647
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Rhinar": {
         "deck_count": 6639,
@@ -60510,8 +60405,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Riptide": {
         "deck_count": 5242,
@@ -61231,8 +61125,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Scurv, Stowaway": {
         "deck_count": 367,
@@ -61751,7 +61644,7 @@
           ],
           "resource": [
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 23.160762942779293
             },
@@ -61762,8 +61655,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Shiyana, Diamond Gemini": {
         "deck_count": 2191,
@@ -62472,7 +62364,7 @@
           ],
           "resource": [
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 34.959349593495936
             },
@@ -62488,8 +62380,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Teklovossen": {
         "deck_count": 1820,
@@ -63095,8 +62986,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Terra": {
         "deck_count": 2635,
@@ -63814,8 +63704,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Tuffnut": {
         "deck_count": 21,
@@ -64276,8 +64165,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Uzuri": {
         "deck_count": 3670,
@@ -65055,8 +64943,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Valda Brightaxe": {
         "deck_count": 2354,
@@ -65801,8 +65688,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Verdance": {
         "deck_count": 2231,
@@ -66365,8 +66251,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Victor Goldmane": {
         "deck_count": 3172,
@@ -66919,8 +66804,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Viserai": {
         "deck_count": 404,
@@ -67616,8 +67500,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Vynnset": {
         "deck_count": 4339,
@@ -68110,8 +67993,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Yoji, Royal Protector": {
         "deck_count": 1400,
@@ -68805,14 +68687,13 @@
               "usage_percentage": 8.428571428571429
             },
             {
-              "card_name": "Riches of Trōpal-Dhani",
+              "card_name": "Riches of Tr\u014dpal-Dhani",
               "card_id": "SEA000",
               "usage_percentage": 7.6923076923076925
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       },
       "Zen": {
         "deck_count": 3395,
@@ -68825,7 +68706,7 @@
               "usage_percentage": 100
             },
             {
-              "card_name": "Twelve Petal Kāṣāya",
+              "card_name": "Twelve Petal K\u0101\u1e63\u0101ya",
               "card_id": "MST048",
               "usage_percentage": 83.29896907216495
             },
@@ -69380,8 +69261,7 @@
             }
           ]
         },
-        "data_source": "scraped",
-        "is_young": true
+        "data_source": "scraped"
       }
     }
   }

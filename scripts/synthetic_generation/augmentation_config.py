@@ -13,7 +13,7 @@ import numpy as np
 class BlurConfig:
     """Configuration for blur augmentation"""
     enabled: bool = True
-    probability_range: Tuple[float, float] = (0.15, 0.50)  # 15-50% blur intensity per image
+    probability_range: Tuple[float, float] = (0.15, 0.35)  # 15-35% blur intensity per image (reduced from 50% for Phase 4)
     kernel_size_range: Tuple[int, int] = (3, 9)  # Must be odd numbers
     sigma_range: Tuple[float, float] = (0.5, 2.0)
 
@@ -22,10 +22,11 @@ class BlurConfig:
 class GlareConfig:
     """Configuration for glare/lighting effects"""
     enabled: bool = True
-    probability: float = 0.25  # 25% of images get glare
-    intensity_range: Tuple[float, float] = (0.3, 0.7)
-    radius_range: Tuple[int, int] = (100, 300)  # Glare spot radius in pixels
-    num_spots_range: Tuple[int, int] = (1, 3)  # Number of glare spots
+    probability: float = 0.08  # 8% of images get glare (reduced from 25% for Phase 4)
+    intensity_range: Tuple[float, float] = (0.05, 0.10)  # Reduced 50% again (was 0.1-0.15) to prevent washout
+    radius_range: Tuple[int, int] = (80, 200)  # Smaller glare spots (was 100-300)
+    num_spots_range: Tuple[int, int] = (1, 2)  # Fewer spots (was 1-3)
+    focus_range: Tuple[float, float] = (0.25, 0.5)  # Sigma = radius * focus (0.25 = tight spot, 0.5 = diffuse)
 
 
 @dataclass
@@ -33,7 +34,7 @@ class ShadowConfig:
     """Configuration for shadow/darkness effects"""
     enabled: bool = True
     probability: float = 0.50  # 50% of images get shadows
-    intensity_range: Tuple[float, float] = (0.0, 0.80)  # 0-80% darkness (0.0 = no shadow, 1.0 = completely black)
+    intensity_range: Tuple[float, float] = (0.0, 0.25)  # 0-25% darkness (reduced 50% again from 50% for Phase 4)
     radius_range: Tuple[int, int] = (120, 400)  # Shadow region radius in pixels
     num_spots_range: Tuple[int, int] = (1, 2)  # Number of shadow spots
     # Shadow types: 'spot' (localized), 'gradient' (directional), 'vignette' (edges), 'uniform' (overall dimming)
@@ -45,13 +46,13 @@ class ColorAdjustmentConfig:
     """Configuration for color/brightness/contrast adjustments"""
     enabled: bool = True
     probability: float = 0.5  # 50% of images get color adjustments
-    brightness_range: Tuple[float, float] = (0.935, 1.065)  # Multiply factor (reduced by 35%: was 0.9-1.1)
-    contrast_range: Tuple[float, float] = (0.935, 1.065)  # Multiply factor (reduced by 35%: was 0.9-1.1)
+    brightness_range: Tuple[float, float] = (0.935, 1.03)  # Multiply factor (max 3% brighter to reduce washout)
+    contrast_range: Tuple[float, float] = (0.935, 1.03)  # Multiply factor (max 3% to reduce washout)
     saturation_range: Tuple[float, float] = (0.9025, 1.0975)  # Multiply factor (reduced by 35%: was 0.85-1.15)
     hue_shift_range: Tuple[int, int] = (-3, 3)  # Degrees (reduced by 35%: was -5 to 5)
     # Color tinting parameters
     tint_probability: float = 0.7  # 70% of color-adjusted images get a tint
-    tint_intensity_range: Tuple[float, float] = (0.0325, 0.0975)  # How strong the tint is (reduced by 35%: was 0.05-0.15)
+    tint_intensity_range: Tuple[float, float] = (0.0325, 0.15)  # Max 15% intensity (increased from 9.75% for Phase 4)
     # Tint colors: red, yellow, blue, green, orange, brown, black, white, purple, pink
     tint_colors: dict = None  # Will be initialized in __post_init__
     

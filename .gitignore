@@ -39,6 +39,9 @@ runs/train/
 # Ignore large package builds (too big for GitHub)
 packages/
 
+# Ignore large ZIP files
+*.zip
+
 # Ignore benchmark files
 benchmark_*.py
 benchmark_*.txt
@@ -46,6 +49,9 @@ benchmark_*.log
 
 # Ignore positioning cache
 data/positioning_cache/
+
+# Ignore archived code versions
+scripts/computer_vision_application/archived/
 
 # Ignore Python cache
 __pycache__/

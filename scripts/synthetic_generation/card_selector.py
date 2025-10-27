@@ -2,10 +2,11 @@
 Simplified card selection system for synthetic playmat generation.
 
 Data Flow:
-1. Select hero from card_weights_all_printings.json
+1. Select hero from card_weights_all_printings.json (90% weighted, 10% unweighted)
 2. Look up hero card data in card.json
-3. Select cards: 75% from weights, 25% non-weighted (8% generic, 8% class, 4% talent, 5% both)
-4. Look up each card's properties in card.json
+3. Prefer adult heroes 75% of the time (for CC format)
+4. Select cards: 90% from weights, 1% generic, 3% class, 3% talent, 3% both
+5. Look up each card's properties in card.json
 """
 
 import json
@@ -14,7 +15,13 @@ from typing import Dict, List, Set, Optional, Tuple
 from pathlib import Path
 
 # Selection probabilities
-WEIGHTED_SELECTION_PROBABILITY = 0.75  # 75% weighted, 25% unweighted for both heroes and cards
+WEIGHTED_SELECTION_PROBABILITY = 0.90  # 90% weighted, 10% unweighted for heroes
+CARD_WEIGHTED_PROBABILITY = 0.90  # 90% weighted for cards
+CARD_GENERIC_PROBABILITY = 0.01  # 1% generic
+CARD_CLASS_ONLY_PROBABILITY = 0.03  # 3% class-only
+CARD_TALENT_ONLY_PROBABILITY = 0.03  # 3% talent-only
+CARD_BOTH_PROBABILITY = 0.03  # 3% both (remaining to reach 100%)
+ADULT_HERO_PROBABILITY = 0.75  # 75% chance to prefer adult heroes
 
 # Classes and talents
 ALL_CLASSES = {'Warrior', 'Brute', 'Guardian', 'Ninja', 'Ranger', 'Assassin', 
@@ -26,9 +33,9 @@ ALL_TALENTS = {'Draconic', 'Elemental', 'Light', 'Shadow', 'Earth', 'Ice',
 
 
 def select_format() -> str:
-    """Select a format with weighted probability: CC 70%, Blitz 30%."""
+    """Select a format with weighted probability: CC 90%, Blitz 10%."""
     rand = random.random()
-    if rand < 0.70:
+    if rand < 0.90:
         return 'cc'
     else:
         return 'blitz'
@@ -111,12 +118,22 @@ class CardSelector:
         return self._select_unweighted_hero(format)
     
     def _select_weighted_hero(self, format: str = None) -> Optional[Tuple[str, Dict, Dict]]:
-        """Select from heroes in weights file."""
-        hero_keys = list(self.weights_data['heroes'].keys())
+        """Select from heroes in weights file, filtered by format."""
+        # If format specified, use only heroes from that format's weighted list
+        if format and format in self.heroes_by_format:
+            hero_keys = list(self.heroes_by_format[format].keys())
+        else:
+            # No format specified, use all weighted heroes
+            hero_keys = list(self.weights_data['heroes'].keys())
+        
         random.shuffle(hero_keys)
         
         for hero_key in hero_keys:
-            hero_weights = self.weights_data['heroes'][hero_key]
+            # Get hero_weights from the correct format or combined pool
+            if format and format in self.heroes_by_format:
+                hero_weights = self.heroes_by_format[format][hero_key]
+            else:
+                hero_weights = self.weights_data['heroes'][hero_key]
             
             # Find matching hero cards in card.json
             hero_key_normalized = hero_key.lower().replace('-', '').replace(' ', '').replace(',', '').replace("'", '').replace('!', '').replace('/', '')
@@ -169,14 +186,26 @@ class CardSelector:
         if not legal_heroes:
             return None
         
-        # For Blitz: prefer Young heroes, fall back to any legal
+        # Split into adult and young heroes
+        adult_heroes = [h for h in legal_heroes if 'Young' not in h.get('types', [])]
+        young_heroes = [h for h in legal_heroes if 'Young' in h.get('types', [])]
+        
+        # For Blitz: prefer Young heroes, fall back to adult
         if format == 'blitz':
-            young_heroes = [h for h in legal_heroes if 'Young' in h.get('types', [])]
-            return young_heroes[0] if young_heroes else legal_heroes[0]
-        # For CC: prefer Adult heroes (non-Young), fall back to any legal
+            if young_heroes and random.random() < ADULT_HERO_PROBABILITY:
+                return random.choice(young_heroes)
+            elif adult_heroes:
+                return random.choice(adult_heroes)
+            else:
+                return random.choice(legal_heroes)
+        # For CC: prefer Adult heroes (75% chance), fall back to young
         else:
-            adult_heroes = [h for h in legal_heroes if 'Young' not in h.get('types', [])]
-            return adult_heroes[0] if adult_heroes else legal_heroes[0]
+            if adult_heroes and random.random() < ADULT_HERO_PROBABILITY:
+                return random.choice(adult_heroes)
+            elif young_heroes:
+                return random.choice(young_heroes)
+            else:
+                return random.choice(legal_heroes)
     
     def get_hero_classes_and_talents(self, hero_card: Dict) -> Tuple[Set[str], Set[str]]:
         """Extract classes and talents from hero card, including Essence bonuses."""
@@ -251,8 +280,19 @@ class CardSelector:
             
             card_types = set(card.get('types', []))
             
-            # Generic cards (including tokens which can appear in any deck)
-            if 'Generic' in card_types or 'Token' in card_types:
+            # Generic cards (always available to any hero)
+            if 'Generic' in card_types:
+                generic_cards.append(card)
+                continue
+            
+            # Check if it's a class/talent-restricted token (e.g., Graphene Chelicera is Assassin)
+            # If it's a token with class/talent restrictions, treat it like any other card
+            is_token = 'Token' in card_types
+            card_classes = card_types & ALL_CLASSES
+            card_talents = card_types & ALL_TALENTS
+            
+            # If token has no class/talent restrictions, add to generic pool
+            if is_token and not card_classes and not card_talents:
                 generic_cards.append(card)
                 continue
             
@@ -267,10 +307,6 @@ class CardSelector:
                     continue
                 # Otherwise skip this companion (it's for a different hero)
                 continue
-            
-            # Check class/talent matching
-            card_classes = card_types & ALL_CLASSES
-            card_talents = card_types & ALL_TALENTS
             
             # If hero has no talents, exclude cards with ANY talent
             if not hero_talents and card_talents:
@@ -343,22 +379,22 @@ class CardSelector:
         """
         roll = random.random()
         
-        if roll < WEIGHTED_SELECTION_PROBABILITY:  # 75% weighted
+        if roll < CARD_WEIGHTED_PROBABILITY:  # 90% weighted
             if card_pools['weighted']:
                 # Use usage_percentage for weighted selection, converted to weights
                 cards = card_pools['weighted']
                 weights = [self._convert_usage_to_weight(c.get('usage_percentage', 1.0)) for c in cards]
                 return random.choices(cards, weights=weights, k=1)[0]
-        elif roll < 0.83:  # 8% generic (75-83%)
+        elif roll < CARD_WEIGHTED_PROBABILITY + CARD_GENERIC_PROBABILITY:  # 1% generic (90-91%)
             if card_pools['generic']:
                 return random.choice(card_pools['generic'])
-        elif roll < 0.91:  # 8% class-only (83-91%)
+        elif roll < CARD_WEIGHTED_PROBABILITY + CARD_GENERIC_PROBABILITY + CARD_CLASS_ONLY_PROBABILITY:  # 3% class-only (91-94%)
             if card_pools['class_only']:
                 return random.choice(card_pools['class_only'])
-        elif roll < 0.95:  # 4% talent-only (91-95%)
+        elif roll < CARD_WEIGHTED_PROBABILITY + CARD_GENERIC_PROBABILITY + CARD_CLASS_ONLY_PROBABILITY + CARD_TALENT_ONLY_PROBABILITY:  # 3% talent-only (94-97%)
             if card_pools['talent_only']:
                 return random.choice(card_pools['talent_only'])
-        else:  # 5% both (95-100%)
+        else:  # 3% both (97-100%)
             if card_pools['both']:
                 return random.choice(card_pools['both'])
         

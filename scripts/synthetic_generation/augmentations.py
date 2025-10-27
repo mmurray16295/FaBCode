@@ -92,8 +92,9 @@ def apply_glare(image: np.ndarray, config: GlareConfig, glare_intensity: float =
             y_grid, x_grid = np.ogrid[:h, :w]
             dist_from_center = np.sqrt((x_grid - center_x)**2 + (y_grid - center_y)**2)
             
-            # Gaussian falloff
-            sigma = radius / 2.0
+            # Gaussian falloff with focus control (0.25 = tight spot, 0.5 = diffuse)
+            focus_ratio = spot.get('focus_ratio', 0.5)  # Default to 0.5 for backwards compatibility
+            sigma = radius * focus_ratio
             glare_mask = np.exp(-(dist_from_center**2) / (2 * sigma**2))
             
             # Apply glare (brighten pixels) - vectorized across all channels
@@ -461,11 +462,9 @@ def apply_color_adjustment(image: np.ndarray, config: ColorAdjustmentConfig,
     hsv[:, :, 1] = np.clip(hsv[:, :, 1], 0, 255)  # Ensure saturation is in valid range
     result = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR).astype(np.float32)
     
-    # Apply color tint if specified or randomly with probability
-    apply_tint = tint_color is not None or (tint_intensity is not None) or (random.random() < config.tint_probability)
-    if apply_tint:
-        if tint_color is None:
-            tint_color = random.choice(list(config.tint_colors.keys()))
+    # Apply color tint if specified (all cards in image should have consistent tint)
+    # Only apply tint if tint_color was explicitly provided
+    if tint_color is not None:
         if tint_intensity is None:
             tint_intensity = random.uniform(*config.tint_intensity_range)
         

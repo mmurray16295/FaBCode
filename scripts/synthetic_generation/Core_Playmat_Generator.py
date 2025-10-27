@@ -655,7 +655,7 @@ def apply_hard_case(card_img, include_artifacts=True):
                         # Only apply to opaque pixels (where alpha > 0)
                         if case_array[py, px, 3] > 0:
                             distance_ratio = np.sqrt(dx*dx + dy*dy) / glare_radius
-                            glare_boost = int(80 * (1 - distance_ratio))  # MUCH stronger glare
+                            glare_boost = int(40 * (1 - distance_ratio))  # Reduced from 80 to 40 to prevent washout
                             
                             if include_artifacts:
                                 # Original behavior: direct addition (can cause artifacts/splotching)
@@ -786,7 +786,7 @@ def apply_card_augmentations(card_img, augmentation_config, blur_intensity=None,
     
     if should_degrade_color:
         from augmentations import apply_color_strip_degradation
-        card_array = apply_color_strip_degradation(card_array, strip_height_ratio=0.08, probability=0.85)
+        card_array = apply_color_strip_degradation(card_array, strip_height_ratio=0.08, probability=0.0)  # Phase 4: Disabled color strip degradation
     
     # Convert back to PIL for sleeve/hard case application
     card_array_rgb = card_array[:, :, ::-1]  # BGR → RGB
@@ -1312,9 +1312,8 @@ def place_combat_chain_card(card, img_path, zone, chain_name, zone_id, card_plac
     max_dim = int(math.sqrt(scaled_width**2 + scaled_height**2))
     
     # Find valid position
-    # Training mode: 65% max overlap (challenging)
-    # Validation mode: 45% max overlap (realistic)
-    max_overlap = 45 if args.validation_mode else 65
+    # Phase 4: Use realistic overlap (45%) for both training and validation
+    max_overlap = 45
     position = find_valid_position_in_zone(zone, max_dim, max_dim, card_placements,
                                            img_width, img_height, max_overlap_pct=max_overlap, max_attempts=50)
     
@@ -1469,7 +1468,9 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
                     'x_ratio': random.random(),  # 0.0-1.0, scales to card width
                     'y_ratio': random.random(),  # 0.0-1.0, scales to card height
                     # Very wide range: 20-160% of card size for large washout coverage with moderate intensity
-                    'radius_ratio': random.uniform(0.20, 1.60)
+                    'radius_ratio': random.uniform(0.20, 1.60),
+                    # Focus ratio: determines Gaussian sigma (0.25 = tight spot, 0.5 = diffuse)
+                    'focus_ratio': random.uniform(*aug_config.glare.focus_range)
                 })
         
         # Shadow generation moved to after background loading (needs image dimensions)
@@ -1513,10 +1514,9 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
         # Use aug_config.sleeves.probability to decide if sleeves are used
         sleeve_color = None
         if random.random() < aug_config.sleeves.probability:
-            # Common sleeve colors (excluding None - that's handled by probability)
+            # Common sleeve colors (excluding white which can cause washout with brightness/glare)
             sleeve_colors = [
                 (0, 0, 0),  # Black
-                (255, 255, 255),  # White
                 (50, 50, 200),  # Blue
                 (200, 50, 50),  # Red
                 (50, 150, 50),  # Green
@@ -1538,9 +1538,8 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
         print(f"   Uniform card scale: {uniform_scale_factor:.3f}× ({(uniform_scale_factor - 1.0) * 100:+.1f}%)")
         
         # Decide whether to include hard case artifacts (challenging splotching effect)
-        # Training mode: 50% chance for artifact-heavy cases (extra challenge)
-        # Validation mode: 0% chance (realistic only)
-        artifact_probability = 0.0 if args.validation_mode else 0.5
+        # Phase 4: Disabled artifacts (0% for both training and validation - realistic only)
+        artifact_probability = 0.0
         hard_case_artifacts = random.random() < artifact_probability
         if hard_case_artifacts:
             print(f"   Hard case mode: With artifacts (challenging training data)")
@@ -1670,22 +1669,56 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
     zones_by_class_id = {z['class_id']: z for z in zones}
     zones_by_name = {z['zone_name']: z for z in zones}
     
-    # Select format for this image FIRST (CC 70%, Blitz 30%)
+    # Select format for this image FIRST (CC 90%, Blitz 10%)
     from card_selector import select_format
-    format = select_format()
     format_names = {'cc': 'Classic Constructed', 'll': 'Living Legend', 'blitz': 'Blitz'}
-    print(f"\n2. Format: {format_names[format]}")
+    
+    # Allow forced format from command line
+    if args and hasattr(args, 'format') and args.format:
+        format = args.format
+        print(f"\n2. Format: {format_names.get(format, format)} (FORCED)")
+    else:
+        format = select_format()
+        print(f"\n2. Format: {format_names[format]}")
     
     # Select two heroes based on the selected format
     t0 = time.time()
     print("\n   Selecting heroes...")
-    hero1_key, hero1_card, hero1_weights = selector.select_random_hero(format)
-    hero1_source = "weighted" if hero1_weights else "unweighted"
-    print(f"   Hero 1: {hero1_card['name']} ({hero1_source})")
     
-    hero2_key, hero2_card, hero2_weights = selector.select_random_hero(format)
-    hero2_source = "weighted" if hero2_weights else "unweighted"
-    print(f"   Hero 2: {hero2_card['name']} ({hero2_source})")
+    # Allow forced hero from command line
+    if args and hasattr(args, 'hero') and args.hero:
+        # Find the hero card in card.json
+        forced_hero_card = None
+        for card in selector.all_cards:
+            if 'Hero' in card.get('types', []) and card['name'].lower() == args.hero.lower():
+                forced_hero_card = card
+                break
+        
+        if not forced_hero_card:
+            print(f"   ERROR: Could not find hero '{args.hero}' in card.json!")
+            print(f"   Available heroes: {', '.join([c['name'] for c in selector.all_cards if 'Hero' in c.get('types', [])][:10])}...")
+            return
+        
+        hero1_key = forced_hero_card['name'].lower().replace(' ', '-').replace(',', '')
+        hero1_card = forced_hero_card
+        hero1_weights = {}  # No weights for forced hero
+        hero1_source = "FORCED"
+        print(f"   Hero 1: {hero1_card['name']} ({hero1_source})")
+        
+        hero2_key = forced_hero_card['name'].lower().replace(' ', '-').replace(',', '')
+        hero2_card = forced_hero_card
+        hero2_weights = {}
+        hero2_source = "FORCED"
+        print(f"   Hero 2: {hero2_card['name']} ({hero2_source})")
+    else:
+        # Normal random selection
+        hero1_key, hero1_card, hero1_weights = selector.select_random_hero(format)
+        hero1_source = "weighted" if hero1_weights else "unweighted"
+        print(f"   Hero 1: {hero1_card['name']} ({hero1_source})")
+        
+        hero2_key, hero2_card, hero2_weights = selector.select_random_hero(format)
+        hero2_source = "weighted" if hero2_weights else "unweighted"
+        print(f"   Hero 2: {hero2_card['name']} ({hero2_source})")
     
     # Find hero images
     hero1_img_path = selector.find_card_image(hero1_card, str(card_dir))
@@ -2145,9 +2178,9 @@ def main(enable_augmentations=True, draw_bboxes=True, preset_name=None, use_back
     
     timings['draw_bboxes'] = time.time() - t0
     
-    # Apply windowed mode simulation (15% of the time)
+    # Apply windowed mode simulation (disabled for Phase 4)
     t0 = time.time()
-    if should_apply_windowed_mode(probability=0.15):
+    if should_apply_windowed_mode(probability=0.0):
         print("\n9. Applying windowed mode simulation...")
         # Convert card_placements to YOLO format labels for transformation
         yolo_labels = []
@@ -2248,8 +2281,8 @@ if __name__ == '__main__':
     import argparse
     
     parser = argparse.ArgumentParser(description='Generate synthetic playmat images')
-    parser.add_argument('--selector', type=str, choices=['weighted', 'smooth'], default='smooth',
-                       help='Card selector type: "smooth" (even distribution, default) or "weighted" (popularity)')
+    parser.add_argument('--selector', type=str, choices=['weighted', 'smooth'], default='weighted',
+                       help='Card selector type: "weighted" (popularity, default) or "smooth" (even distribution)')
     parser.add_argument('--validation_mode', action='store_true',
                        help='Use realistic validation settings (0%% artifacts, 45%% overlap, reduced glare/shadows). Default is hard training settings (50%% artifacts, 65%% overlap).')
     parser.add_argument('--split', type=str, choices=['train', 'valid', 'test'], default='train',
@@ -2258,6 +2291,10 @@ if __name__ == '__main__':
                        help='Disable augmentations (for debugging)')
     parser.add_argument('--draw-bboxes', action='store_true',
                        help='Draw bounding boxes on output images')
+    parser.add_argument('--hero', type=str, default=None,
+                       help='Force a specific hero (e.g., "Betsy, Skin in the Game" or "Dromai, Ash Artist"). Both players will use this hero.')
+    parser.add_argument('--format', type=str, choices=['cc', 'blitz'], default=None,
+                       help='Force a specific format (cc or blitz). If not specified, uses 90/10 CC/Blitz split.')
     
     args = parser.parse_args()
     

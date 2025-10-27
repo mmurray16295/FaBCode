@@ -1,0 +1,6 @@
+{
+  "model_path": "C:/VS Code/FaB Code/scripts/computer_vision_application/archived/temp_check/FaBCardDetector_Phase4_20251024/models/best.pt",
+  "conf_threshold": 0.69,
+  "iou_threshold": 0.5,
+  "hero_filtering_enabled": false
+}

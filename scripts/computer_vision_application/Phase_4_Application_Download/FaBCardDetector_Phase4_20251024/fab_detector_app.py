@@ -786,14 +786,15 @@ class CardDetector:
         self.hero2_confidence_history = []  # Track hero 2 detections over time
         self.legal_card_names = None  # Set of legal card names for both heroes
         
-        # Dynamic hero detection threshold - starts at 0.65, lowers by 0.1 every second until 0.07
+        # Dynamic hero detection threshold - starts at 0.65, lowers by 0.1 every 30 frames until 0.07
         self.hero_detection_threshold = 0.65  # Starting threshold
         self.hero_threshold_min = 0.07  # Minimum threshold
-        self.hero_threshold_step = 0.10  # Amount to lower each second
-        self.hero_threshold_interval = 1.0  # Lower every 1 second
-        self.hero_threshold_last_update = time.time()
+        self.hero_threshold_step = 0.10  # Amount to lower per interval
+        self.hero_threshold_frame_interval = 30  # Lower every 30 frames (works at any FPS)
+        self.hero_threshold_frame_counter = 0  # Frame counter for threshold lowering
         
-        self.hero_detection_time = 5.0  # Need 5 seconds of consistent detection
+        self.hero_min_detections = 3  # Minimum detections required (works even at <1 FPS)
+        self.hero_max_history_size = 50  # Maximum history entries to keep
         
         # Manual hero overrides
         self.hero1_override = getattr(args, 'hero1_override', None)
@@ -1058,7 +1059,7 @@ class CardDetector:
         self.hero2_override = None
         # Reset dynamic threshold
         self.hero_detection_threshold = 0.65
-        self.hero_threshold_last_update = time.time()
+        self.hero_threshold_frame_counter = 0
         print("[hero] Detection reset - starting fresh with threshold 0.65")
     
     def _apply_hero_filtering(self, boxes, clss, confs, names, current_time):
@@ -1066,16 +1067,20 @@ class CardDetector:
         if len(boxes) == 0:
             return boxes, clss, confs
         
-        # Dynamic threshold adjustment: Lower threshold every second until both heroes detected or min reached
+        # Dynamic threshold adjustment: Lower threshold every N frames until both heroes detected or min reached
         if (self.detected_hero1 is None or self.detected_hero2 is None):
-            if current_time - self.hero_threshold_last_update >= self.hero_threshold_interval:
+            self.hero_threshold_frame_counter += 1
+            if self.hero_threshold_frame_counter >= self.hero_threshold_frame_interval:
                 if self.hero_detection_threshold > self.hero_threshold_min:
                     self.hero_detection_threshold = max(
                         self.hero_threshold_min,
                         self.hero_detection_threshold - self.hero_threshold_step
                     )
-                    print(f"[hero] Lowering detection threshold to {self.hero_detection_threshold:.2f}")
-                    self.hero_threshold_last_update = current_time
+                    print(f"[hero] Lowering detection threshold to {self.hero_detection_threshold:.2f} (frame {self.hero_threshold_frame_counter})")
+                    self.hero_threshold_frame_counter = 0
+        else:
+            # Both heroes detected, reset counter
+            self.hero_threshold_frame_counter = 0
         
         # Step 1: Check for hero detections (only if not overridden)
         for i, cls_idx in enumerate(clss):
@@ -1100,14 +1105,12 @@ class CardDetector:
         
         # Step 2: Process hero1 history
         if not self.hero1_override:
-            # Remove old entries
-            self.hero1_confidence_history = [
-                (t, name, conf) for t, name, conf in self.hero1_confidence_history
-                if current_time - t <= self.hero_detection_time
-            ]
+            # Limit history size (keep most recent entries)
+            if len(self.hero1_confidence_history) > self.hero_max_history_size:
+                self.hero1_confidence_history = self.hero1_confidence_history[-self.hero_max_history_size:]
             
-            # Check if we have consistent hero detection
-            if len(self.hero1_confidence_history) >= 10 and not self.detected_hero1:
+            # Check if we have consistent hero detection (just need minimum count)
+            if len(self.hero1_confidence_history) >= self.hero_min_detections and not self.detected_hero1:
                 from collections import Counter
                 hero_names = [name for _, name, _ in self.hero1_confidence_history]
                 most_common_hero = Counter(hero_names).most_common(1)[0][0]
@@ -1117,14 +1120,12 @@ class CardDetector:
         
         # Step 3: Process hero2 history
         if not self.hero2_override:
-            # Remove old entries
-            self.hero2_confidence_history = [
-                (t, name, conf) for t, name, conf in self.hero2_confidence_history
-                if current_time - t <= self.hero_detection_time
-            ]
+            # Limit history size (keep most recent entries)
+            if len(self.hero2_confidence_history) > self.hero_max_history_size:
+                self.hero2_confidence_history = self.hero2_confidence_history[-self.hero_max_history_size:]
             
-            # Check if we have consistent hero detection
-            if len(self.hero2_confidence_history) >= 10 and not self.detected_hero2:
+            # Check if we have consistent hero detection (just need minimum count)
+            if len(self.hero2_confidence_history) >= self.hero_min_detections and not self.detected_hero2:
                 from collections import Counter
                 hero_names = [name for _, name, _ in self.hero2_confidence_history]
                 most_common_hero = Counter(hero_names).most_common(1)[0][0]
@@ -1695,7 +1696,8 @@ class CardDetector:
                                 # Only include if card name contains search string AND is legal
                                 if search_lower in card_name_lower:
                                     # Check if card is legal (same logic as detection filtering)
-                                    if card_name_lower in self.legal_card_names or self._is_hero_card(card_name):
+                                    # If no heroes detected yet, allow all cards
+                                    if self.legal_card_names is None or card_name_lower in self.legal_card_names or self._is_hero_card(card_name):
                                         matches.append(card_name)
                             
                             if not matches:
@@ -1727,7 +1729,7 @@ class CardDetector:
                                     card_name = card.get('name', '')
                                     card_name_lower = card_name.lower().strip()
                                     if search_lower in card_name_lower:
-                                        if card_name_lower in self.legal_card_names or self._is_hero_card(card_name):
+                                        if self.legal_card_names is None or card_name_lower in self.legal_card_names or self._is_hero_card(card_name):
                                             matches.append(card_name)
                                 self.text_input_matches = matches[:10]
                             else:
@@ -1756,7 +1758,7 @@ class CardDetector:
                             card_name = card.get('name', '')
                             card_name_lower = card_name.lower().strip()
                             if search_lower in card_name_lower:
-                                if card_name_lower in self.legal_card_names or self._is_hero_card(card_name):
+                                if self.legal_card_names is None or card_name_lower in self.legal_card_names or self._is_hero_card(card_name):
                                     matches.append(card_name)
                         self.text_input_matches = matches[:10]
                 
